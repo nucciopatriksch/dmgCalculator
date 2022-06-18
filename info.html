@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Unofficial Damage Calculator - INFO</title>
+<link rel="stylesheet" href="css/navbars.css" type="text/css">
+<link rel="stylesheet" href="css/info.css" type="text/css">
+<script type="text/javascript" src="js/info.js"></script>
+</head>
+<body>
+<header id="startPart">
+	<section class="titleSection">
+		<p>Unofficial Damage Calculator</p>
+	</section>
+	<nav class="navbar">
+		<div class="linkSection">
+			<ul class="links">
+				<li><a href="index.html">HomePage</a></li>
+			</ul>
+		</div>
+		<div class="langSection">
+			<ul class="languages">
+				<li><button id="langEng" onclick="changeLang()" hidden>EN</button></li>
+				<li><button id="langIta" onclick="changeLang()">IT</button></li>
+			</ul>
+		</div>
+	</nav>
+</header>
+<section id="mainSection">
+	<section class="mainIntro">
+		<p id="premiseIntroEng">Before using the calculator...</p>
+		<p id="premiseIntroIta" hidden>Prima di usare il calcolatore...</p>
+	</section>
+	<section class="mainPremise">
+		<p id="premiseEng">...you should have an average knowledge of this game.<br>
+			Knowing the basis of your stats, of Cathedral Seals, Buffs and every item that increases the final damage output,<br>
+			will make the task easier, letting you to calculate your potential damage of the single skill basing on several factors.
+		</p>
+		<p id="premiseIta" hidden>...dovresti avere una conoscenza media del gioco.<br>
+			Conoscendo le basi delle tue statistiche, i Bonus della Cattedrale, i Buffs e ogni altro oggetto che aumenta<br>
+			il danno finale, renderà il compito più semplice permettendoti di calcolare i tuoi danni potenziali della singola<br>
+			skill basandosi su diversi fattori.
+		</p>
+	</section>
+	<section class="rulesIntro">
+		<p id="introEng">Rules for using the calculator</p>
+		<p id="introIta" hidden>Regole per l'utilizzo del calcolatore</p>
+	</section>
+	<section class="infoRules">
+		<p id="infoRulesEng">Enter the value of the damage caused by one of the skills of a class, for example Revenant skill Slaughter;
+			check the actual damage value from the game itself via the Abilities tab before entering.<br>
+			Then insert the reference values of your character's stats; you can also use values that are not
+			in your possession to make a comparison between one or more configurations.<br>
+			The calculation of the damage can be done without the need to necessarily enter all the values;
+			just think that some of the multipliers such as "Damage when combat starts" are momentary bonuses.<br>
+			To calculate critical damage, the "Critical damage bonus" value must be greater than 0.<br><br>
+			Note:<br>
+			- "Base Damage" refers to your character's base multiplier (max 56%).<br>
+			- "Elder Multiplier" increases the damage done by a certain skill of a class, obtained by progressing
+			within the Halls of Elder Gods (max 28%).<br>
+			- "Damage when combat starts" increases your damage at the start of a battle and for the first 15 seconds (max 59%).<br>
+			- "Artifact Damage bonus" increases all damage done, obtained through a Legendary Artifact (max 35%).<br>
+			- "Class Seal Bonus" increases all damage done by a class, obtained through the Cathedral (max 10%).<br>
+			- "Adventure Seal Bonus" increases all damage done in a certain type of adventure, obtained through
+			the Cathedral (max 5%).</p>
+
+		<p id ="infoRulesIta" hidden>Inserire il valore del danno causato da una delle skill di una classe, ad esempio Revenant skill Slaughter;
+			controllare l'effettivo valore del danno dal gioco stesso tramite la scheda Abilities prima dell'inserimento.<br>
+			Inserire quindi i valori di riferimento alle statistiche del vostro personaggio; potete usare anche valori non
+			in vostro possesso per effettuare un confronto tra una o più configurazioni.<br>
+			Il calcolo del danno può essere effettuato senza la necessità di inserire necessariamente tutti i valori;
+			basti pensare che alcuni dei moltiplicatori come ad esempio "Damage when combat starts" sono bonus momentanei.<br>
+			Per calcolare i danni critici il valore di "Critical damage bonus" deve essere maggiore di 0.<br><br>
+			Note:<br>
+			- "Base Damage" si riferisce al moltiplicatore di base del vostro personaggio (max 56%).<br>
+			- "Elder Multiplier" aumenta i danni effettuati da una certa skill di una classe, si ottiene facendo progressi
+			all'interno della Halls of Elder Gods (max 28%).<br>
+			- "Damage when combat starts" aumenta i vostri danni all'inizio di una battaglia e per i primi 15 secondi (max 59%).<br>
+			- "Artifact Damage bonus" aumenta tutti i danni effettuati, si ottiene tramite un Artefatto Leggendario (max 35%).<br>
+			- "Class Seal Bonus" aumenta tutti i danni effettuati da una classe, si ottiene tramite la Cattedrale (max 10%).<br>
+			- "Adventure Seal Bonus" aumenta tutti i danni effettuati in un determinato tipo di avventura, si ottiene tramite
+			la Cattedrale (max 5%).</p>
+	</section>
+	<section class="effectIntro">
+		<p id="descEng">Rules for using effects</p>
+		<p id="descIta" hidden>Regole per l'uso degli effetti</p>
+	</section>
+	<section class="effectRules">
+		<p id="infoEffectEng">Unlock the menu, then select an effect type and enter the stack value.<br>
+			The need to use this section arises from the fact of being able to calculate the damage that can be done
+			with certain Legendary weapons or under certain circumstances.<br><br>
+			- "Generic Effect" multiplies the final damage value by 10% for each stack applied (unlimited).<br>
+			- "Tracer" multiplies the final damage value by 10% for each stack applied (max 16).<br>
+			- "Viper Mark" multiplies the final damage value for each stack applied by 10% up to 20. After the 20th stack,
+			each new stack adds + 2% to the base multiplier which is 10%, hence the value of the multiplier
+			it will depend on how many stacks you have set (max 100).<br>
+			- "Dodge That" triples the base damage value of the skill if you previously hit a target with Sureshot,
+			then multiplies the final damage value by 10% for each stack applied (max 16).<br><br>
+			Note:<br>
+			- "Generic Effect" could be used to calculate the 'Dehydration' skill with Ner'Gal weapon (use max 10 for this).<br>
+			- Use "Tracer" and "Viper Mark" to calculate the 'Sureshot' skill for the Outlaw class.<br>
+			- Use "Dodge That" with 0 stack to calculate the 'Dodge That' skill for the Outlaw class. Apply the
+			stacks (max 16) to calculate the damage that the 'Eternal Darkness, Endless Night' weapon can generate.<br>
+			- "Dodge That" with 0 stack could be used for 'Living Missle' skill calculation via Sigil weapon.</p>
+
+		<p id="infoEffectIta" hidden>Sbloccare il menù, quindi selezionare un tipo di effetto e inserire il valore dello stack.<br>
+			L'esigenza di usare questa sezione nasce dal fatto di poter calcolare i danni che si possono effettuare
+			con determinate armi Leggendarie.<br>
+			- "Generic Effect" moltiplica del 10% il valore finale del danno per ogni stack applicato (senza limiti).<br>
+			- "Tracer" moltiplica del 10% il valore finale del danno per ogni stack applicato (max 16).<br>
+			- "Viper Mark" moltiplica del 10% il valore finale del danno per ogni stack applicato fino a 20. Dopo i 20 stack,
+			ogni nuovo stack aggiunge il +2% al moltiplicatore di base che è del 10%, quindi il valore del moltiplicatore
+			dipenderà da quanti stack avete impostato (max 100).<br>
+			- "Dodge That" triplica di base il valore del danno della skill se in precedenza hai colpito un bersaglio con Sureshot,
+			quindi moltiplica del 10% il valore finale del danno per ogni stack applicato (max 16).<br><br>
+			Note:<br>
+			- "Generic Effect" potrebbe essere usato per il calcolo della skill 'Dehydration' tramite arma Ner'Gal (max 10 for this).<br>
+			- Usare "Tracer" e "Viper Mark" per il calcolo della skill 'Sureshot' per la classe Outlaw.<br>
+			- Usare "Dodge That" con 0 stack per il calcolo della skill 'Dodge That' per la classe Outlaw. Applicare gli
+			stacks (max 16) per calcolare i danni che può generare l'arma 'Eternal Darkness, Endless Night'.<br>
+			- "Dodge That" con 0 stack potrebbe essere usato per il calcolo della skill 'Living Missle' tramite arma Sigil.</p>
+	</section>
+</section>
+<footer id="lastPart">
+	<section>
+		<ul>
+			<li><label id="authorEng">Author: </label></li>
+			<li><label id="authorIta" hidden>Autore: </label></li>
+			<li class="name">Anonymous</li>
+		</ul>
+	</section>
+</footer>
+</body>
+</html>

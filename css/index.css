@@ -1,0 +1,88 @@
+@charset "ISO-8859-1";
+#mainSection{
+	width : 850px;
+	height : 100%;
+	margin : 0 auto;
+	color : darkslategrey;
+}
+
+#mainSection .desc, .outputSection, .subSection{
+	display : flex;
+	justify-content : center;
+}
+
+#mainSection .outputSection{
+	border-top : 1px solid black;
+	border-left : 1px solid black;
+	border-right : 1px solid black;
+	background : rgba(240,160,0,1);
+	color : darkslategrey;
+}
+
+#mainSection .outputSection td{
+	font-size : 24px;
+}
+
+#mainSection .dataSection, .weaponSection, .effectSection{
+	border-top : 1px solid black;
+	border-bottom : 1px solid black;
+	background : rgba(0,88,96,1);
+	color : whitesmoke;
+}
+
+#mainSection .dataSection p, .weaponSection p, .effectSection p{
+	margin : 0 auto;
+	text-align : center;
+	border-bottom : 1px solid black;
+	font-size : 24px;
+	font-weight : bold;
+}
+
+#mainSection .btnSection{
+	display : grid;
+}
+
+#mainSection .dataSection{
+	width : 36%;
+	border-left : 1px solid black;
+	border-right : 1px solid black;
+}
+
+#mainSection .weaponSection{
+	width : 32%;
+	border-right : 1px solid black;
+}
+
+#mainSection .effectSection{
+	width : 32%;
+	border-right : 1px solid black;
+}
+
+#mainSection .finalSection .btnSection{
+	width : 100%;
+	display : flex;
+	justify-content : center;
+}
+
+#mainSection .finalSection .btnSection button{
+	width : 50%;
+	height : 50px;
+}
+
+#mainSection .space{
+	text-align : center;
+}
+
+#mainSection input{
+	width : 102px;
+}
+
+#mainSection select{
+	width : 110px;
+}
+
+#mainSection .subSection label{
+	color : gold;
+	display : flex;
+	justify-content : flex-end;
+}

@@ -1,0 +1,72 @@
+@charset "ISO-8859-1";
+body{
+	height : 100%;
+	width : 100%;
+	margin : 0 auto;
+	background : whitesmoke;
+	font-family : sans-serif;
+	font-size : 14px;
+}
+
+#startPart{
+	width : 100%;
+	background : rgba(0,80,128,1);
+}
+
+#startPart .titleSection{
+	display : flex;
+	justify-content : center;
+}
+
+#startPart .navbar ul li{
+	display : inline;
+}
+
+#startPart .navbar .linkSection .links li a{
+	color : whitesmoke;
+}
+
+#startPart .navbar .linkSection .links li a:hover{
+	background : whitesmoke;
+	color : rgba(0,80,160,1);
+	transition : .8s;
+}
+
+#startPart .navbar .langSection{
+	border-top : 1px solid darkslategrey;
+	border-bottom : 1px solid darkslategrey;
+	background : slategray;
+}
+
+#startPart .navbar .langSection .languages{
+	margin : 0 auto;
+	width : 90%;
+	display : flex;
+	justify-content : flex-end;
+}
+
+#startPart .navbar .langSection .languages button{
+	width : 40px;
+}
+
+#startPart section p{
+	text-align : center;
+	font-weight : bold;
+	font-size : 32px;
+	color : whitesmoke;
+}
+
+#lastPart{
+	display : flex;
+	width : 100%;
+	background : rgba(24,24,24,1);
+}
+
+#lastPart section ul li{
+	display : inline;
+	color : whitesmoke;
+}
+
+#lastPart section ul .name{
+	color : gold;
+}
