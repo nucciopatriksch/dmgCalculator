@@ -185,8 +185,9 @@ function calculateDamage()
 	let stun = 1 + ( document.getElementById("stunDmg").value / 100);
 	let slow = 1 + (document.getElementById("slowDmg").value / 100);
 	let chain = 1 + (document.getElementById("chainDmg").value / 100);
-	let charAura = document.getElementById("charAura").checked;		// character support aura
+	let charAura = document.getElementById("charAura").checked;		// character support aura boost
 	let isPlrSupp = document.getElementById("isPlrSupport").checked;	// if player is support
+	let plrSuppAura = 0;	// player's base support aura power
 /*				SECOND MENU				*/
 // SUPERIORITY CALCULATION
 	let plrRank = document.getElementById("plrRank").value;		// player rank
@@ -219,10 +220,10 @@ function calculateDamage()
 	let select2 = document.getElementById("multiSelect2");	// artifact
 // EUPHOMINE
 	let useStims = document.getElementById("useStims").checked;			// euphomine
-	let stimsValue = 1 + (document.getElementById("stimsValue").value / 100);	// euphomine
+	let stimsValue = (document.getElementById("stimsValue").value / 100);	// euphomine
 // SUPPORT
-	let suppMight = document.getElementById("suppMight").value;			// support
-	let suppAura = 1 + (document.getElementById("aura").value / 100);		// support
+	let suppMight = document.getElementById("suppMight").value;		// support's might
+	let suppAura = (document.getElementById("aura").value / 100);	// support's aura
 	let mightGiven = (document.getElementById("mightPercentage").value / 100);	// support
 // BUFF EFFECT
 	let select3 = document.getElementById("multiSelect3");		// soundweaver
@@ -246,7 +247,8 @@ function calculateDamage()
 	if (+wpnAura < +0) wpnAura = 0;	// weapon support aura
 	if (+elder < +1) elder = 1;			// elder multiplier min 1x
 	if (+elder > +1.28) elder = 1.28;		// elder multiplier max 28%
-	if (+main < +1) main = 1;
+	if (+main < +1) main = 1;			// main damage bonus
+	if (+main > +2.36) main = 2.36;		// main damage bonus max 136%
 	if (+crit < +1) crit = 1;
 	if (+comp < +0) comp = 0;		// companion damage only used to calculate nightfall buff
 	if (+troop < +1) troop = 1;
@@ -268,7 +270,7 @@ function calculateDamage()
 	if (+atlasTroopDmg < +1) atlasTroopDmg = 1;	// atlas troop damage bonus
 	if (+atlasTroopDmg > +1.39) atlasTroopDmg = 1.39;
 	if (+suppMight < +1000 ) suppMight = 1000;	// support's might
-	if (+suppAura < +1) suppAura = 1;			// support's aura power
+	if (+suppAura < +0) suppAura = 0;			// support's aura power
 	if (+mightGiven < +0 ) mightGiven = 0;		// support's transferred might percentage
 	if (+mightGiven > +0.8 ) mightGiven = 0.8;	// transferred might max 80% (elder mercy)
 	skill = Math.floor( skill );	// workaround
@@ -280,6 +282,7 @@ function calculateDamage()
 	stack = Math.floor( stack );	// workaround
 	stack2 = Math.floor( stack2 );	// workaround
 	stack3 = Math.floor( stack3 );	// workaround
+	console.log("base " + Number(base));
 // calculate player superiority bonus (+1% dmg done for every excess rank player has than monster, or -10% dmg done for every excess rank monster has)
 	if ( (Number(plrRank) > +0) && (Number(monsterRank) > +0) )	// calculate only if both ranks are higher than 0
 	{
@@ -325,22 +328,18 @@ function calculateDamage()
 		if ( effect4 == "soloParty" ) skill *= 1.85;	// scorching light 70% + warming light 15%
 		if ( defSuppBonus ) skill *= 1.3;	// increases damage by 30% when solo if in defense or support class
 	}
-// check if player is support
+// check if player is support, in case add values to base damage bonus
 	if ( isPlrSupp )
-	{
-		let suppBoost = 1.2;
-		base += 0.2;		// support class ability give +20% to base damage
+	{		
+		plrSuppAura += 0.2;	// support class ability increases damage by 20%
 		if ( charAura )
 		{
-			base += 0.24;	// support node give extra +24% to base damage
-			suppBoost += 0.24;
-			if ( isPlrGod )
-			{
-				base += 0.36;	// support node give extra +36% to base damage if god
-				suppBoost += 0.36;
-			}
+			plrSuppAura += 0.24; // support node give extra 24% to base damage
+			if ( isPlrGod ) plrSuppAura += 0.36; // support node give extra 36% to base damage if in god form
 		}
-		skill *= suppBoost;	// skill should be boosted by support aura and not only base damage
+		base += plrSuppAura;	// add support aura to base damage bonus
+		console.log("plrSuppAura " + Number(plrSuppAura));
+		console.log("base " + Number(base));
 	}
 // if checked apply cathedral seals
 	if ( dmgSeal ) skill *= 1.03;	// all damage seal +3% damage increase
@@ -353,8 +352,6 @@ function calculateDamage()
 		if (Number(verdict) > Number(1.2)) verdict = 1.2;
 		skill *= verdict;
 	}
-// in case apply atlas buffs
-
 // if stack value is greater than 0, calculate weapon special effect
 	if ( Number(stack) > Number(0) )
 	{
@@ -408,30 +405,28 @@ function calculateDamage()
 // if euphomine is checked, calculate stimulants buff
 	if ( useStims )
 	{
-		if ( Number(stimsValue) < Number(1.3) ) stimsValue = 1.3;	// min buff value is 30% (red euphomine)
-		if ( Number(stimsValue) > Number(2) ) stimsValue = 2;	// max buff value is 100% (green euphomine)
-		if ( Number(stimsValue) === Number(1.3) )	// if equals to 1.3x we are using red euphomine, then boost its effect with support aura
+		if ( Number(stimsValue) < Number(0.3) ) stimsValue = 0.3;	// min buff value is 30% (red euphomine)
+		if ( Number(stimsValue) > Number(0.3) )
 		{
-			if ( isPlrSupp )
-			{
-				stimsValue += 0.2;
-				if ( charAura )
-				{
-					stimsValue += 0.24;
-					if ( isPlrGod ) stimsValue += 0.36;
-				}
-				if ( Number(wpnAura) > Number(0) ) stimsValue += wpnAura;
-			}
+			wpnAura = 0;	// green euphomine overrides support aura
+			base -= plrSuppAura;	// remove support aura from base damage bonus
 		}
-		skill *= stimsValue;
+		if ( Number(stimsValue) > Number(1) ) stimsValue = 1;	// max buff value is 100% (green euphomine)
+		base += stimsValue;	// stimulants adds value to character's base damage bonus
+		console.log("stimsValue " + Number(stimsValue));
+		console.log("base " + Number(base));
 	}
-// if suppAura value is greater than 1, calculate aura buff
-	if ( Number(suppAura) > Number(1) )
+// if player is not support and we have support aura from another player, calculate aura buff
+	if ( !isPlrSupp )
 	{
-		if ( !isPlrSupp )
+		if ( Number(suppAura) > Number(0) )
 		{
-			if ( Number(stimsValue) === Number(1.3) ) suppAura += 0.3;
-			skill *= suppAura;
+			console.log("suppAura " + Number(suppAura));
+			if ( !(useStims) || (Number(stimsValue) === Number(0.3)) )
+			{
+				base += suppAura;	// boost only if we are using red euphomine or if we are not
+				console.log("base " + Number(base));
+			}
 		}
 	}
 // apply soundweaver buffs
@@ -445,7 +440,7 @@ function calculateDamage()
 			multiplier += shower;
 			skill *= multiplier;		// rythm of strength
 			skill *= multiplier;		// rythm of courage
-			multiplier = (1 + tracer);	// make rythm stronger by 10% and multiply again out of this if
+			multiplier = (1 + tracer);	// make rythm stronger by 10% and multiply again out of this if block
 		}
 		skill *= multiplier;	// multiply skill
 	}
@@ -490,6 +485,7 @@ function calculateDamage()
 	if ( Number(stack3) > Number(0) )
 	{
 		multiplier = 1;	// reinizialize multiplier
+		if (Number(comp) > Number(1.81)) comp = 1.81;	// comp damage max 181%
 		if (Number(stack3) > Number(3)) stack3 = 3;	// max 3 stacks
 		if (Number(compStat) < Number(0)) compStat = 0;
 		if (Number(compStat) > Number(0.33)) compStat = 0.33;
@@ -503,6 +499,7 @@ function calculateDamage()
 // IF CRIT
 	if ( Number(crit) > Number(1) )
 	{
+		if ( Number(crit) > Number(2.81) ) crit = 2.81;	// crit damage bonus max 181%
 		let critCalc = ((((((((((((skill * elder) * (base + (wpn + wpnAura))) * crit) * troop) 
 			* artif) * start) * stun) * slow) * chain) * armor) * atlasDmg) * atlasTroopDmg);
 		finalDmg += critCalc;	// ADD TO FINAL DMG
