@@ -89,11 +89,15 @@ function showTravelBonus()
 	let c = document.getElementById("defSuppDesc");
 	let d = document.getElementById("multiSelect4");
 	let e = document.getElementById("defSuppBonus");
+	let f = document.getElementById("monsterDmgDesc");
+	let g = document.getElementById("monsterDmg");
 	a.hidden = ((a.hidden)? false : true );
 	b.hidden = ((b.hidden)? false : true );
 	c.hidden = ((c.hidden)? false : true );
 	d.hidden = ((d.hidden)? false : true );
 	e.hidden = ((e.hidden)? false : true );
+	f.hidden = ((f.hidden)? false : true );
+	g.hidden = ((g.hidden)? false : true );
 }
 
 function useStimulants()
@@ -102,6 +106,24 @@ function useStimulants()
 	let b = document.getElementById("stimsValue");
 	a.hidden = ((a.hidden)? false : true );
 	b.hidden = ((b.hidden)? false : true );
+}
+
+function enableTimeDamage()
+{
+	let a = document.getElementById("atkNumDesc");
+	let b = document.getElementById("atkNum");
+	let c = document.getElementById("atkTimeDesc");
+	let d = document.getElementById("atkTime");
+	let e = document.getElementById("timeDamageOutput");
+	let f = document.getElementById("critChanceDesc");
+	let g = document.getElementById("critChance");
+	a.hidden = ((a.hidden)? false : true );
+	b.hidden = ((b.hidden)? false : true );
+	c.hidden = ((c.hidden)? false : true );
+	d.hidden = ((d.hidden)? false : true );
+	e.hidden = ((e.hidden)? false : true );
+	f.hidden = ((f.hidden)? false : true );
+	g.hidden = ((g.hidden)? false : true );
 }
 
 function deleteForm()
@@ -116,6 +138,7 @@ function deleteForm()
 	let elder = document.getElementById("elderMulti");
 	let main = document.getElementById("mainDmg");
 	let crit = document.getElementById("critDmg");
+	let critChance = document.getElementById("critChance");
 	let comp = document.getElementById("compDmg");
 	let troop = document.getElementById("troopDmg");
 	let armor = document.getElementById("armorFracture");
@@ -135,6 +158,8 @@ function deleteForm()
 	let monsterRank = document.getElementById("monsterRank");
 	let atlasDmg = document.getElementById("atlasDmg");
 	let atlasTroopDmg = document.getElementById("atlasTroopDmg");
+	let atkNum = document.getElementById("atkNum");
+	let atkTime = document.getElementById("atkTime");
 // ERASE	
 	output.value = "";
 	might.value = "";
@@ -145,6 +170,7 @@ function deleteForm()
 	elder.value = "";
 	main.value = "";
 	crit.value = "";
+	critChance.value = "";
 	comp.value = "";
 	troop.value = "";
 	armor.value = "";
@@ -164,21 +190,26 @@ function deleteForm()
 	monsterRank.value = "";
 	atlasDmg.value= "";
 	atlasTroopDmg.value = "";
+	atkNum.value = "";
+	atkTime.value = "";
 }
 
 function calculateDamage()
 {
 	let output = document.getElementById("outputDmg");	// OUTPUT VAR
+	let timeOutput = document.getElementById("timeOutputDmg");	// TIME OUTPUT VAR
 /*				FIRST MENU				*/
 // STATS
 	let skill = document.getElementById("skillDmg").value;
 	let isPlrGod = document.getElementById("isPlrGod").checked;	// if player in divine form
+	let monsterDmg = document.getElementById("monsterDmg").checked;	// if god, check if we have dmg to monster bonus
 	let might = document.getElementById("might").value;
 	let base = 1 + (document.getElementById("baseDmg").value / 100);
 	let elder = 1 + (document.getElementById("elderMulti").value / 100);
 	let armor = 1 + (document.getElementById("armorFracture").value / 100);
 	let main = 1 + (document.getElementById("mainDmg").value / 100);
 	let crit = 1 + (document.getElementById("critDmg").value / 100);
+	let critChance = document.getElementById("critChance").value;
 	let comp = (document.getElementById("compDmg").value / 100);
 	let troop = 1 + (document.getElementById("troopDmg").value / 100);
 	let start = 1 + (document.getElementById("startDmg").value / 100);
@@ -192,7 +223,6 @@ function calculateDamage()
 // SUPERIORITY CALCULATION
 	let plrRank = document.getElementById("plrRank").value;		// player rank
 	let monsterRank = document.getElementById("monsterRank").value;	// monster rank
-	let monsterBoss = document.getElementById("isBoss").checked;	// check if monster is boss
 // WEAPON STATS
 	let wpn = (document.getElementById("weaponDmg").value / 100);		// weapon damage
 	let wpnAura = (document.getElementById("weaponAura").value / 100);	// weapon support aura
@@ -236,8 +266,14 @@ function calculateDamage()
 // EXO NIGHTFALL
 	let stack3 = document.getElementById("stack3").value;			// nightfall
 	let compStat = (document.getElementById("compStat").value / 100);	// nightfall
-// FINAL DAMAGE VARIABLE
+// DAMAGE OUTPUT VARIABLE
 	let finalDmg = 0;
+	let critCalc = 0;
+	let dmgOvertime = 0;
+// TIME VARIABLES
+	let enableTime = document.getElementById("enableTime").checked;	// time enabler
+	let atkNum = document.getElementById("atkNum").value;		// number of attacks
+	let atkTime = document.getElementById("atkTime").value;		// attacks per second
 // CHECKS
 	if (+might < +1000) might = 1000;		// character base might
 	if (+skill < +0) skill = 0;		// class skill damage
@@ -250,6 +286,7 @@ function calculateDamage()
 	if (+main < +1) main = 1;			// main damage bonus
 	if (+main > +2.36) main = 2.36;		// main damage bonus max 136%
 	if (+crit < +1) crit = 1;
+	if (+crit > +2.81) crit = 2.81;	// crit damage bonus max 181%
 	if (+comp < +0) comp = 0;		// companion damage only used to calculate nightfall buff
 	if (+troop < +1) troop = 1;
 	if (+troop > +1.6856) troop = 1.6856;	// troop dmg max 68.56% (this value related to exo module buff)
@@ -282,7 +319,6 @@ function calculateDamage()
 	stack = Math.floor( stack );	// workaround
 	stack2 = Math.floor( stack2 );	// workaround
 	stack3 = Math.floor( stack3 );	// workaround
-	console.log("base " + Number(base));
 // calculate player superiority bonus (+1% dmg done for every excess rank player has than monster, or -10% dmg done for every excess rank monster has)
 	if ( (Number(plrRank) > +0) && (Number(monsterRank) > +0) )	// calculate only if both ranks are higher than 0
 	{
@@ -323,7 +359,7 @@ function calculateDamage()
 // check if player is playing solo and in god form, then apply selected buff
 	if ( isPlrGod )
 	{
-		if ( !monsterBoss ) skill *= 2;		// hall of war, third node increases damage done to monsters by 100%
+		if ( monsterDmg ) skill *= 2;		// hall of war, third node increases damage done to monsters by 100%
 		if ( effect4 == "soloGroup" ) skill *= 1.5;		// scorching light 40% + warming light 10%
 		if ( effect4 == "soloParty" ) skill *= 1.85;	// scorching light 70% + warming light 15%
 		if ( defSuppBonus ) skill *= 1.3;	// increases damage by 30% when solo if in defense or support class
@@ -338,8 +374,6 @@ function calculateDamage()
 			if ( isPlrGod ) plrSuppAura += 0.36; // support node give extra 36% to base damage if in god form
 		}
 		base += plrSuppAura;	// add support aura to base damage bonus
-		console.log("plrSuppAura " + Number(plrSuppAura));
-		console.log("base " + Number(base));
 	}
 // if checked apply cathedral seals
 	if ( dmgSeal ) skill *= 1.03;	// all damage seal +3% damage increase
@@ -355,15 +389,15 @@ function calculateDamage()
 // if stack value is greater than 0, calculate weapon special effect
 	if ( Number(stack) > Number(0) )
 	{
-		if ( effect == "genEffect" ) multiplier += (tracer * stack);	// generic effect
+		if ( effect == "genEffect" ) multiplier += (tracer * stack);	// stack without limits
 		if ( effect == "tracer" )	// outlaw's tracer
 		{
-			if ( Number(stack) > Number(16) ) stack = 16;
+			if ( Number(stack) > Number(16) ) stack = 16;	// standard tracer max 16 stacks
 			multiplier += (tracer * stack);
 		}
-		if ( effect == "viperMark" )	// outlaw's viper mark
+		if ( effect == "viperMark" )	// outlaw's viper mark effect
 		{
-			if ( Number(stack) > Number(100) ) stack = 100;	// max 100 viper marks
+			if ( Number(stack) > Number(100) ) stack = 100;	// viper mark max 100 stacks
 			if ( Number(stack) > Number(20) )	// starting from 20th mark, apply special effect
 			{
 				if ( stack % 2 != 0 ) stack += 1;	// apply in pairs
@@ -374,6 +408,11 @@ function calculateDamage()
 			{
 				multiplier += (tracer * stack);
 			}
+		}
+		if ( effect == "bloodlust" )	// berserker's bloodlust effect
+		{
+			if ( Number(stack) > Number(100) ) stack = 100;	// bloodlust max 100 stacks
+			multiplier += (blade * stack);
 		}
 		skill *= multiplier;	// multiply the base class skill damage
 	}
@@ -413,19 +452,15 @@ function calculateDamage()
 		}
 		if ( Number(stimsValue) > Number(1) ) stimsValue = 1;	// max buff value is 100% (green euphomine)
 		base += stimsValue;	// stimulants adds value to character's base damage bonus
-		console.log("stimsValue " + Number(stimsValue));
-		console.log("base " + Number(base));
 	}
 // if player is not support and we have support aura from another player, calculate aura buff
 	if ( !isPlrSupp )
 	{
 		if ( Number(suppAura) > Number(0) )
 		{
-			console.log("suppAura " + Number(suppAura));
 			if ( !(useStims) || (Number(stimsValue) === Number(0.3)) )
 			{
 				base += suppAura;	// boost only if we are using red euphomine or if we are not
-				console.log("base " + Number(base));
 			}
 		}
 	}
@@ -496,15 +531,40 @@ function calculateDamage()
 // CALCULATION
 	finalDmg = ((((((((((((skill * elder) * (base + (wpn + wpnAura))) * main) * troop) 
 		* artif) * start) * stun) * slow) * chain) * armor) * atlasDmg) * atlasTroopDmg);
-// IF CRIT
-	if ( Number(crit) > Number(1) )
+// IF CRIT (MANUAL)
+	if ( (Number(crit) > Number(1)) && (!enableTime) )
 	{
-		if ( Number(crit) > Number(2.81) ) crit = 2.81;	// crit damage bonus max 181%
-		let critCalc = ((((((((((((skill * elder) * (base + (wpn + wpnAura))) * crit) * troop) 
+		critCalc = ((((((((((((skill * elder) * (base + (wpn + wpnAura))) * crit) * troop) 
 			* artif) * start) * stun) * slow) * chain) * armor) * atlasDmg) * atlasTroopDmg);
 		finalDmg += critCalc;	// ADD TO FINAL DMG
 	}
 // OUTPUT
 	let digit = Intl.NumberFormat();
 	output.innerText = digit.format( Math.floor(finalDmg) );	// thousands separated with dots
+// TIME BASED DAMAGE
+	if ( enableTime )	// this output simulate damage from continuous attacks
+	{
+		if ( Number(atkNum) < Number(1) ) atkNum = 1;
+		if ( Number(atkTime) < Number(1) ) atkTime = 1;
+		if ( Number(critChance) < Number(5) ) critChance = 5;
+		if ( Number(critChance) > Number(33.8) ) critChance = 33.8;
+		if ( Number(crit) < Number(1.3) ) crit = 1.3;	// here calculate base crit damage in case
+		for ( var i = 0; i < atkNum; i++ )
+		{
+			let random = ((Math.random() * 100) + 1);	// generate random number
+			for ( var j = 0; j < atkTime; j++ )
+			{
+				let origDmg = finalDmg;
+				if ( Number(atkNum) > Number(15) ) origDmg /= start;	// remove start buff
+				if ( Number(random) <= Number(critChance) )	// crit if random is within the range
+				{
+					critCalc = ((((((((((((skill * elder) * (base + (wpn + wpnAura))) * crit) * troop) 
+						* artif) * start) * stun) * slow) * chain) * armor) * atlasDmg) * atlasTroopDmg);
+					origDmg += critCalc;
+				}
+				dmgOvertime += origDmg;
+			}
+		}
+		timeOutput.innerText = digit.format( Math.floor(dmgOvertime) );
+	}
 }

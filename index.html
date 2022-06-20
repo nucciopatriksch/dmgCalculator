@@ -35,9 +35,18 @@
 	<div class="outputSection">
 		<table>
 			<tr>
-				<td id="outputEng">Damage Output: </td>
-				<td id="outputIta" hidden>Output Danni: </td>
+				<td id="outputEng">Damage: </td>
+				<td id="outputIta" hidden>Danni: </td>
 				<td id="outputDmg">0</td>
+			</tr>
+		</table>
+	</div>
+	<div class="timeOutputSection">
+		<table id="timeDamageOutput" hidden>
+			<tr>
+				<td id="outputEng2">Damage Overtime: </td>
+			<!--<td id="outputIta2" hidden>Danni nel Tempo: </td>-->
+				<td id="timeOutputDmg">0</td>
 			</tr>
 		</table>
 	</div>
@@ -54,6 +63,10 @@
 				<tr>
 					<td>God Form</td>
 					<td><input type="checkbox" id="isPlrGod" onclick="showTravelBonus()"></td>
+				</tr>
+				<tr>
+					<td id="monsterDmgDesc" hidden>Damage to Monsters</td>
+					<td><input type="checkbox" id="monsterDmg" hidden></td>
 				</tr>
 				<tr>
 					<td>Might</td>
@@ -85,16 +98,20 @@
 					<td><input type="number" id="mainDmg" min="0" max="136" placeholder="0"></td>
 				</tr>
 				<tr>
-					<td>Critical Damage Bonus</td>
-					<td><input type="number" id="critDmg" min="0" max="181" placeholder="0"></td>
-				</tr>
-				<tr>
 					<td>Companion Damage Bonus</td>
 					<td><input type="number" id="compDmg" min="0" max="181" placeholder="0"></td>
 				</tr>
 				<tr>
 					<td>Damage to Elite/Minion</td>
 					<td><input type="number" id="troopDmg" min="0" max="68.56" placeholder="0"></td>
+				</tr>
+				<tr>
+					<td>Critical Damage Bonus</td>
+					<td><input type="number" id="critDmg" min="0" max="181" placeholder="0"></td>
+				</tr>
+				<tr>
+					<td id="critChanceDesc" hidden>Critical Chance</td>
+					<td><input type="number" id="critChance" min="5" max="33.8" placeholder="0" hidden></td>
 				</tr>
 				<tr><td><label>Sub Stats</label></td></tr>
 				<tr>
@@ -126,10 +143,6 @@
 				<tr>
 					<td>Monster's Rank</td>
 					<td><input type="number" id="monsterRank" min="0" placeholder="0"></td>
-				</tr>
-				<tr>
-					<td>Is Monster Boss</td>
-					<td><input type="checkbox" id="isBoss"></td>
 				</tr>
 				<tr><td><label>Weapon Stats</label></td></tr>
 				<tr>
@@ -213,6 +226,7 @@
 						<option id="optValue" value="tracer">Tracer</option>
 						<option id="optValue" value="viperMark">Viper Mark</option>
 						<option id="optValue" value="dodgeThat">Dodge That</option>
+						<option id="optValue" value="bloodlust">Bloodlust</option>
 					</select></td>
 				</tr>
 				<tr><td><label>Artifact Effect</label></td></tr>
@@ -292,6 +306,29 @@
 				<tr>
 					<td>Stat Percentage</td>
 					<td><input type="number" id="compStat" min="0" max="33" placeholder="0"></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<div class="timeSection">
+		<label>Time based Damage</label>
+		<div class="timeInputs">
+			<table>
+				<tr>
+					<td>Enable Time</td>
+					<td><input type="checkbox" id="enableTime" onclick="enableTimeDamage()"></td>
+				</tr>
+			</table>
+			<table>
+				<tr>
+					<td id="atkNumDesc" hidden>Number of Attacks</td>
+					<td><input type="number" id="atkNum" min="1" placeholder="1" hidden></td>
+				</tr>
+			</table>
+			<table>
+				<tr>
+					<td id="atkTimeDesc" hidden>Attacks per Seconds</td>
+					<td><input type="number" id="atkTime" min="1" placeholder="1" hidden></td>
 				</tr>
 			</table>
 		</div>
