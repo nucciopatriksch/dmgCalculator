@@ -390,7 +390,7 @@ function calculateDamage()
 			if ( Number(stack) > Number(16) ) stack = 16;
 			multiplier += (tracer * stack);
 			skill *= 3;
-			skill *= multiplier;
+			break;
 		}
 		case "ironHeart":	// berserker's iron heart effect
 		{
@@ -399,7 +399,7 @@ function calculateDamage()
 		}
 		case "gvardar":		// berserker's gvardar effect
 		{
-			multiplier *= 4;	// crippling bow damage increased 4 times
+			skill *= 4;	// crippling bow damage increased 4 times
 			break;
 		}
 		case "bloodlust":	// berserker's bloodlust effect
