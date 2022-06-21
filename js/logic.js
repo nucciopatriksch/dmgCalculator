@@ -40,6 +40,9 @@ function changeLang()
 	// AUTHOR
 	let o = document.getElementById("authorEng");
 	let p = document.getElementById("authorIta");
+	// TIME OUTPUT
+	let q = document.getElementById("outputEng2");
+	let r = document.getElementById("outputIta2");
 	// SET VISIBLE ITEMS ORDER
 	a.hidden = ((a.hidden)? false : true);
 	b.hidden = ((b.hidden)? false : true);
@@ -57,6 +60,8 @@ function changeLang()
 	n.hidden = ((n.hidden)? false : true);
 	o.hidden = ((o.hidden)? false : true);
 	p.hidden = ((p.hidden)? false : true);
+	q.hidden = ((q.hidden)? false : true);
+	r.hidden = ((r.hidden)? false : true);
 }
 
 function showEffects()
@@ -128,70 +133,12 @@ function enableTimeDamage()
 
 function deleteForm()
 {
-// VARIABLES
-	let output = document.getElementById("outputDmg");
-	let might = document.getElementById("might");
-	let skill = document.getElementById("skillDmg");
-	let base = document.getElementById("baseDmg");
-	let wpn = document.getElementById("weaponDmg");
-	let wpnAura = document.getElementById("weaponAura");
-	let elder = document.getElementById("elderMulti");
-	let main = document.getElementById("mainDmg");
-	let crit = document.getElementById("critDmg");
-	let critChance = document.getElementById("critChance");
-	let comp = document.getElementById("compDmg");
-	let troop = document.getElementById("troopDmg");
-	let armor = document.getElementById("armorFracture");
-	let start = document.getElementById("startDmg");
-	let stun = document.getElementById("stunDmg");
-	let slow = document.getElementById("slowDmg");
-	let chain = document.getElementById("chainDmg");
-	let artif = document.getElementById("artifactDmg");
-	let stack = document.getElementById("stack");
-	let stack2 = document.getElementById("stack2");
-	let stack3 = document.getElementById("stack3");
-	let compStat = document.getElementById("compStat");
-	let suppMight = document.getElementById("suppMight");
-	let suppAura = document.getElementById("aura");
-	let mightGiven = document.getElementById("mightPercentage");
-	let plrRank = document.getElementById("plrRank");
-	let monsterRank = document.getElementById("monsterRank");
-	let atlasDmg = document.getElementById("atlasDmg");
-	let atlasTroopDmg = document.getElementById("atlasTroopDmg");
-	let atkNum = document.getElementById("atkNum");
-	let atkTime = document.getElementById("atkTime");
-// ERASE	
-	output.value = "";
-	might.value = "";
-	skill.value = "";
-	base.value = "";
-	wpn.value = "";
-	wpnAura.value = "";
-	elder.value = "";
-	main.value = "";
-	crit.value = "";
-	critChance.value = "";
-	comp.value = "";
-	troop.value = "";
-	armor.value = "";
-	start.value = "";
-	stun.value = "";
-	slow.value = "";
-	chain.value = "";
-	artif.value = "";
-	stack.value = "";
-	stack2.value = "";
-	stack3.value = "";
-	compStat.value = "";
-	suppMight.value = "";
-	suppAura.value = "";
-	mightGiven.value = "";
-	plrRank.value = "";
-	monsterRank.value = "";
-	atlasDmg.value= "";
-	atlasTroopDmg.value = "";
-	atkNum.value = "";
-	atkTime.value = "";
+	const inputs = document.querySelectorAll('#might, #skillDmg, #baseDmg, #classBuff, #a9Buff,'
+		+ ' #weaponDmg, #weaponAura, #elderMulti, #mainDmg, #critDmg, #critChance, #compDmg,'
+		+ ' #troopDmg, #armorFracture, #startDmg, #stunDmg, #slowDmg, #chainDmg, #artifactDmg,'
+		+ ' #stack, #stack2, #stack3, #compStat, #suppMight, #aura, #mightPercentage, #plrRank,'
+		+ ' #monsterRank, #atlasDmg, #atlasTroopDmg, #atkNum, #atkTime, #symbolBuff, #guildDmg');
+	inputs.forEach(input => {input.value = ""});
 }
 
 function calculateDamage()
@@ -199,8 +146,12 @@ function calculateDamage()
 	let output = document.getElementById("outputDmg");	// OUTPUT VAR
 	let timeOutput = document.getElementById("timeOutputDmg");	// TIME OUTPUT VAR
 /*				FIRST MENU				*/
-// STATS
+// CLASS
 	let skill = document.getElementById("skillDmg").value;
+	let classBuff = 1 + (document.getElementById("classBuff").value / 100);
+	let a9Buff = 1 + (document.getElementById("a9Buff").value / 100);
+	let symbolBuff = 1 + (document.getElementById("symbolBuff").value / 100);
+// STATS
 	let isPlrGod = document.getElementById("isPlrGod").checked;	// if player in divine form
 	let monsterDmg = document.getElementById("monsterDmg").checked;	// if god, check if we have dmg to monster bonus
 	let might = document.getElementById("might").value;
@@ -241,6 +192,9 @@ function calculateDamage()
 // ATLAS
 	let atlasDmg = 1 + (document.getElementById("atlasDmg").value / 100);
 	let atlasTroopDmg = 1 + (document.getElementById("atlasTroopDmg").value / 100);
+// MISC
+	let panthDmg = 1 + (document.getElementById("guildDmg").value / 100);
+	let premiumDmg = document.getElementById("premiumDmg").checked;
 /* 				EFFECTS MENU				*/
 // WEAPON EFFECT
 	let stack = document.getElementById("stack").value;	// weapon
@@ -257,6 +211,7 @@ function calculateDamage()
 	let mightGiven = (document.getElementById("mightPercentage").value / 100);	// support
 // BUFF EFFECT
 	let select3 = document.getElementById("multiSelect3");		// soundweaver
+	let wings = document.getElementById("wings").checked;		// wings of skies artifact - use biotrap const
 	let sunBless = document.getElementById("bless").checked;	// lightbinder's bless
 	let iLight = document.getElementById("light").checked;		// lightbinder's ulti
 	let eShower = document.getElementById("shower").checked;	// alchemist's shower	
@@ -275,6 +230,9 @@ function calculateDamage()
 	let atkNum = document.getElementById("atkNum").value;		// number of attacks
 	let atkTime = document.getElementById("atkTime").value;		// attacks per second
 // CHECKS
+	if (+classBuff < +1) classBuff = 1;
+	if (+a9Buff < +1) a9Buff = 1;
+	if (+symbolBuff < +1) symbolBuff = 1;
 	if (+might < +1000) might = 1000;		// character base might
 	if (+skill < +0) skill = 0;		// class skill damage
 	if (+base < +1) base = 1;			// character base damage min 1x
@@ -304,12 +262,15 @@ function calculateDamage()
 	if (+artif > +1.35) artif = 1.35;		// artifact bonus max 35%
 	if (+atlasDmg < +1) atlasDmg = 1;	// atlas adventure damage bonus
 	if (+atlasDmg > +1.3) atlasDmg = 1.3;
+	if (+panthDmg < +1) panthDmg = 1;	// damage bonus from pantheon
+	if (+panthDmg > +1.12) panthDmg = 1.12;	// pantheon damage bonus max 12%
 	if (+atlasTroopDmg < +1) atlasTroopDmg = 1;	// atlas troop damage bonus
 	if (+atlasTroopDmg > +1.39) atlasTroopDmg = 1.39;
 	if (+suppMight < +1000 ) suppMight = 1000;	// support's might
 	if (+suppAura < +0) suppAura = 0;			// support's aura power
 	if (+mightGiven < +0 ) mightGiven = 0;		// support's transferred might percentage
 	if (+mightGiven > +0.8 ) mightGiven = 0.8;	// transferred might max 80% (elder mercy)
+	if (+stack < +0) stack = 0;
 	skill = Math.floor( skill );	// workaround
 	let effect = select.options[select.selectedIndex].value;	// get option value
 	let effect2 = select2.options[select2.selectedIndex].value;	// get option value
@@ -320,7 +281,7 @@ function calculateDamage()
 	stack2 = Math.floor( stack2 );	// workaround
 	stack3 = Math.floor( stack3 );	// workaround
 // calculate player superiority bonus (+1% dmg done for every excess rank player has than monster, or -10% dmg done for every excess rank monster has)
-	if ( (Number(plrRank) > +0) && (Number(monsterRank) > +0) )	// calculate only if both ranks are higher than 0
+	if ( (Number(plrRank) > Number(0)) && (Number(monsterRank) > Number(0)) )	// calculate only if both ranks are higher than 0
 	{
 		let superiorityMultiplier = 1;
 		if ( Number(plrRank) > Number(monsterRank) )
@@ -352,6 +313,7 @@ function calculateDamage()
 		{
 			suppMight *= mightGiven;	// get the support's might percentage
 			suppMight /= 100;		// subdivide by 100
+			if ( wings ) might += (suppMight * alcBiotrap);
 			might += suppMight;		// add support's might percentage to player's might
 		}
 		skill *= might;	// calcolate final skill damage value based on might
@@ -375,8 +337,12 @@ function calculateDamage()
 		}
 		base += plrSuppAura;	// add support aura to base damage bonus
 	}
+// apply class skill or talents buff if value is greater than 1
+	if ( Number(classBuff) > Number(1) ) skill *= classBuff;
+	if ( Number(a9Buff) > Number(1) ) skill *= a9Buff;
+	if ( Number(symbolBuff) > Number(1) ) skill *= symbolBuff;
 // if checked apply cathedral seals
-	if ( dmgSeal ) skill *= 1.03;	// all damage seal +3% damage increase
+	if ( dmgSeal ) skill *= 1.03;	// all damage seal increase damage by 3%
 	if ( cSeal ) skill *= 1.1;	// class seal +10% damage increase
 	if ( aSeal ) skill *= 1.05;	// adventure seal +5% damage increase
 // use verdict buff if checked
@@ -386,16 +352,25 @@ function calculateDamage()
 		if (Number(verdict) > Number(1.2)) verdict = 1.2;
 		skill *= verdict;
 	}
-// if stack value is greater than 0, calculate weapon special effect
-	if ( Number(stack) > Number(0) )
+// apply pantheon damage bonus
+	if ( Number(panthDmg) > Number(1) ) skill *= panthDmg;	// max 12%
+// if checked apply premium damage bonus
+	if ( premiumDmg ) skill *= 1.03;	// premium increases all damage by 3%
+// calculate weapon special effect, some of these need stacks to increase damage
+	switch ( effect )	// select
 	{
-		if ( effect == "genEffect" ) multiplier += (tracer * stack);	// stack without limits
-		if ( effect == "tracer" )	// outlaw's tracer
+		default: case "genEffect":
+		{
+			multiplier += (tracer * stack);		// stack without limits
+			break;
+		}
+		case "tracer":		// outlaw's tracer
 		{
 			if ( Number(stack) > Number(16) ) stack = 16;	// standard tracer max 16 stacks
 			multiplier += (tracer * stack);
+			break;
 		}
-		if ( effect == "viperMark" )	// outlaw's viper mark effect
+		case "viperMark":	// outlaw's viper mark effect
 		{
 			if ( Number(stack) > Number(100) ) stack = 100;	// viper mark max 100 stacks
 			if ( Number(stack) > Number(20) )	// starting from 20th mark, apply special effect
@@ -408,36 +383,52 @@ function calculateDamage()
 			{
 				multiplier += (tracer * stack);
 			}
+			break;
 		}
-		if ( effect == "bloodlust" )	// berserker's bloodlust effect
+		case "dodgeThat":	// outlaw's dodge that
+		{
+			if ( Number(stack) > Number(16) ) stack = 16;
+			multiplier += (tracer * stack);
+			skill *= 3;
+			skill *= multiplier;
+		}
+		case "ironHeart":	// berserker's iron heart effect
+		{
+			multiplier += alcBiotrap;	// gladiator strike 40% damage bonus
+			break;
+		}
+		case "gvardar":		// berserker's gvardar effect
+		{
+			multiplier *= 4;	// crippling bow damage increased 4 times
+			break;
+		}
+		case "bloodlust":	// berserker's bloodlust effect
 		{
 			if ( Number(stack) > Number(100) ) stack = 100;	// bloodlust max 100 stacks
 			multiplier += (blade * stack);
+			break;
 		}
-		skill *= multiplier;	// multiply the base class skill damage
 	}
-// dodge that only (stack here can be 0)
-	if ( effect == "dodgeThat" )	// outlaw's dodge that
-	{
-		if ( Number(stack) < Number(0) ) stack = 0;
-		if ( Number(stack) > Number(16) ) stack = 16;
-		multiplier += (tracer * stack);
-		skill *= 3;
-		skill *= multiplier;
-	}
+	skill *= multiplier;	// multiply class skill damage based on weapon effect
 // if stack2 value is greater than 0, calculate artifact special effect
 	if ( Number(stack2) > Number(0) )
 	{
 		multiplier = 1;	// reinizialize multiplier
-		if ( effect2 == "detector" )
+		switch ( effect2 )
 		{
-			if (Number(stack2) > Number(5)) stack2 = 5;	// detector max 5 stacks
-			multiplier += (vulnerability * stack2);
-		}
-		if ( effect2 == "blade" )
-		{
-			if (Number(stack2) > Number(10)) stack2 = 10;	// blade max 10 stacks
-			multiplier += (blade * stack2);
+			default: {break;}	// case null - do nothing
+			case "detector":
+			{
+				if (Number(stack2) > Number(5)) stack2 = 5;	// detector max 5 stacks
+				multiplier += (vulnerability * stack2);
+				break;
+			}
+			case "blade":
+			{
+				if (Number(stack2) > Number(10)) stack2 = 10;	// blade max 10 stacks
+				multiplier += (blade * stack2);
+				break;
+			}
 		}
 		skill *= multiplier;
 	}
@@ -468,14 +459,31 @@ function calculateDamage()
 	if ( effect3 != "null" )
 	{
 		multiplier = 1;	// reinizialize multiplier
-		if ( effect3 == "rythm1" ) multiplier += shower;	// use alc shower const since same buff value
-		if ( effect3 == "rythmOC" ) multiplier += (shower * 2);	// overcharge
-		if ( effect3 == "swUlti" )
+		switch ( effect3 )
 		{
-			multiplier += shower;
-			skill *= multiplier;		// rythm of strength
-			skill *= multiplier;		// rythm of courage
-			multiplier = (1 + tracer);	// make rythm stronger by 10% and multiply again out of this if block
+			default: {break;}	// case null - do nothing
+			case "rythm1":
+			{
+				if ( wings ) multiplier += (shower * alcBiotrap);
+				multiplier += shower;	// use alc shower const since same buff value
+				break;
+			}
+			case "rythmOC":
+			{
+				if ( wings ) multiplier += ((shower * alcBiotrap) * 2);
+				multiplier += (shower * 2);	// overcharge
+				break;
+			}
+			case "swUlti":
+			{
+				if ( wings ) multiplier += (shower * alcBiotrap);
+				multiplier += shower;
+				skill *= multiplier;		// rythm of strength
+				skill *= multiplier;		// rythm of courage
+				multiplier = (1 + tracer);	// make rythm stronger by 10% and multiply again out of this if block
+				if ( wings ) multiplier += (tracer * alcBiotrap);
+				break;
+			}
 		}
 		skill *= multiplier;	// multiply skill
 	}
@@ -483,18 +491,21 @@ function calculateDamage()
 	if ( sunBless )		// blessing of the sun
 	{
 		multiplier = 1;	// reinizialize multiplier
+		if ( wings ) multiplier += (bless * alcBiotrap);
 		multiplier += bless;
 		skill *= multiplier;
 	}
 	if ( iLight )		// incarnation of light
 	{
 		multiplier = 1;	// reinizialize multiplier
+		if ( wings ) multiplier += (lightInc * alcBiotrap);
 		multiplier += lightInc;
 		skill *= multiplier;
 	}
 	if ( eShower )		// energy shower
 	{
 		multiplier = 1;	// reinizialize multiplier
+		if ( wings ) multiplier += (shower * alcBiotrap);
 		multiplier += shower;
 		skill *= multiplier;
 	}
@@ -513,6 +524,7 @@ function calculateDamage()
 	if ( macha )		// machavann's upgrade
 	{
 		multiplier = 1;	// reinizialize multiplier
+		if ( wings ) multiplier += (macha_hammer * alcBiotrap);
 		multiplier += macha_hammer;
 		skill *= multiplier;
 	}
@@ -525,6 +537,7 @@ function calculateDamage()
 		if (Number(compStat) < Number(0)) compStat = 0;
 		if (Number(compStat) > Number(0.33)) compStat = 0.33;
 		let nightfall = (comp * compStat);
+		if ( wings ) multiplier += (nightfall * alcBiotrap);
 		multiplier += (nightfall * stack3);
 		skill *= multiplier;
 	}
@@ -532,7 +545,7 @@ function calculateDamage()
 	finalDmg = ((((((((((((skill * elder) * (base + (wpn + wpnAura))) * main) * troop) 
 		* artif) * start) * stun) * slow) * chain) * armor) * atlasDmg) * atlasTroopDmg);
 // IF CRIT (MANUAL)
-	if ( (Number(crit) > Number(1)) && (!enableTime) )
+	if ( (Number(crit) > Number(1)) && (!enableTime) )	// crit with stat only if time is disabled
 	{
 		critCalc = ((((((((((((skill * elder) * (base + (wpn + wpnAura))) * crit) * troop) 
 			* artif) * start) * stun) * slow) * chain) * armor) * atlasDmg) * atlasTroopDmg);
@@ -544,14 +557,15 @@ function calculateDamage()
 // TIME BASED DAMAGE
 	if ( enableTime )	// this output simulate damage from continuous attacks
 	{
-		if ( Number(atkNum) < Number(1) ) atkNum = 1;
-		if ( Number(atkTime) < Number(1) ) atkTime = 1;
-		if ( Number(critChance) < Number(5) ) critChance = 5;
-		if ( Number(critChance) > Number(33.8) ) critChance = 33.8;
+		if ( Number(atkNum) < Number(1) ) atkNum = 1;	// number of attacks min 1 but unlimited
+		if ( Number(atkTime) < Number(1) ) atkTime = 1;		// attacks per second min 1
+		if ( Number(atkTime) > Number(3) ) atkTime = 3;		// attacks per second max 3
+		if ( Number(critChance) < Number(5) ) critChance = 5;	// base crit chance
+		if ( Number(critChance) > Number(44) ) critChance = 44;	// max chance without divine weapons
 		if ( Number(crit) < Number(1.3) ) crit = 1.3;	// here calculate base crit damage in case
 		for ( var i = 0; i < atkNum; i++ )
 		{
-			let random = ((Math.random() * 100) + 1);	// generate random number
+			let random = ((Math.random() * 100) + 1);	// generate random number for crit chance
 			for ( var j = 0; j < atkTime; j++ )
 			{
 				let origDmg = finalDmg;

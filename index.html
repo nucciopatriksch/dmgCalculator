@@ -45,7 +45,7 @@
 		<table id="timeDamageOutput" hidden>
 			<tr>
 				<td id="outputEng2">Damage Overtime: </td>
-			<!--<td id="outputIta2" hidden>Danni nel Tempo: </td>-->
+				<td id="outputIta2" hidden>Danni nel Tempo: </td>
 				<td id="timeOutputDmg">0</td>
 			</tr>
 		</table>
@@ -54,10 +54,22 @@
 		<!--	FIRST TAB	-->
 		<div class="dataSection">
 			<table>
-				<tr><td><label>Skill</label></td></tr>
+				<tr><td><label>Class</label></td></tr>
 				<tr>
 					<td>Class Skill Damage</td>
 					<td><input type="number" id="skillDmg" min="0" placeholder="0" required></td>
+				</tr>
+				<tr>
+					<td>Generic Class Buff</td>
+					<td><input type="number" id="classBuff" min="0" placeholder="0"></td>
+				</tr>
+				<tr>
+					<td>Aelerium-9 Buff</td>
+					<td><input type="number" id="a9Buff" min="0" placeholder="0"></td>
+				</tr>
+				<tr>
+					<td>Symbol Buff</td>
+					<td><input type="number" id="symbolBuff" min="0" placeholder="0"></td>
 				</tr>
 				<tr><td><label>Character</label></td></tr>
 				<tr>
@@ -111,7 +123,7 @@
 				</tr>
 				<tr>
 					<td id="critChanceDesc" hidden>Critical Chance</td>
-					<td><input type="number" id="critChance" min="5" max="33.8" placeholder="0" hidden></td>
+					<td><input type="number" id="critChance" min="5" max="44" placeholder="0" hidden></td>
 				</tr>
 				<tr><td><label>Sub Stats</label></td></tr>
 				<tr>
@@ -203,6 +215,15 @@
 					<td>Troop Damage Bonus</td>
 					<td><input type="number" id="atlasTroopDmg" min="0" max="39" placeholder="0"></td>
 				</tr>
+				<tr><td><label>Misc</label></td></tr>
+				<tr>
+					<td>Pantheon Damage Bonus</td>
+					<td><input type="number" id="guildDmg" min="0" max="12" placeholder="0"></td>
+				</tr>
+				<tr>
+					<td>Premium Damage Bonus</td>
+					<td><input type="checkbox" id="premiumDmg"></td>
+				</tr>
 			</table>
 		</div>
 		<!--	EFFECTS		-->
@@ -226,6 +247,8 @@
 						<option id="optValue" value="tracer">Tracer</option>
 						<option id="optValue" value="viperMark">Viper Mark</option>
 						<option id="optValue" value="dodgeThat">Dodge That</option>
+						<option id="optValue" value="ironHeart">Iron Heart</option>
+						<option id="optValue" value="gvardar">Gvardar</option>
 						<option id="optValue" value="bloodlust">Bloodlust</option>
 					</select></td>
 				</tr>
@@ -273,6 +296,10 @@
 						<option id="optValue3" value="rythmOC">Rythm with Overcharge</option>
 						<option id="optValue3" value="swUlti">Fiery Solo</option>
 					</select></td>
+				</tr>
+				<tr>
+					<td>Wings of Skies</td>
+					<td><input type="checkbox" id="wings"></td>
 				</tr>
 				<tr>
 					<td>Blessing of the Sun</td>
@@ -328,7 +355,7 @@
 			<table>
 				<tr>
 					<td id="atkTimeDesc" hidden>Attacks per Seconds</td>
-					<td><input type="number" id="atkTime" min="1" placeholder="1" hidden></td>
+					<td><input type="number" id="atkTime" min="1" max="3" placeholder="1" hidden></td>
 				</tr>
 			</table>
 		</div>
