@@ -48,6 +48,11 @@
 				<td id="outputIta2" hidden>Danni nel Tempo: </td>
 				<td id="timeOutputDmg">0</td>
 			</tr>
+			<tr>
+				<td>Enemies hitted: </td>
+			<!--<td id="enemiesIta" hidden>Nemici colpiti: </td>-->
+				<td id="enemiesNum">0</td>
+			</tr>
 		</table>
 	</div>
 	<div class="subSection">
@@ -215,6 +220,14 @@
 					<td>Troop Damage Bonus</td>
 					<td><input type="number" id="atlasTroopDmg" min="0" max="39" placeholder="0"></td>
 				</tr>
+				<tr>
+					<td>Atlas Node Buff 1</td>
+					<td><input type="number" id="node1" min="0" placeholder="0"></td>
+				</tr>
+				<tr>
+					<td>Atlas Node Buff 2</td>
+					<td><input type="number" id="node2" min="0" placeholder="0"></td>
+				</tr>
 				<tr><td><label>Misc</label></td></tr>
 				<tr>
 					<td>Pantheon Damage Bonus</td>
@@ -354,8 +367,14 @@
 			</table>
 			<table>
 				<tr>
-					<td id="atkTimeDesc" hidden>Attacks per Seconds</td>
+					<td id="atkTimeDesc" hidden>Attacks per Second</td>
 					<td><input type="number" id="atkTime" min="1" max="3" placeholder="1" hidden></td>
+				</tr>
+			</table>
+			<table>
+				<tr>
+					<td id="enemiesDesc" hidden>Enemies hitted</td>
+					<td><input type="number" id="enemies" min="1" placeholder="1" hidden></td>
 				</tr>
 			</table>
 		</div>

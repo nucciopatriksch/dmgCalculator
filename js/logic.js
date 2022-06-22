@@ -122,6 +122,8 @@ function enableTimeDamage()
 	let e = document.getElementById("timeDamageOutput");
 	let f = document.getElementById("critChanceDesc");
 	let g = document.getElementById("critChance");
+	let h = document.getElementById("enemiesDesc");
+	let i = document.getElementById("enemies");
 	a.hidden = ((a.hidden)? false : true );
 	b.hidden = ((b.hidden)? false : true );
 	c.hidden = ((c.hidden)? false : true );
@@ -129,6 +131,8 @@ function enableTimeDamage()
 	e.hidden = ((e.hidden)? false : true );
 	f.hidden = ((f.hidden)? false : true );
 	g.hidden = ((g.hidden)? false : true );
+	h.hidden = ((h.hidden)? false : true );
+	i.hidden = ((i.hidden)? false : true );
 }
 
 function deleteForm()
@@ -137,7 +141,8 @@ function deleteForm()
 		+ ' #weaponDmg, #weaponAura, #elderMulti, #mainDmg, #critDmg, #critChance, #compDmg,'
 		+ ' #troopDmg, #armorFracture, #startDmg, #stunDmg, #slowDmg, #chainDmg, #artifactDmg,'
 		+ ' #stack, #stack2, #stack3, #compStat, #suppMight, #aura, #mightPercentage, #plrRank,'
-		+ ' #monsterRank, #atlasDmg, #atlasTroopDmg, #atkNum, #atkTime, #symbolBuff, #guildDmg');
+		+ ' #monsterRank, #atlasDmg, #atlasTroopDmg, #atkNum, #atkTime, #symbolBuff, #guildDmg,'
+		+ ' #node1, #node2, #enemies');
 	inputs.forEach(input => {input.value = ""});
 }
 
@@ -145,6 +150,7 @@ function calculateDamage()
 {
 	let output = document.getElementById("outputDmg");	// OUTPUT VAR
 	let timeOutput = document.getElementById("timeOutputDmg");	// TIME OUTPUT VAR
+	let enemiesOutput = document.getElementById("enemiesNum");
 /*				FIRST MENU				*/
 // CLASS
 	let skill = document.getElementById("skillDmg").value;
@@ -192,6 +198,8 @@ function calculateDamage()
 // ATLAS
 	let atlasDmg = 1 + (document.getElementById("atlasDmg").value / 100);
 	let atlasTroopDmg = 1 + (document.getElementById("atlasTroopDmg").value / 100);
+	let node1 = 1 + (document.getElementById("node1").value / 100);
+	let node2 = 1 + (document.getElementById("node2").value / 100);
 // MISC
 	let panthDmg = 1 + (document.getElementById("guildDmg").value / 100);
 	let premiumDmg = document.getElementById("premiumDmg").checked;
@@ -229,6 +237,7 @@ function calculateDamage()
 	let enableTime = document.getElementById("enableTime").checked;	// time enabler
 	let atkNum = document.getElementById("atkNum").value;		// number of attacks
 	let atkTime = document.getElementById("atkTime").value;		// attacks per second
+	let enemies = document.getElementById("enemies").value;		// number of enemies hitted with one attack
 // CHECKS
 	if (+classBuff < +1) classBuff = 1;
 	if (+a9Buff < +1) a9Buff = 1;
@@ -266,10 +275,13 @@ function calculateDamage()
 	if (+panthDmg > +1.12) panthDmg = 1.12;	// pantheon damage bonus max 12%
 	if (+atlasTroopDmg < +1) atlasTroopDmg = 1;	// atlas troop damage bonus
 	if (+atlasTroopDmg > +1.39) atlasTroopDmg = 1.39;
+	if (+node1 < +1) node1 = 1;		// generic atlas node buff (class or symbol)
+	if (+node2 < +1) node2 = 1;		// generic atlas node buff (class or symbol)
 	if (+suppMight < +1000 ) suppMight = 1000;	// support's might
 	if (+suppAura < +0) suppAura = 0;			// support's aura power
-	if (+mightGiven < +0 ) mightGiven = 0;		// support's transferred might percentage
-	if (+mightGiven > +0.8 ) mightGiven = 0.8;	// transferred might max 80% (elder mercy)
+	if (+mightGiven < +0) mightGiven = 0;		// support's transferred might percentage
+	if (+mightGiven > +0.8) mightGiven = 0.8;	// transferred might max 80% (elder mercy)
+	if (+enemies < +1) enemies = 1;
 	if (+stack < +0) stack = 0;
 	skill = Math.floor( skill );	// workaround
 	let effect = select.options[select.selectedIndex].value;	// get option value
@@ -354,6 +366,9 @@ function calculateDamage()
 	}
 // apply pantheon damage bonus
 	if ( Number(panthDmg) > Number(1) ) skill *= panthDmg;	// max 12%
+// if values are higher than 1, calculate generic atlas buff (related to class skill or symbols)
+	if ( Number(node1) > Number(1) ) skill *= node1;
+	if ( Number(node2) > Number(1) ) skill *= node2;
 // if checked apply premium damage bonus
 	if ( premiumDmg ) skill *= 1.03;	// premium increases all damage by 3%
 // calculate weapon special effect, some of these need stacks to increase damage
@@ -569,16 +584,18 @@ function calculateDamage()
 			for ( var j = 0; j < atkTime; j++ )
 			{
 				let origDmg = finalDmg;
-				if ( Number(atkNum) > Number(15) ) origDmg /= start;	// remove start buff
+				if ( Number(atkNum) > Number(15) ) origDmg /= start;	// remove start buff after 15 attacks (guess 1 attack per second)
 				if ( Number(random) <= Number(critChance) )	// crit if random is within the range
 				{
 					critCalc = ((((((((((((skill * elder) * (base + (wpn + wpnAura))) * crit) * troop) 
 						* artif) * start) * stun) * slow) * chain) * armor) * atlasDmg) * atlasTroopDmg);
 					origDmg += critCalc;
 				}
+				if ( Number(enemies) > Number(1) ) origDmg *= enemies;
 				dmgOvertime += origDmg;
 			}
 		}
 		timeOutput.innerText = digit.format( Math.floor(dmgOvertime) );
+		enemiesOutput.innerText = enemies;
 	}
 }

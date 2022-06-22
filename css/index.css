@@ -104,3 +104,7 @@
 	display : flex;
 	justify-content : space-evenly;
 }
+
+#mainSection .timeSection input{
+	width : 56px;
+}
