@@ -581,6 +581,7 @@ function calculateDamage()
 		for ( var i = 0; i < atkNum; i++ )
 		{
 			let random = ((Math.random() * 100) + 1);	// generate random number for crit chance
+			let enemyCnt = 0;	// enemies counter used to calculate damage on multiple target in same time
 			for ( var j = 0; j < atkTime; j++ )
 			{
 				let origDmg = finalDmg;
@@ -591,8 +592,13 @@ function calculateDamage()
 						* artif) * start) * stun) * slow) * chain) * armor) * atlasDmg) * atlasTroopDmg);
 					origDmg += critCalc;
 				}
-				if ( Number(enemies) > Number(1) ) origDmg *= enemies;
 				dmgOvertime += origDmg;
+				if ( Number(enemies) > Number(1) )
+				{
+					enemyCnt++;	// increase enemy counter
+					if ( Number(enemyCnt) < Number(enemies) ) j--;	// decrease counter
+					else enemyCnt = 0;
+				}
 			}
 		}
 		timeOutput.innerText = digit.format( Math.floor(dmgOvertime) );
