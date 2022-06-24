@@ -157,6 +157,7 @@ function calculateDamage()
 	let classBuff = 1 + (document.getElementById("classBuff").value / 100);
 	let a9Buff = 1 + (document.getElementById("a9Buff").value / 100);
 	let symbolBuff = 1 + (document.getElementById("symbolBuff").value / 100);
+	let classEffectCnt = 0;
 // STATS
 	let isPlrGod = document.getElementById("isPlrGod").checked;	// if player in divine form
 	let monsterDmg = document.getElementById("monsterDmg").checked;	// if god, check if we have dmg to monster bonus
@@ -414,8 +415,25 @@ function calculateDamage()
 		}
 		case "gvardar":		// berserker's gvardar effect
 		{
-			skill *= 4;	// crippling bow damage increased 4 times
-			break;
+			switch ( enableTime )
+			{
+				case false:
+				{
+					let bakSkill = (skill / 4);	// get single attack damage
+					skill = 0;	// reset skill value to fill later
+					for ( var i = 0; i < 10; i++ )	// crippling bow deals damage 10 times in one go
+					{	// starting from 4th attack, crippling bow damage is 4 times higher
+						if ( Number(i) > Number(2) ) skill += (bakSkill * 4);
+						else skill += bakSkill;		// up to 3 continuous attacks, damage is standard
+					}
+					break;
+				}
+				case true:
+				{
+					skill /= 4;	// need to get the effective single attack damage
+					break;
+				}
+			}
 		}
 		case "bloodlust":	// berserker's bloodlust effect
 		{
@@ -572,6 +590,11 @@ function calculateDamage()
 // TIME BASED DAMAGE
 	if ( enableTime )	// this output simulate damage from continuous attacks
 	{
+		let armorTime = 1;	// armor fracture attacks counter, min 1 - max 5
+		let armorFr = 1;	// value that will increased
+		let armorStack = (armor - 1);	// get only the percentage for stacks
+		armorStack /= 4;	// take 1/4 of the value that will multiplied later
+		if ( Number(armor) > Number(1) ) finalDmg /= armor;	// remove armor fracture buff, now is calculated below
 		if ( Number(atkNum) < Number(1) ) atkNum = 1;	// number of attacks min 1 but unlimited
 		if ( Number(atkTime) < Number(1) ) atkTime = 1;		// attacks per second min 1
 		if ( Number(atkTime) > Number(3) ) atkTime = 3;		// attacks per second max 3
@@ -585,14 +608,25 @@ function calculateDamage()
 			for ( var j = 0; j < atkTime; j++ )
 			{
 				let origDmg = finalDmg;
+				classEffectCnt++;
 				if ( Number(atkNum) > Number(15) ) origDmg /= start;	// remove start buff after 15 attacks (guess 1 attack per second)
+				if ( effect == "gvardar" )
+				{
+					if ( Number(classEffectCnt) > Number(3) ) origDmg *= 4; // from 4th attack, damage is increased 4 times
+				}
+				if ( (Number(armor) > Number(1)) && (Number(armorTime) <= Number(5)) )	// calculate armor fracture buff overtime
+				{
+					if (Number(armorTime) > Number(1))
+						armorFr = 1 + (armorStack * (armorTime - 1));
+					armorTime++;
+				}
 				if ( Number(random) <= Number(critChance) )	// crit if random is within the range
 				{
 					critCalc = ((((((((((((skill * elder) * (base + (wpn + wpnAura))) * crit) * troop) 
-						* artif) * start) * stun) * slow) * chain) * armor) * atlasDmg) * atlasTroopDmg);
+						* artif) * start) * stun) * slow) * chain) * atlasDmg) * atlasTroopDmg) * armorFr);
 					origDmg += critCalc;
 				}
-				dmgOvertime += origDmg;
+				dmgOvertime += (origDmg * armorFr);
 				if ( Number(enemies) > Number(1) )
 				{
 					enemyCnt++;	// increase enemy counter
