@@ -603,6 +603,7 @@ function calculateDamage()
 		let armorFr = 1;	// value that will increased
 		let armorStack = (armor - 1);	// get only the percentage for stacks
 		armorStack /= 4;	// take 1/4 of the value that will multiplied later
+		multiplier = 1;		// reset multiplier
 		if ( Number(armor) > Number(1) ) finalDmg /= armor;	// remove armor fracture buff, now is calculated below
 		if ( Number(atkNum) < Number(1) ) atkNum = 1;	// number of attacks min 1 but unlimited
 		if ( Number(atkTime) < Number(1) ) atkTime = 1;		// attacks per second min 1
@@ -613,11 +614,16 @@ function calculateDamage()
 		for ( var i = 0; i < atkNum; i++ )
 		{
 			let enemyCnt = 0;	// enemies counter used to calculate damage on multiple target in same time
+			if ( effect == "ironHeart")
+			{	// increase damage at every attack
+				if ( Number(i) > Number(0) ) multiplier += tracer;
+			}
 			for ( var j = 0; j < atkTime; j++ )
 			{
 				let random = ((Math.random() * 100) + 1);	// generate random number for crit chance
 				let origDmg = finalDmg;
 				if ( Number(atkNum) > Number(15) ) origDmg /= start;	// remove start buff after 15 attacks (guess 1 attack per second)
+				if ( effect == "ironHeart") origDmg *= multiplier;
 				if ( effect == "gvardar" )
 				{
 					classEffectCnt++;
