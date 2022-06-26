@@ -124,6 +124,7 @@ function enableTimeDamage()
 	let g = document.getElementById("critChance");
 	let h = document.getElementById("enemiesDesc");
 	let i = document.getElementById("enemies");
+	let j = document.getElementById("critHits");
 	a.hidden = ((a.hidden)? false : true );
 	b.hidden = ((b.hidden)? false : true );
 	c.hidden = ((c.hidden)? false : true );
@@ -133,6 +134,7 @@ function enableTimeDamage()
 	g.hidden = ((g.hidden)? false : true );
 	h.hidden = ((h.hidden)? false : true );
 	i.hidden = ((i.hidden)? false : true );
+	j.hidden = ((j.hidden)? false : true );
 }
 
 function deleteForm()
@@ -149,8 +151,6 @@ function deleteForm()
 function calculateDamage()
 {
 	let output = document.getElementById("outputDmg");	// OUTPUT VAR
-	let timeOutput = document.getElementById("timeOutputDmg");	// TIME OUTPUT VAR
-	let enemiesOutput = document.getElementById("enemiesNum");
 /*				FIRST MENU				*/
 // CLASS
 	let skill = document.getElementById("skillDmg").value;
@@ -410,6 +410,7 @@ function calculateDamage()
 		}
 		case "ironHeart":	// berserker's iron heart effect
 		{
+			if ( enableTime ) skill /= 5;	// get single attack damage
 			multiplier += alcBiotrap;	// gladiator strike 40% damage bonus
 			break;
 		}
@@ -435,10 +436,15 @@ function calculateDamage()
 				}
 			}
 		}
-		case "bloodlust":	// berserker's bloodlust effect
+		case "bloodlust":	// berserker's ragnar bloodlust effect
 		{
 			if ( Number(stack) > Number(100) ) stack = 100;	// bloodlust max 100 stacks
 			multiplier += (blade * stack);
+			break;
+		}
+		case "idol":	// revenant's baron samedi effect
+		{
+			skill *= 2;		// damage increased by 100%
 			break;
 		}
 	}
@@ -590,6 +596,9 @@ function calculateDamage()
 // TIME BASED DAMAGE
 	if ( enableTime )	// this output simulate damage from continuous attacks
 	{
+		let timeOutput = document.getElementById("timeOutputDmg");	// TIME OUTPUT VAR
+		let critOutput = document.getElementById("critTime");	// CRIT OUTPUT VAR
+		let critCnt = 0;	// critical hits counter for output
 		let armorTime = 1;	// armor fracture attacks counter, min 1 - max 5
 		let armorFr = 1;	// value that will increased
 		let armorStack = (armor - 1);	// get only the percentage for stacks
@@ -597,21 +606,21 @@ function calculateDamage()
 		if ( Number(armor) > Number(1) ) finalDmg /= armor;	// remove armor fracture buff, now is calculated below
 		if ( Number(atkNum) < Number(1) ) atkNum = 1;	// number of attacks min 1 but unlimited
 		if ( Number(atkTime) < Number(1) ) atkTime = 1;		// attacks per second min 1
-		if ( Number(atkTime) > Number(3) ) atkTime = 3;		// attacks per second max 3
+		if ( Number(atkTime) > Number(5) ) atkTime = 5;		// attacks per second max 5
 		if ( Number(critChance) < Number(5) ) critChance = 5;	// base crit chance
-		if ( Number(critChance) > Number(44) ) critChance = 44;	// max chance without divine weapons
+		if ( Number(critChance) > Number(100) ) critChance = 100;	// max chance including weapons and other stuff
 		if ( Number(crit) < Number(1.3) ) crit = 1.3;	// here calculate base crit damage in case
 		for ( var i = 0; i < atkNum; i++ )
 		{
-			let random = ((Math.random() * 100) + 1);	// generate random number for crit chance
 			let enemyCnt = 0;	// enemies counter used to calculate damage on multiple target in same time
 			for ( var j = 0; j < atkTime; j++ )
 			{
+				let random = ((Math.random() * 100) + 1);	// generate random number for crit chance
 				let origDmg = finalDmg;
-				classEffectCnt++;
 				if ( Number(atkNum) > Number(15) ) origDmg /= start;	// remove start buff after 15 attacks (guess 1 attack per second)
 				if ( effect == "gvardar" )
 				{
+					classEffectCnt++;
 					if ( Number(classEffectCnt) > Number(3) ) origDmg *= 4; // from 4th attack, damage is increased 4 times
 				}
 				if ( (Number(armor) > Number(1)) && (Number(armorTime) <= Number(5)) )	// calculate armor fracture buff overtime
@@ -625,6 +634,7 @@ function calculateDamage()
 					critCalc = ((((((((((((skill * elder) * (base + (wpn + wpnAura))) * crit) * troop) 
 						* artif) * start) * stun) * slow) * chain) * atlasDmg) * atlasTroopDmg) * armorFr);
 					origDmg += critCalc;
+					critCnt++;	// increase crit counter
 				}
 				dmgOvertime += (origDmg * armorFr);
 				if ( Number(enemies) > Number(1) )
@@ -636,6 +646,6 @@ function calculateDamage()
 			}
 		}
 		timeOutput.innerText = digit.format( Math.floor(dmgOvertime) );
-		enemiesOutput.innerText = enemies;
+		critOutput.innerText = critCnt;
 	}
 }

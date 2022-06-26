@@ -48,10 +48,12 @@
 				<td id="outputIta2" hidden>Danni nel Tempo: </td>
 				<td id="timeOutputDmg">0</td>
 			</tr>
+		</table>
+		<table id="critHits" hidden>
 			<tr>
-				<td>Enemies hitted: </td>
-			<!--<td id="enemiesIta" hidden>Nemici colpiti: </td>-->
-				<td id="enemiesNum">0</td>
+				<td id="critHitEng">Critical hits: </td>
+			<!--<td id="critHitIta" hidden>Colpi Critici: </td>-->
+				<td id="critTime">0</td>
 			</tr>
 		</table>
 	</div>
@@ -128,7 +130,7 @@
 				</tr>
 				<tr>
 					<td id="critChanceDesc" hidden>Critical Chance</td>
-					<td><input type="number" id="critChance" min="5" max="44" placeholder="0" hidden></td>
+					<td><input type="number" id="critChance" min="5" max="100" placeholder="0" hidden></td>
 				</tr>
 				<tr><td><label>Sub Stats</label></td></tr>
 				<tr>
@@ -263,6 +265,7 @@
 						<option id="optValue" value="ironHeart">Iron Heart</option>
 						<option id="optValue" value="gvardar">Gvardar</option>
 						<option id="optValue" value="bloodlust">Bloodlust</option>
+						<option id="optValue" value="idol">Idol of Death</option>
 					</select></td>
 				</tr>
 				<tr><td><label>Artifact Effect</label></td></tr>
@@ -368,7 +371,7 @@
 			<table>
 				<tr>
 					<td id="atkTimeDesc" hidden>Attacks per Second</td>
-					<td><input type="number" id="atkTime" min="1" max="3" placeholder="1" hidden></td>
+					<td><input type="number" id="atkTime" min="1" max="5" placeholder="1" hidden></td>
 				</tr>
 			</table>
 			<table>

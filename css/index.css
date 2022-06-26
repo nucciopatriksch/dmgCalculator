@@ -6,9 +6,14 @@
 	color : darkslategrey;
 }
 
-#mainSection .desc, .outputSection, .timeOutputSection, .subSection{
+#mainSection .desc, .outputSection, .subSection{
 	display : flex;
 	justify-content : center;
+}
+
+#mainSection .timeOutputSection{
+	display : flex;
+	justify-content : space-around;
 }
 
 #mainSection .outputSection, .timeOutputSection{
