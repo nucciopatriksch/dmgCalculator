@@ -43,6 +43,9 @@ function changeLang()
 	// TIME OUTPUT
 	let q = document.getElementById("outputEng2");
 	let r = document.getElementById("outputIta2");
+	// CRIT COUNTER
+	let s = document.getElementById("critHitEng");
+	let t = document.getElementById("critHitIta");
 	// SET VISIBLE ITEMS ORDER
 	a.hidden = ((a.hidden)? false : true);
 	b.hidden = ((b.hidden)? false : true);
@@ -62,6 +65,8 @@ function changeLang()
 	p.hidden = ((p.hidden)? false : true);
 	q.hidden = ((q.hidden)? false : true);
 	r.hidden = ((r.hidden)? false : true);
+	s.hidden = ((s.hidden)? false : true);
+	t.hidden = ((t.hidden)? false : true);
 }
 
 function showEffects()
@@ -415,7 +420,7 @@ function calculateDamage()
 				case false:
 				{
 					let bakSkill = skill;
-					for ( var i = 0; i < 8; i++ )	// gladiator strike hits 5 times per 8 uses
+					for ( var i = 0; i < 9; i++ )	// gladiator strike hits 5 times per 9 uses
 					{	// every use increases damage, i think 10% per stack
 						if ( Number(i) > Number(0) )
 							skill += (bakSkill * (1 + (tracer * i)));
@@ -639,12 +644,21 @@ function calculateDamage()
 			{
 				let random = ((Math.random() * 100) + 1);	// generate random number for crit chance
 				let origDmg = finalDmg;
+				let origSkill = skill;
 				if ( Number(atkNum) > Number(15) ) origDmg /= start;	// remove start buff after 15 attacks (guess 1 attack per second)
 				if ( effect == "ironHeart") origDmg *= multiplier;
 				if ( effect == "gvardar" )
-				{
+				{	// gvardar crippling bow hits 10 times
 					classEffectCnt++;
-					if ( Number(classEffectCnt) > Number(3) ) origDmg *= 4; // from 4th attack, damage is increased 4 times
+					if ( Number(classEffectCnt) > Number(3) )
+					{	// from 4th attack, damage is increased 4 times
+						origDmg *= 4;	// get the original total value
+						origDmg *= 4;	// increase total value by 4 times
+						origDmg /= 7;	// get the single boosted attack value
+						origSkill *= 4;	// used for crit damage only
+						origSkill *= 4;
+						origSkill /= 7;
+					}
 				}
 				if ( (Number(armor) > Number(1)) && (Number(armorTime) <= Number(5)) )	// calculate armor fracture buff overtime
 				{
@@ -654,7 +668,7 @@ function calculateDamage()
 				}
 				if ( Number(random) <= Number(critChance) )	// crit if random is within the range
 				{
-					critCalc = ((((((((((((skill * elder) * (base + (wpn + wpnAura))) * crit) * troop) 
+					critCalc = ((((((((((((origSkill * elder) * (base + (wpn + wpnAura))) * crit) * troop) 
 						* artif) * start) * stun) * slow) * chain) * atlasDmg) * atlasTroopDmg) * armorFr);
 					origDmg += critCalc;
 					critCnt++;	// increase crit counter
