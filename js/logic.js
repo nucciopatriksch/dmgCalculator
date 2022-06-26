@@ -410,7 +410,24 @@ function calculateDamage()
 		}
 		case "ironHeart":	// berserker's iron heart effect
 		{
-			if ( enableTime ) skill /= 5;	// get single attack damage
+			switch ( enableTime )
+			{
+				case false:
+				{
+					let bakSkill = skill;
+					for ( var i = 0; i < 8; i++ )	// gladiator strike hits 5 times per 8 uses
+					{	// every use increases damage, i think 10% per stack
+						if ( Number(i) > Number(0) )
+							skill += (bakSkill * (1 + (tracer * i)));
+					}
+					break;
+				}
+				case true:
+				{
+					skill /= 5;	// get single attack damage
+					break;
+				}
+			}
 			multiplier += alcBiotrap;	// gladiator strike 40% damage bonus
 			break;
 		}
@@ -615,7 +632,7 @@ function calculateDamage()
 		{
 			let enemyCnt = 0;	// enemies counter used to calculate damage on multiple target in same time
 			if ( effect == "ironHeart")
-			{	// increase damage at every attack
+			{	// increase damage at every attack, i think 10% each
 				if ( Number(i) > Number(0) ) multiplier += tracer;
 			}
 			for ( var j = 0; j < atkTime; j++ )
