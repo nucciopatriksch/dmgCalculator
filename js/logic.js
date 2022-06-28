@@ -457,10 +457,53 @@ function calculateDamage()
 					break;
 				}
 			}
+			break;
 		}
-		case "bloodlust":	// berserker's ragnar bloodlust effect
+		case "bloodlust1":	// berserker's ragnar bloodlust effect (firestorm)
 		{
 			if ( Number(stack) > Number(100) ) stack = 100;	// bloodlust max 100 stacks
+			switch ( enableTime )
+			{
+				case false:
+				{
+					let bakSkill = (skill / 9);	// get single attack damage
+					skill = 0;	// reset skill value to fill later
+					for ( var i = 0; i < 9; i++ )	// firestorm hits 9 times in one go
+					{
+						skill += bakSkill;
+					}
+					break;
+				}
+				case true:
+				{
+					skill /= 9;	// get single firestorm attack damage (9 hit max)
+					break;
+				}
+			}
+			multiplier += (blade * stack);
+			break;
+		}
+		case "bloodlust2":	// berserker's ragnar bloodlust effect (whirlwind)
+		{
+			if ( Number(stack) > Number(100) ) stack = 100;	// bloodlust max 100 stacks
+			switch ( enableTime )
+			{
+				case false:
+				{
+					let bakSkill = (skill / 4);	// get single attack damage
+					skill = 0;	// reset skill value to fill later
+					for ( var i = 0; i < 4; i++ )	// whirlwind hits 4 times in one go
+					{
+						skill += bakSkill;
+					}
+					break;
+				}
+				case true:
+				{
+					skill /= 4;	// get single whirlwind attack damage (4 hit max)
+					break;
+				}
+			}
 			multiplier += (blade * stack);
 			break;
 		}
@@ -655,12 +698,8 @@ function calculateDamage()
 					classEffectCnt++;
 					if ( Number(classEffectCnt) > Number(3) )
 					{	// from 4th attack, damage is increased 4 times
-						origDmg *= 4;	// get the original total value
-						origDmg *= 4;	// increase total value by 4 times
-						origDmg /= 7;	// get the single boosted attack value
-						origSkill *= 4;	// used for crit damage only
-						origSkill *= 4;
-						origSkill /= 7;
+						origDmg *= 4;	// single damage value increased 4 times
+						origSkill *= 4;	// used for crit damage calculation only
 					}
 				}
 				if ( (Number(armor) > Number(1)) && (Number(armorTime) <= Number(5)) )	// calculate armor fracture buff overtime
