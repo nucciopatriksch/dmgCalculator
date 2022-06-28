@@ -153,7 +153,7 @@ function deleteForm()
 	inputs.forEach(input => {input.value = ""});
 }
 
-function calculateDamage()
+async function calculateDamage()
 {
 	let output = document.getElementById("outputDmg");	// OUTPUT VAR
 /*				FIRST MENU				*/
