@@ -645,7 +645,10 @@ function calculateDamage()
 				let random = ((Math.random() * 100) + 1);	// generate random number for crit chance
 				let origDmg = finalDmg;
 				let origSkill = skill;
-				if ( Number(atkNum) > Number(15) ) origDmg /= start;	// remove start buff after 15 attacks (guess 1 attack per second)
+				if ( Number(start) > Number(1) )
+				{	// remove start buff after 15 attacks (guess 1 attack per second)
+					if ( Number(atkNum) > Number(15) ) origDmg /= start;
+				}
 				if ( effect == "ironHeart") origDmg *= multiplier;
 				if ( effect == "gvardar" )
 				{	// gvardar crippling bow hits 10 times
