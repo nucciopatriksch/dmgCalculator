@@ -690,7 +690,7 @@ function calculateDamage()
 				}
  			//	timeOutput.innerText = digit.format( Math.floor(dmgOvertime) );
 			//	critOutput.innerText = critCnt;
-				setTimeout(function(){timeBasedOutput(dmgOvertime, critCnt)}, 500);
+				setTimeout(function timeBasedOutput(dmgOvertime, critCnt), 500);
 			}
 		}
 	}
