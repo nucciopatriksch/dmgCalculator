@@ -688,9 +688,9 @@ function calculateDamage()
 					if ( Number(enemyCnt) < Number(enemies) ) j--;	// decrease counter
 					else enemyCnt = 0;
 				}
+ 				timeOutput.innerText = digit.format( Math.floor(dmgOvertime) );
+				critOutput.innerText = critCnt;
 			}
 		}
-		timeOutput.innerText = digit.format( Math.floor(dmgOvertime) );
-		critOutput.innerText = critCnt;
 	}
 }
