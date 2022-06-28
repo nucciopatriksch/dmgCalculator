@@ -627,8 +627,9 @@ function calculateDamage()
 // TIME BASED DAMAGE
 	if ( enableTime )	// this output simulate damage from continuous attacks
 	{
-	//	let timeOutput = document.getElementById("timeOutputDmg");	// TIME OUTPUT VAR
-	//	let critOutput = document.getElementById("critTime");	// CRIT OUTPUT VAR
+		var delay = 1000;	// time delay for inner cycle
+		let timeOutput = document.getElementById("timeOutputDmg");	// TIME OUTPUT VAR
+		let critOutput = document.getElementById("critTime");	// CRIT OUTPUT VAR
 		let critCnt = 0;	// critical hits counter for output
 		let armorTime = 1;	// armor fracture attacks counter, min 1 - max 5
 		let armorFr = 1;	// value that will increased
@@ -643,64 +644,59 @@ function calculateDamage()
 		if ( Number(critChance) > Number(100) ) critChance = 100;	// max chance including weapons and other stuff
 		if ( Number(crit) < Number(1.3) ) crit = 1.3;	// here calculate base crit damage in case
 		for ( var i = 0; i < atkNum; i++ )
-		{
-			let enemyCnt = 0;	// enemies counter used to calculate damage on multiple target in same time
-			if ( effect == "ironHeart")
-			{	// increase damage at every attack, i think 10% each
-				if ( Number(i) > Number(0) ) multiplier += tracer;
-			}
-			for ( var j = 0; j < atkTime; j++ )
-			{
-				let random = ((Math.random() * 100) + 1);	// generate random number for crit chance
-				let origDmg = finalDmg;
-				let origSkill = skill;
-				if ( Number(start) > Number(1) )
-				{	// remove start buff after 15 attacks (guess 1 attack per second)
-					if ( Number(atkNum) > Number(15) ) origDmg /= start;
+		{	// time based cycle
+			setTimeout(function(){
+				let enemyCnt = 0;	// enemies counter used to calculate damage on multiple target in same time
+				if ( effect == "ironHeart")
+				{	// increase damage at every attack, i think 10% each
+					delay = 500;	// half the delay to simulate gladiator strike dmg overtime
+					if ( Number(i) > Number(0) ) multiplier += tracer;
 				}
-				if ( effect == "ironHeart") origDmg *= multiplier;
-				if ( effect == "gvardar" )
-				{	// gvardar crippling bow hits 10 times
-					classEffectCnt++;
-					if ( Number(classEffectCnt) > Number(3) )
-					{	// from 4th attack, damage is increased 4 times
-						origDmg *= 4;	// single damage value increased 4 times
-						origSkill *= 4;	// used for crit damage calculation only
-					}
+				for ( var j = 0; j < atkTime; j++ )
+				{	// time based inner cycle
+					setTimeout(function(){
+						let random = ((Math.random() * 100) + 1);	// generate random number for crit chance
+						let origDmg = finalDmg;
+						let origSkill = skill;
+						if ( Number(start) > Number(1) )
+						{	// remove start buff after 15 attacks (guess 1 attack per second)
+							if ( Number(atkNum) > Number(15) ) origDmg /= start;
+						}
+						if ( effect == "ironHeart") origDmg *= multiplier;
+						if ( effect == "gvardar" )
+						{	// gvardar crippling bow hits 10 times
+							classEffectCnt++;
+							if ( Number(classEffectCnt) > Number(3) )
+							{	// from 4th attack, damage is increased 4 times
+								origDmg *= 4;	// single damage value increased 4 times
+								origSkill *= 4;	// used for crit damage calculation only
+							}
+						}
+						if ( (Number(armor) > Number(1)) && (Number(armorTime) <= Number(5)) )	// calculate armor fracture buff overtime
+						{
+							if (Number(armorTime) > Number(1))
+								armorFr = 1 + (armorStack * (armorTime - 1));
+							armorTime++;
+						}
+						if ( Number(random) <= Number(critChance) )	// crit if random is within the range
+						{
+							critCalc = ((((((((((((origSkill * elder) * (base + (wpn + wpnAura))) * crit) * troop) 
+								* artif) * start) * stun) * slow) * chain) * atlasDmg) * atlasTroopDmg) * armorFr);
+							origDmg += critCalc;
+							critCnt++;	// increase crit counter
+						}
+						dmgOvertime += (origDmg * armorFr);
+						if ( Number(enemies) > Number(1) )
+						{
+							enemyCnt++;	// increase enemy counter
+							if ( Number(enemyCnt) < Number(enemies) ) j--;	// decrease counter
+							else enemyCnt = 0;
+						}
+						timeOutput.innerText = digit.format( Math.floor(dmgOvertime) );
+						critOutput.innerText = critCnt;
+					}, (delay / atkTime) * j);
 				}
-				if ( (Number(armor) > Number(1)) && (Number(armorTime) <= Number(5)) )	// calculate armor fracture buff overtime
-				{
-					if (Number(armorTime) > Number(1))
-						armorFr = 1 + (armorStack * (armorTime - 1));
-					armorTime++;
-				}
-				if ( Number(random) <= Number(critChance) )	// crit if random is within the range
-				{
-					critCalc = ((((((((((((origSkill * elder) * (base + (wpn + wpnAura))) * crit) * troop) 
-						* artif) * start) * stun) * slow) * chain) * atlasDmg) * atlasTroopDmg) * armorFr);
-					origDmg += critCalc;
-					critCnt++;	// increase crit counter
-				}
-				dmgOvertime += (origDmg * armorFr);
-				if ( Number(enemies) > Number(1) )
-				{
-					enemyCnt++;	// increase enemy counter
-					if ( Number(enemyCnt) < Number(enemies) ) j--;	// decrease counter
-					else enemyCnt = 0;
-				}
- 			//	timeOutput.innerText = digit.format( Math.floor(dmgOvertime) );
-			//	critOutput.innerText = critCnt;
-				setTimeout(function timeBasedOutput(dmgOvertime, critCnt), 500);
-			}
+			}, 1000 * i);
 		}
 	}
-}
-
-function timeBasedOutput(n1, n2)
-{
-	let timeOutput = document.getElementById("timeOutputDmg");	// TIME OUTPUT VAR
-	let critOutput = document.getElementById("critTime");	// CRIT OUTPUT VAR
-	let digit = Intl.NumberFormat();
-	timeOutput.innerText = digit.format( Math.floor(n1) );
-	critOutput.innerText = n2;
 }
