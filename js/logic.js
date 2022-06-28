@@ -153,7 +153,7 @@ function deleteForm()
 	inputs.forEach(input => {input.value = ""});
 }
 
-async function calculateDamage()
+function calculateDamage()
 {
 	let output = document.getElementById("outputDmg");	// OUTPUT VAR
 /*				FIRST MENU				*/
@@ -627,8 +627,8 @@ async function calculateDamage()
 // TIME BASED DAMAGE
 	if ( enableTime )	// this output simulate damage from continuous attacks
 	{
-		let timeOutput = document.getElementById("timeOutputDmg");	// TIME OUTPUT VAR
-		let critOutput = document.getElementById("critTime");	// CRIT OUTPUT VAR
+	//	let timeOutput = document.getElementById("timeOutputDmg");	// TIME OUTPUT VAR
+	//	let critOutput = document.getElementById("critTime");	// CRIT OUTPUT VAR
 		let critCnt = 0;	// critical hits counter for output
 		let armorTime = 1;	// armor fracture attacks counter, min 1 - max 5
 		let armorFr = 1;	// value that will increased
@@ -688,10 +688,19 @@ async function calculateDamage()
 					if ( Number(enemyCnt) < Number(enemies) ) j--;	// decrease counter
 					else enemyCnt = 0;
 				}
-				await sleep( 500 );
- 				timeOutput.innerText = digit.format( Math.floor(dmgOvertime) );
-				critOutput.innerText = critCnt;
+ 			//	timeOutput.innerText = digit.format( Math.floor(dmgOvertime) );
+			//	critOutput.innerText = critCnt;
+				setTimeout(function(){timeBasedOutput(dmgOvertime, critCnt)}, 500);
 			}
 		}
 	}
+}
+
+function timeBasedOutput(n1, n2)
+{
+	let timeOutput = document.getElementById("timeOutputDmg");	// TIME OUTPUT VAR
+	let critOutput = document.getElementById("critTime");	// CRIT OUTPUT VAR
+	let digit = Intl.NumberFormat();
+	timeOutput.innerText = digit.format( Math.floor(n1) );
+	critOutput.innerText = n2;
 }
