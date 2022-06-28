@@ -462,48 +462,14 @@ function calculateDamage()
 		case "bloodlust1":	// berserker's ragnar bloodlust effect (firestorm)
 		{
 			if ( Number(stack) > Number(100) ) stack = 100;	// bloodlust max 100 stacks
-			switch ( enableTime )
-			{
-				case false:
-				{
-					let bakSkill = (skill / 9);	// get single attack damage
-					skill = 0;	// reset skill value to fill later
-					for ( var i = 0; i < 9; i++ )	// firestorm hits 9 times in one go
-					{
-						skill += bakSkill;
-					}
-					break;
-				}
-				case true:
-				{
-					skill /= 9;	// get single firestorm attack damage (9 hit max)
-					break;
-				}
-			}
+			if ( enableTime ) skill /= 9;	// get single firestorm attack damage (9 hit max)
 			multiplier += (blade * stack);
 			break;
 		}
 		case "bloodlust2":	// berserker's ragnar bloodlust effect (whirlwind)
 		{
 			if ( Number(stack) > Number(100) ) stack = 100;	// bloodlust max 100 stacks
-			switch ( enableTime )
-			{
-				case false:
-				{
-					let bakSkill = (skill / 4);	// get single attack damage
-					skill = 0;	// reset skill value to fill later
-					for ( var i = 0; i < 4; i++ )	// whirlwind hits 4 times in one go
-					{
-						skill += bakSkill;
-					}
-					break;
-				}
-				case true:
-				{
-					skill /= 4;	// get single whirlwind attack damage (4 hit max)
-					break;
-				}
-			}
+			if ( enableTime ) skill /= 4;	// get single whirlwind attack damage (4 hit max)
 			multiplier += (blade * stack);
 			break;
 		}
