@@ -686,15 +686,15 @@ function calculateDamage()
 							critCnt++;	// increase crit counter
 						}
 						dmgOvertime += (origDmg * armorFr);
-						if ( Number(enemies) > Number(1) )
-						{
-							enemyCnt++;	// increase enemy counter
-							if ( Number(enemyCnt) < Number(enemies) ) j--;	// decrease counter
-							else enemyCnt = 0;
-						}
 						timeOutput.innerText = digit.format( Math.floor(dmgOvertime) );
 						critOutput.innerText = critCnt;
 					}, (delay / atkTime) * j);
+					if ( Number(enemies) > Number(1) )
+					{
+						enemyCnt++;	// increase enemy counter
+						if ( Number(enemyCnt) < Number(enemies) ) j--;	// decrease counter
+						else enemyCnt = 0;
+					}
 				}
 			}, 1000 * i);
 		}
