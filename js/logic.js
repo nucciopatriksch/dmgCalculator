@@ -302,6 +302,7 @@ function calculateDamage()
 	var effect3 = select3.options[select3.selectedIndex].value;	// get option value
 	var effect4 = soloBonus.options[soloBonus.selectedIndex].value;	// hall of travels bonus
 	var multiplier = 1;	// base multiplier is always 1
+	var alertValue = 0;	// send value for those attacks where the use of time is suggested
 	stack = Math.floor( stack );	// workaround
 	stack2 = Math.floor( stack2 );	// workaround
 	stack3 = Math.floor( stack3 );	// workaround
@@ -432,6 +433,7 @@ function calculateDamage()
 						if ( Number(i) > Number(0) )
 							skill += (bakSkill * (1 + (tracer * i)));
 					}
+					alertValue = 1;
 					break;
 				}
 				case true:
@@ -456,6 +458,7 @@ function calculateDamage()
 						if ( Number(i) > Number(2) ) skill += (bakSkill * 4);
 						else skill += bakSkill;		// up to 3 continuous attacks, damage is standard
 					}
+					alertValue = 2;
 					break;
 				}
 				case true:
@@ -470,6 +473,7 @@ function calculateDamage()
 		{
 			if ( Number(stack) > Number(100) ) stack = 100;	// bloodlust max 100 stacks
 			if ( enableTime ) skill /= 9;	// get single firestorm attack damage (9 hit max)
+			else alertValue = 3;
 			multiplier += (blade * stack);
 			break;
 		}
@@ -477,6 +481,7 @@ function calculateDamage()
 		{
 			if ( Number(stack) > Number(100) ) stack = 100;	// bloodlust max 100 stacks
 			if ( enableTime ) skill /= 4;	// get single whirlwind attack damage (4 hit max)
+			else alertValue = 4;
 			multiplier += (blade * stack);
 			break;
 		}
@@ -702,5 +707,32 @@ function calculateDamage()
 				}
 			}, 1000 * i);
 		}
+	}
+	else
+	{	// send alert to suggest time use for best calculation of some skills dmg
+		if ( Number(alertValue) != Number(0) ) sendAlert(alertValue);
+	}
+}
+
+function sendAlert( type )
+{
+	switch ( type )
+	{
+		case 1:
+			alert("For best calculation of Gladiator Strike with Iron Heart weapon use Time menu.\n"
+				+ "Suggested parameters for 45 hits:\nNumber of Attacks: 9\nAttacks per Second: 5");
+			break;
+		case 2:
+			alert("For best calculation of Crippling Bow with Gvardar weapon use Time menu.\n"
+				+ "Suggested parameters for 10 hits:\nNumber of Attacks: 5\nAttacks per Second: 2");
+			break;
+		case 3:
+			alert("For best calculation of Firestorm with Ragnar weapon use Time menu.\n"
+				+ "Suggested parameters for 9 hits:\nNumber of Attacks: 3\nAttacks per Second: 3");
+			break;
+		case 4:
+			alert("For best calculation of Whirlwind with Ragnar weapon use Time menu.\n"
+				+ "Suggested parameters for 4 hits:\nNumber of Attacks: 2\nAttacks per Second: 2");
+			break;
 	}
 }

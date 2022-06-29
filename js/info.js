@@ -4,27 +4,27 @@
 function changeLang()
 {
 	// LANG BUTTONS
-	let a = document.getElementById("langEng");
-	let b = document.getElementById("langIta");
+	var a = document.getElementById("langEng");
+	var b = document.getElementById("langIta");
 	// INTRO
-	let c = document.getElementById("introEng");
-	let d = document.getElementById("introIta");
-	let e = document.getElementById("descEng");
-	let f = document.getElementById("descIta");
+	var c = document.getElementById("introEng");
+	var d = document.getElementById("introIta");
+	var e = document.getElementById("descEng");
+	var f = document.getElementById("descIta");
 	// RULES INFO
-	let g = document.getElementById("infoRulesEng");
-	let h = document.getElementById("infoRulesIta");
+	var g = document.getElementById("infoRulesEng");
+	var h = document.getElementById("infoRulesIta");
 	// EFFECT INFO
-	let i = document.getElementById("infoEffectEng");
-	let j = document.getElementById("infoEffectIta");
+	var i = document.getElementById("infoEffectEng");
+	var j = document.getElementById("infoEffectIta");
 	// AUTHOR
-	let k = document.getElementById("authorEng");
-	let l = document.getElementById("authorIta");
+	var k = document.getElementById("authorEng");
+	var l = document.getElementById("authorIta");
 	// PREMISE
-	let m = document.getElementById("premiseIntroEng");
-	let n = document.getElementById("premiseIntroIta");
-	let o = document.getElementById("premiseEng");
-	let p = document.getElementById("premiseIta");
+	var m = document.getElementById("premiseIntroEng");
+	var n = document.getElementById("premiseIntroIta");
+	var o = document.getElementById("premiseEng");
+	var p = document.getElementById("premiseIta");
 	// SET VISIBLE ITEMS ORDER
 	a.hidden = ((a.hidden)? false : true);
 	b.hidden = ((b.hidden)? false : true);
