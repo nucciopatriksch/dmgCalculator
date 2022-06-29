@@ -18,34 +18,34 @@ const alcBiotrap = 0.4;		// 0.4 equals to 40%
 function changeLang()
 {
 	// HREF
-	let a = document.getElementById("linkEng");
-	let b = document.getElementById("linkIta");
+	var a = document.getElementById("linkEng");
+	var b = document.getElementById("linkIta");
 	// LANG BUTTONS
-	let c = document.getElementById("langEng");
-	let d = document.getElementById("langIta");
+	var c = document.getElementById("langEng");
+	var d = document.getElementById("langIta");
 	// DESCRIPTION
-	let e = document.getElementById("descEng");
-	let f = document.getElementById("descIta");
+	var e = document.getElementById("descEng");
+	var f = document.getElementById("descIta");
 	// OUTPUT
-	let g = document.getElementById("outputEng");
-	let h = document.getElementById("outputIta");
+	var g = document.getElementById("outputEng");
+	var h = document.getElementById("outputIta");
 	// LAST INFO
-	let i = document.getElementById("lastInfoEng");
-	let j = document.getElementById("lastInfoIta");
+	var i = document.getElementById("lastInfoEng");
+	var j = document.getElementById("lastInfoIta");
 	// CALC BUTTONS
-	let k = document.getElementById("calcButtonEng");
-	let l = document.getElementById("clearButtonEng");
-	let m = document.getElementById("calcButtonIta");
-	let n = document.getElementById("clearButtonIta");
+	var k = document.getElementById("calcButtonEng");
+	var l = document.getElementById("clearButtonEng");
+	var m = document.getElementById("calcButtonIta");
+	var n = document.getElementById("clearButtonIta");
 	// AUTHOR
-	let o = document.getElementById("authorEng");
-	let p = document.getElementById("authorIta");
+	var o = document.getElementById("authorEng");
+	var p = document.getElementById("authorIta");
 	// TIME OUTPUT
-	let q = document.getElementById("outputEng2");
-	let r = document.getElementById("outputIta2");
+	var q = document.getElementById("outputEng2");
+	var r = document.getElementById("outputIta2");
 	// CRIT COUNTER
-	let s = document.getElementById("critHitEng");
-	let t = document.getElementById("critHitIta");
+	var s = document.getElementById("critHitEng");
+	var t = document.getElementById("critHitIta");
 	// SET VISIBLE ITEMS ORDER
 	a.hidden = ((a.hidden)? false : true);
 	b.hidden = ((b.hidden)? false : true);
@@ -72,35 +72,35 @@ function changeLang()
 function showEffects()
 {
 // SHOW TABLE EFFECTS
-	let a = document.getElementById("tableOfEffects");
+	var a = document.getElementById("tableOfEffects");
 	a.hidden = ((a.hidden)? false : true );
 }
 
 function showSuppAura()
 {
-	let a = document.getElementById("charAura");
-	let b = document.getElementById("auraDesc");
+	var a = document.getElementById("charAura");
+	var b = document.getElementById("auraDesc");
 	a.hidden = ((a.hidden)? false : true );
 	b.hidden = ((b.hidden)? false : true );
 }
 
 function showVerdictStacks()
 {
-	let a = document.getElementById("verdictDesc");
-	let b = document.getElementById("verdictValue");
+	var a = document.getElementById("verdictDesc");
+	var b = document.getElementById("verdictValue");
 	a.hidden = ((a.hidden)? false : true );
 	b.hidden = ((b.hidden)? false : true );
 }
 
 function showTravelBonus()
 {
-	let a = document.getElementById("travelDesc");
-	let b = document.getElementById("soloDesc");
-	let c = document.getElementById("defSuppDesc");
-	let d = document.getElementById("multiSelect4");
-	let e = document.getElementById("defSuppBonus");
-	let f = document.getElementById("monsterDmgDesc");
-	let g = document.getElementById("monsterDmg");
+	var a = document.getElementById("travelDesc");
+	var b = document.getElementById("soloDesc");
+	var c = document.getElementById("defSuppDesc");
+	var d = document.getElementById("multiSelect4");
+	var e = document.getElementById("defSuppBonus");
+	var f = document.getElementById("monsterDmgDesc");
+	var g = document.getElementById("monsterDmg");
 	a.hidden = ((a.hidden)? false : true );
 	b.hidden = ((b.hidden)? false : true );
 	c.hidden = ((c.hidden)? false : true );
@@ -112,24 +112,24 @@ function showTravelBonus()
 
 function useStimulants()
 {
-	let a = document.getElementById("stimsDesc");
-	let b = document.getElementById("stimsValue");
+	var a = document.getElementById("stimsDesc");
+	var b = document.getElementById("stimsValue");
 	a.hidden = ((a.hidden)? false : true );
 	b.hidden = ((b.hidden)? false : true );
 }
 
 function enableTimeDamage()
 {
-	let a = document.getElementById("atkNumDesc");
-	let b = document.getElementById("atkNum");
-	let c = document.getElementById("atkTimeDesc");
-	let d = document.getElementById("atkTime");
-	let e = document.getElementById("timeDamageOutput");
-	let f = document.getElementById("critChanceDesc");
-	let g = document.getElementById("critChance");
-	let h = document.getElementById("enemiesDesc");
-	let i = document.getElementById("enemies");
-	let j = document.getElementById("critHits");
+	var a = document.getElementById("atkNumDesc");
+	var b = document.getElementById("atkNum");
+	var c = document.getElementById("atkTimeDesc");
+	var d = document.getElementById("atkTime");
+	var e = document.getElementById("timeDamageOutput");
+	var f = document.getElementById("critChanceDesc");
+	var g = document.getElementById("critChance");
+	var h = document.getElementById("enemiesDesc");
+	var i = document.getElementById("enemies");
+	var j = document.getElementById("critHits");
 	a.hidden = ((a.hidden)? false : true );
 	b.hidden = ((b.hidden)? false : true );
 	c.hidden = ((c.hidden)? false : true );
@@ -153,97 +153,104 @@ function deleteForm()
 	inputs.forEach(input => {input.value = ""});
 }
 
+function getDamageValue(n1,n2,n3,n4,n5,n6,n7,n8,n9,n10,n11,n12,n13,n14,n15)
+{
+	var dmg = ((((((((((((n1 * n2) * (n3 + (n4 + n5))) * n6) * n7) 
+		* n8) * n9) * n10) * n11) * n12) * n13) * n14) * n15);
+	return dmg;
+}
+
 function calculateDamage()
 {
-	let output = document.getElementById("outputDmg");	// OUTPUT VAR
+	var output = document.getElementById("outputDmg");	// OUTPUT VAR
 /*				FIRST MENU				*/
 // CLASS
-	let skill = document.getElementById("skillDmg").value;
-	let classBuff = 1 + (document.getElementById("classBuff").value / 100);
-	let a9Buff = 1 + (document.getElementById("a9Buff").value / 100);
-	let symbolBuff = 1 + (document.getElementById("symbolBuff").value / 100);
-	let classEffectCnt = 0;
+	var skill = document.getElementById("skillDmg").value;
+	var classBuff = 1 + (document.getElementById("classBuff").value / 100);
+	var a9Buff = 1 + (document.getElementById("a9Buff").value / 100);
+	var symbolBuff = 1 + (document.getElementById("symbolBuff").value / 100);
+	var classEffectCnt = 0;
 // STATS
-	let isPlrGod = document.getElementById("isPlrGod").checked;	// if player in divine form
-	let monsterDmg = document.getElementById("monsterDmg").checked;	// if god, check if we have dmg to monster bonus
-	let might = document.getElementById("might").value;
-	let base = 1 + (document.getElementById("baseDmg").value / 100);
-	let elder = 1 + (document.getElementById("elderMulti").value / 100);
-	let armor = 1 + (document.getElementById("armorFracture").value / 100);
-	let main = 1 + (document.getElementById("mainDmg").value / 100);
-	let crit = 1 + (document.getElementById("critDmg").value / 100);
-	let critChance = document.getElementById("critChance").value;
-	let comp = (document.getElementById("compDmg").value / 100);
-	let troop = 1 + (document.getElementById("troopDmg").value / 100);
-	let start = 1 + (document.getElementById("startDmg").value / 100);
-	let stun = 1 + ( document.getElementById("stunDmg").value / 100);
-	let slow = 1 + (document.getElementById("slowDmg").value / 100);
-	let chain = 1 + (document.getElementById("chainDmg").value / 100);
-	let charAura = document.getElementById("charAura").checked;		// character support aura boost
-	let isPlrSupp = document.getElementById("isPlrSupport").checked;	// if player is support
-	let plrSuppAura = 0;	// player's base support aura power
+	var isPlrGod = document.getElementById("isPlrGod").checked;	// if player in divine form
+	var monsterDmg = document.getElementById("monsterDmg").checked;	// if god, check if we have dmg to monster bonus
+	var might = document.getElementById("might").value;
+	var base = 1 + (document.getElementById("baseDmg").value / 100);
+	var elder = 1 + (document.getElementById("elderMulti").value / 100);
+	var armor = 1 + (document.getElementById("armorFracture").value / 100);
+	var main = 1 + (document.getElementById("mainDmg").value / 100);
+	var crit = 1 + (document.getElementById("critDmg").value / 100);
+	var critChance = document.getElementById("critChance").value;
+	var comp = (document.getElementById("compDmg").value / 100);
+	var troop = 1 + (document.getElementById("troopDmg").value / 100);
+	var start = 1 + (document.getElementById("startDmg").value / 100);
+	var stun = 1 + ( document.getElementById("stunDmg").value / 100);
+	var slow = 1 + (document.getElementById("slowDmg").value / 100);
+	var chain = 1 + (document.getElementById("chainDmg").value / 100);
+	var charAura = document.getElementById("charAura").checked;		// character support aura boost
+	var isPlrSupp = document.getElementById("isPlrSupport").checked;	// if player is support
+	var plrSuppAura = 0;	// player's base support aura power
 /*				SECOND MENU				*/
 // SUPERIORITY CALCULATION
-	let plrRank = document.getElementById("plrRank").value;		// player rank
-	let monsterRank = document.getElementById("monsterRank").value;	// monster rank
+	var plrRank = document.getElementById("plrRank").value;		// player rank
+	var monsterRank = document.getElementById("monsterRank").value;	// monster rank
 // WEAPON STATS
-	let wpn = (document.getElementById("weaponDmg").value / 100);		// weapon damage
-	let wpnAura = (document.getElementById("weaponAura").value / 100);	// weapon support aura
+	var wpn = (document.getElementById("weaponDmg").value / 100);		// weapon damage
+	var wpnAura = (document.getElementById("weaponAura").value / 100);	// weapon support aura
 // ARTIFACT BONUS
-	let artif = 1 + (document.getElementById("artifactDmg").value / 100);	// artifact damage
+	var artif = 1 + (document.getElementById("artifactDmg").value / 100);	// artifact damage
 // CATHEDRAL SEALS
-	let dmgSeal = document.getElementById("sealAllDmg").checked;	// all damage bonus +3%
-	let cSeal = document.getElementById("sealClass").checked;	// class seal
-	let aSeal = document.getElementById("sealAdv").checked;	// adventure seal
+	var dmgSeal = document.getElementById("sealAllDmg").checked;	// all damage bonus +3%
+	var cSeal = document.getElementById("sealClass").checked;	// class seal
+	var aSeal = document.getElementById("sealAdv").checked;	// adventure seal
 // VERDICT
-	let useVerdict = document.getElementById("useVerdict").checked;
-	let verdict = 1 + (document.getElementById("verdictValue").value / 100);
+	var useVerdict = document.getElementById("useVerdict").checked;
+	var verdict = 1 + (document.getElementById("verdictValue").value / 100);
 // HALL OF TRAVELS
-	let soloBonus = document.getElementById("multiSelect4");
-	let defSuppBonus = document.getElementById("defSuppBonus").checked;
+	var soloBonus = document.getElementById("multiSelect4");
+	var defSuppBonus = document.getElementById("defSuppBonus").checked;
 // ATLAS
-	let atlasDmg = 1 + (document.getElementById("atlasDmg").value / 100);
-	let atlasTroopDmg = 1 + (document.getElementById("atlasTroopDmg").value / 100);
-	let node1 = 1 + (document.getElementById("node1").value / 100);
-	let node2 = 1 + (document.getElementById("node2").value / 100);
+	var atlasDmg = 1 + (document.getElementById("atlasDmg").value / 100);
+	var atlasTroopDmg = 1 + (document.getElementById("atlasTroopDmg").value / 100);
+	var node1 = 1 + (document.getElementById("node1").value / 100);
+	var node2 = 1 + (document.getElementById("node2").value / 100);
 // MISC
-	let panthDmg = 1 + (document.getElementById("guildDmg").value / 100);
-	let premiumDmg = document.getElementById("premiumDmg").checked;
+	var panthDmg = 1 + (document.getElementById("guildDmg").value / 100);
+	var premiumDmg = document.getElementById("premiumDmg").checked;
 /* 				EFFECTS MENU				*/
 // WEAPON EFFECT
-	let stack = document.getElementById("stack").value;	// weapon
-	let select = document.getElementById("multiSelect");	// weapon
+	var stack = document.getElementById("stack").value;	// weapon
+	var select = document.getElementById("multiSelect");	// weapon
 // ARTIFACT EFFECT
-	let stack2 = document.getElementById("stack2").value;	// artifact
-	let select2 = document.getElementById("multiSelect2");	// artifact
+	var stack2 = document.getElementById("stack2").value;	// artifact
+	var select2 = document.getElementById("multiSelect2");	// artifact
 // EUPHOMINE
-	let useStims = document.getElementById("useStims").checked;			// euphomine
-	let stimsValue = (document.getElementById("stimsValue").value / 100);	// euphomine
+	var useStims = document.getElementById("useStims").checked;			// euphomine
+	var stimsValue = (document.getElementById("stimsValue").value / 100);	// euphomine
 // SUPPORT
-	let suppMight = document.getElementById("suppMight").value;		// support's might
-	let suppAura = (document.getElementById("aura").value / 100);	// support's aura
-	let mightGiven = (document.getElementById("mightPercentage").value / 100);	// support
+	var suppMight = document.getElementById("suppMight").value;		// support's might
+	var suppAura = (document.getElementById("aura").value / 100);	// support's aura
+	var mightGiven = (document.getElementById("mightPercentage").value / 100);	// support
 // BUFF EFFECT
-	let select3 = document.getElementById("multiSelect3");		// soundweaver
-	let wings = document.getElementById("wings").checked;		// wings of skies artifact - use biotrap const
-	let sunBless = document.getElementById("bless").checked;	// lightbinder's bless
-	let iLight = document.getElementById("light").checked;		// lightbinder's ulti
-	let eShower = document.getElementById("shower").checked;	// alchemist's shower	
-	let biotrap = document.getElementById("biotrap").checked;	// alchemist's biotrap
-	let hammer = document.getElementById("nerion").checked;		// nerion's hammer
-	let macha = document.getElementById("machavann").checked;	// machavann upgrade
+	var select3 = document.getElementById("multiSelect3");		// soundweaver
+	var wings = document.getElementById("wings").checked;		// wings of skies artifact - use biotrap const
+	var sunBless = document.getElementById("bless").checked;	// lightbinder's bless
+	var iLight = document.getElementById("light").checked;		// lightbinder's ulti
+	var eShower = document.getElementById("shower").checked;	// alchemist's shower	
+	var biotrap = document.getElementById("biotrap").checked;	// alchemist's biotrap
+	var hammer = document.getElementById("nerion").checked;		// nerion's hammer
+	var macha = document.getElementById("machavann").checked;	// machavann upgrade
 // EXO NIGHTFALL
-	let stack3 = document.getElementById("stack3").value;			// nightfall
-	let compStat = (document.getElementById("compStat").value / 100);	// nightfall
+	var stack3 = document.getElementById("stack3").value;			// nightfall
+	var compStat = (document.getElementById("compStat").value / 100);	// nightfall
 // DAMAGE OUTPUT VARIABLE
-	let finalDmg = 0;
-	let critCalc = 0;
-	let dmgOvertime = 0;
+	var finalDmg = 0;
+	var critCalc = 0;
+	var dmgOvertime = 0;
 // TIME VARIABLES
-	let enableTime = document.getElementById("enableTime").checked;	// time enabler
-	let atkNum = document.getElementById("atkNum").value;		// number of attacks
-	let atkTime = document.getElementById("atkTime").value;		// attacks per second
-	let enemies = document.getElementById("enemies").value;		// number of enemies hitted with one attack
+	var enableTime = document.getElementById("enableTime").checked;	// time enabler
+	var atkNum = document.getElementById("atkNum").value;		// number of attacks
+	var atkTime = document.getElementById("atkTime").value;		// attacks per second
+	var enemies = document.getElementById("enemies").value;		// number of enemies hitted with one attack
 // CHECKS
 	if (+classBuff < +1) classBuff = 1;
 	if (+a9Buff < +1) a9Buff = 1;
@@ -290,18 +297,18 @@ function calculateDamage()
 	if (+enemies < +1) enemies = 1;
 	if (+stack < +0) stack = 0;
 	skill = Math.floor( skill );	// workaround
-	let effect = select.options[select.selectedIndex].value;	// get option value
-	let effect2 = select2.options[select2.selectedIndex].value;	// get option value
-	let effect3 = select3.options[select3.selectedIndex].value;	// get option value
-	let effect4 = soloBonus.options[soloBonus.selectedIndex].value;	// hall of travels bonus
-	let multiplier = 1;	// base multiplier is always 1
+	var effect = select.options[select.selectedIndex].value;	// get option value
+	var effect2 = select2.options[select2.selectedIndex].value;	// get option value
+	var effect3 = select3.options[select3.selectedIndex].value;	// get option value
+	var effect4 = soloBonus.options[soloBonus.selectedIndex].value;	// hall of travels bonus
+	var multiplier = 1;	// base multiplier is always 1
 	stack = Math.floor( stack );	// workaround
 	stack2 = Math.floor( stack2 );	// workaround
 	stack3 = Math.floor( stack3 );	// workaround
 // calculate player superiority bonus (+1% dmg done for every excess rank player has than monster, or -10% dmg done for every excess rank monster has)
 	if ( (Number(plrRank) > Number(0)) && (Number(monsterRank) > Number(0)) )	// calculate only if both ranks are higher than 0
 	{
-		let superiorityMultiplier = 1;
+		var superiorityMultiplier = 1;
 		if ( Number(plrRank) > Number(monsterRank) )
 		{	// bonus
 			superiorityMultiplier += ((plrRank - monsterRank) / 100);
@@ -397,7 +404,7 @@ function calculateDamage()
 			if ( Number(stack) > Number(20) )	// starting from 20th mark, apply special effect
 			{
 				if ( stack % 2 != 0 ) stack += 1;	// apply in pairs
-				let newMark = (stack - 20);
+				var newMark = (stack - 20);
 				multiplier += ((tracer + (viperMark * newMark)) * stack)
 			}
 			else
@@ -419,7 +426,7 @@ function calculateDamage()
 			{
 				case false:
 				{
-					let bakSkill = skill;
+					var bakSkill = skill;
 					for ( var i = 0; i < 9; i++ )	// gladiator strike hits 5 times per 9 uses
 					{	// every use increases damage, i think 10% per stack
 						if ( Number(i) > Number(0) )
@@ -442,7 +449,7 @@ function calculateDamage()
 			{
 				case false:
 				{
-					let bakSkill = (skill / 4);	// get single attack damage
+					var bakSkill = (skill / 4);	// get single attack damage
 					skill = 0;	// reset skill value to fill later
 					for ( var i = 0; i < 10; i++ )	// crippling bow deals damage 10 times in one go
 					{	// starting from 4th attack, crippling bow damage is 4 times higher
@@ -606,34 +613,34 @@ function calculateDamage()
 		if (Number(stack3) > Number(3)) stack3 = 3;	// max 3 stacks
 		if (Number(compStat) < Number(0)) compStat = 0;
 		if (Number(compStat) > Number(0.33)) compStat = 0.33;
-		let nightfall = (comp * compStat);
+		var nightfall = (comp * compStat);
 		if ( wings ) multiplier += (nightfall * alcBiotrap);
 		multiplier += (nightfall * stack3);
 		skill *= multiplier;
 	}
 // CALCULATION
-	finalDmg = ((((((((((((skill * elder) * (base + (wpn + wpnAura))) * main) * troop) 
-		* artif) * start) * stun) * slow) * chain) * armor) * atlasDmg) * atlasTroopDmg);
+	finalDmg = getDamageValue(skill,elder,base,wpn,wpnAura,main,troop,
+		artif,start,stun,slow,chain,armor,atlasDmg,atlasTroopDmg);
 // IF CRIT (MANUAL)
 	if ( (Number(crit) > Number(1)) && (!enableTime) )	// crit with stat only if time is disabled
 	{
-		critCalc = ((((((((((((skill * elder) * (base + (wpn + wpnAura))) * crit) * troop) 
-			* artif) * start) * stun) * slow) * chain) * armor) * atlasDmg) * atlasTroopDmg);
+		critCalc = getDamageValue(skill,elder,base,wpn,wpnAura,crit,troop,
+			artif,start,stun,slow,chain,armor,atlasDmg,atlasTroopDmg);
 		finalDmg += critCalc;	// ADD TO FINAL DMG
 	}
 // OUTPUT
-	let digit = Intl.NumberFormat();
+	var digit = Intl.NumberFormat();
 	output.innerText = digit.format( Math.floor(finalDmg) );	// thousands separated with dots
 // TIME BASED DAMAGE
 	if ( enableTime )	// this output simulate damage from continuous attacks
 	{
 		var delay = 1000;	// time delay for inner cycle
-		let timeOutput = document.getElementById("timeOutputDmg");	// TIME OUTPUT VAR
-		let critOutput = document.getElementById("critTime");	// CRIT OUTPUT VAR
-		let critCnt = 0;	// critical hits counter for output
-		let armorTime = 1;	// armor fracture attacks counter, min 1 - max 5
-		let armorFr = 1;	// value that will increased
-		let armorStack = (armor - 1);	// get only the percentage for stacks
+		var timeOutput = document.getElementById("timeOutputDmg");	// TIME OUTPUT VAR
+		var critOutput = document.getElementById("critTime");	// CRIT OUTPUT VAR
+		var critCnt = 0;	// critical hits counter for output
+		var armorTime = 1;	// armor fracture attacks counter, min 1 - max 5
+		var armorFr = 1;	// value that will increased
+		var armorStack = (armor - 1);	// get only the percentage for stacks
 		armorStack /= 4;	// take 1/4 of the value that will multiplied later
 		multiplier = 1;		// reset multiplier
 		if ( Number(armor) > Number(1) ) finalDmg /= armor;	// remove armor fracture buff, now is calculated below
@@ -646,7 +653,6 @@ function calculateDamage()
 		for ( var i = 0; i < atkNum; i++ )
 		{	// time based cycle
 			setTimeout(function(){
-			//	let enemyCnt = 1;	// enemies counter used to calculate damage on multiple target in same time
 				if ( effect == "ironHeart")
 				{	// increase damage at every attack, i think 10% each
 					delay = 500;	// half the delay to simulate gladiator strike dmg overtime
@@ -654,50 +660,44 @@ function calculateDamage()
 				}
 				for ( var j = 0; j < atkTime; j++ )
 				{	// time based inner cycle
-					var enemyCnt = 1;
 					setTimeout(function(){
-						do {
-						let random = ((Math.random() * 100) + 1);	// generate random number for crit chance
-						let origDmg = finalDmg;
-						let origSkill = skill;
-						if ( Number(start) > Number(1) )
-						{	// remove start buff after 15 attacks (guess 1 attack per second)
-							if ( Number(atkNum) > Number(15) ) origDmg /= start;
-						}
-						if ( effect == "ironHeart") origDmg *= multiplier;
-						if ( effect == "gvardar" )
-						{	// gvardar crippling bow hits 10 times
-							classEffectCnt++;
-							if ( Number(classEffectCnt) > Number(3) )
-							{	// from 4th attack, damage is increased 4 times
-								origDmg *= 4;	// single damage value increased 4 times
-								origSkill *= 4;	// used for crit damage calculation only
+						for ( var z = 0; z < enemies; z++ )
+						{	// execute this chunk more times if multiple enemies are found
+							var random = ((Math.random() * 100) + 1);	// generate random number for crit chance
+							var origDmg = finalDmg;
+							var origSkill = skill;
+							if ( Number(start) > Number(1) )
+							{	// remove start buff after 15 attacks (guess 1 attack per second)
+								if ( Number(atkNum) > Number(15) ) origDmg /= start;
 							}
+							if ( effect == "ironHeart") origDmg *= multiplier;
+							if ( effect == "gvardar" )
+							{	// gvardar crippling bow hits 10 times
+								classEffectCnt++;
+								if ( Number(classEffectCnt) > Number(3) )
+								{	// from 4th attack, damage is increased 4 times
+									origDmg *= 4;	// single damage value increased 4 times
+									origSkill *= 4;	// used for crit damage calculation only
+								}
+							}
+							if ( (Number(armor) > Number(1)) && (Number(armorTime) <= Number(5)) )	// calculate armor fracture buff overtime
+							{
+								if (Number(armorTime) > Number(1))
+									armorFr = 1 + (armorStack * (armorTime - 1));
+								armorTime++;
+							}
+							if ( Number(random) <= Number(critChance) )	// crit if random is within the range
+							{
+								critCalc = getDamageValue(origSkill,elder,base,wpn,wpnAura,crit,troop,
+									artif,start,stun,slow,chain,armorFr,atlasDmg,atlasTroopDmg);
+								if ( effect == "ironHeart") critCalc *= multiplier;	// give stacks to crit dmg
+								origDmg += critCalc;
+								critCnt++;	// increase crit counter
+							}
+							dmgOvertime += (origDmg * armorFr);
+							timeOutput.innerText = digit.format( Math.floor(dmgOvertime) );
+							critOutput.innerText = critCnt;
 						}
-						if ( (Number(armor) > Number(1)) && (Number(armorTime) <= Number(5)) )	// calculate armor fracture buff overtime
-						{
-							if (Number(armorTime) > Number(1))
-								armorFr = 1 + (armorStack * (armorTime - 1));
-							armorTime++;
-						}
-						if ( Number(random) <= Number(critChance) )	// crit if random is within the range
-						{
-							critCalc = ((((((((((((origSkill * elder) * (base + (wpn + wpnAura))) * crit) * troop) 
-								* artif) * start) * stun) * slow) * chain) * atlasDmg) * atlasTroopDmg) * armorFr);
-							if ( effect == "ironHeart") critCalc *= multiplier;
-							origDmg += critCalc;
-							critCnt++;	// increase crit counter
-						}
-						dmgOvertime += (origDmg * armorFr);
-						if ( Number(enemies) > Number(1) ) enemyCnt++;
-					//	{
-						//	enemyCnt++;	// increase enemy counter
-						//	if ( Number(enemyCnt) < Number(enemies) ) j--;	// decrease counter
-						//	else enemyCnt = 0;
-					//	}
-						timeOutput.innerText = digit.format( Math.floor(dmgOvertime) );
-						critOutput.innerText = critCnt;
-						} while( Number(enemyCnt) < Number(enemies));
 					}, (delay / atkTime) * j);
 				}
 			}, 1000 * i);
