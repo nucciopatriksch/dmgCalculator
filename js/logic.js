@@ -646,7 +646,7 @@ function calculateDamage()
 		for ( var i = 0; i < atkNum; i++ )
 		{	// time based cycle
 			setTimeout(function(){
-				let enemyCnt = 0;	// enemies counter used to calculate damage on multiple target in same time
+			//	let enemyCnt = 1;	// enemies counter used to calculate damage on multiple target in same time
 				if ( effect == "ironHeart")
 				{	// increase damage at every attack, i think 10% each
 					delay = 500;	// half the delay to simulate gladiator strike dmg overtime
@@ -654,7 +654,9 @@ function calculateDamage()
 				}
 				for ( var j = 0; j < atkTime; j++ )
 				{	// time based inner cycle
+					var enemyCnt = 1;
 					setTimeout(function(){
+						do {
 						let random = ((Math.random() * 100) + 1);	// generate random number for crit chance
 						let origDmg = finalDmg;
 						let origSkill = skill;
@@ -682,19 +684,21 @@ function calculateDamage()
 						{
 							critCalc = ((((((((((((origSkill * elder) * (base + (wpn + wpnAura))) * crit) * troop) 
 								* artif) * start) * stun) * slow) * chain) * atlasDmg) * atlasTroopDmg) * armorFr);
+							if ( effect == "ironHeart") critCalc *= multiplier;
 							origDmg += critCalc;
 							critCnt++;	// increase crit counter
 						}
 						dmgOvertime += (origDmg * armorFr);
+						if ( Number(enemies) > Number(1) ) enemyCnt++;
+					//	{
+						//	enemyCnt++;	// increase enemy counter
+						//	if ( Number(enemyCnt) < Number(enemies) ) j--;	// decrease counter
+						//	else enemyCnt = 0;
+					//	}
 						timeOutput.innerText = digit.format( Math.floor(dmgOvertime) );
 						critOutput.innerText = critCnt;
+						} while( Number(enemyCnt) < Number(enemies));
 					}, (delay / atkTime) * j);
-					if ( Number(enemies) > Number(1) )
-					{
-						enemyCnt++;	// increase enemy counter
-						if ( Number(enemyCnt) < Number(enemies) ) j--;	// decrease counter
-						else enemyCnt = 0;
-					}
 				}
 			}, 1000 * i);
 		}
