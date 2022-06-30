@@ -451,18 +451,26 @@ function calculateDamage()
 			{
 				case false:
 				{
+					if ( Number(a9Buff) > Number(1) ) skill /= a9Buff;	// remove a9 buff in case
 					var bakSkill = (skill / 4);	// get single attack damage
+					var skDmg = 0;	// value boosted by a9 talent
 					skill = 0;	// reset skill value to fill later
 					for ( var i = 0; i < 10; i++ )	// crippling bow deals damage 10 times in one go
 					{	// starting from 4th attack, crippling bow damage is 4 times higher
-						if ( Number(i) > Number(2) ) skill += (bakSkill * 4);
-						else skill += bakSkill;		// up to 3 continuous attacks, damage is standard
+						if ( Number(a9Buff) > Number(1) )
+						{
+							if ( Number(a9Buff) > Number(2.5) ) a9Buff = 2.5;
+							skDmg = (bakSkill * a9Buff);
+						}
+						if ( Number(i) > Number(2) ) skill += ((bakSkill * 4) + skDmg);
+						else skill += (bakSkill + skDmg);		// up to 3 continuous attacks, damage is standard
 					}
 					alertValue = 2;
 					break;
 				}
 				case true:
 				{
+					if ( Number(a9Buff) > Number(1) ) skill /= a9Buff;	// remove a9 buff in case
 					skill /= 4;	// need to get the effective single attack damage
 					break;
 				}
@@ -678,11 +686,24 @@ function calculateDamage()
 							if ( effect == "ironHeart") origDmg *= multiplier;
 							if ( effect == "gvardar" )
 							{	// gvardar crippling bow hits 10 times
+								var gvDmg = 0;	// variables used to store values boosted by talent
+								var skDmg = 0;
 								classEffectCnt++;
+								if ( Number(a9Buff) > Number(1) )
+								{	// single damage value boosted by a9 Talent
+									if ( Number(a9Buff) > Number(2.5) ) a9Buff = 2.5;	// a9 talent max 150% boost
+									gvDmg = (origDmg * a9Buff);
+									skDmg = (origSkill * a9Buff);
+									if ( Number(classEffectCnt) < Number(4) )
+									{	// do the addition with gvardar skill when this if is false
+										origDmg = gvDmg;
+										origSkill = skDmg;
+									}
+								}
 								if ( Number(classEffectCnt) > Number(3) )
-								{	// from 4th attack, damage is increased 4 times
-									origDmg *= 4;	// single damage value increased 4 times
-									origSkill *= 4;	// used for crit damage calculation only
+								{	// from 4th attack, damage is increased 4 times, in case boosted by talent
+									origDmg = ((origDmg * 4) + gvDmg);	// single damage value increased 4 times
+									origSkill = ((origSkill * 4) + skDmg);	// used for crit damage calculation only
 								}
 							}
 							if ( (Number(armor) > Number(1)) && (Number(armorTime) <= Number(5)) )	// calculate armor fracture buff overtime
