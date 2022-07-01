@@ -251,6 +251,8 @@ function calculateDamage()
 	var atkNum = document.getElementById("atkNum").value;		// number of attacks
 	var atkTime = document.getElementById("atkTime").value;		// attacks per second
 	var enemies = document.getElementById("enemies").value;		// number of enemies hitted with one attack
+// SERVICE
+	var digit = Intl.NumberFormat();	// used to separate thousands values with dots
 // CHECKS
 	if (+classBuff < +1) classBuff = 1;
 	if (+a9Buff < +1) a9Buff = 1;
@@ -632,106 +634,103 @@ function calculateDamage()
 		skill *= multiplier;
 	}
 // CALCULATION
-	finalDmg = getDamageValue(skill,elder,base,wpn,wpnAura,main,troop,
-		artif,start,stun,slow,chain,armor,atlasDmg,atlasTroopDmg);
-// IF CRIT (MANUAL)
-	if ( (Number(crit) > Number(1)) && (!enableTime) )	// crit with stat only if time is disabled
+	switch ( enableTime )
 	{
-		critCalc = getDamageValue(skill,elder,base,wpn,wpnAura,crit,troop,
-			artif,start,stun,slow,chain,armor,atlasDmg,atlasTroopDmg);
-		finalDmg += critCalc;	// ADD TO FINAL DMG
-	}
-// OUTPUT
-	var digit = Intl.NumberFormat();
-	output.innerText = digit.format( Math.floor(finalDmg) );	// thousands separated with dots
-// TIME BASED DAMAGE
-	if ( enableTime )	// this output simulate damage from continuous attacks
-	{
-		var delay = 1000;	// time delay for inner cycle
-		var timeOutput = document.getElementById("timeOutputDmg");	// TIME OUTPUT VAR
-		var critOutput = document.getElementById("critTime");	// CRIT OUTPUT VAR
-		var critCnt = 0;	// critical hits counter for output
-		var armorTime = 1;	// armor fracture attacks counter, min 1 - max 5
-		var armorFr = 1;	// value that will increased
-		var armorStack = (armor - 1);	// get only the percentage for stacks
-		armorStack /= 4;	// take 1/4 of the value that will multiplied later
-		multiplier = 1;		// reset multiplier
-		if ( Number(armor) > Number(1) ) finalDmg /= armor;	// remove armor fracture buff, now is calculated below
-		if ( Number(atkNum) < Number(1) ) atkNum = 1;	// number of attacks min 1 but unlimited
-		if ( Number(atkTime) < Number(1) ) atkTime = 1;		// attacks per second min 1
-		if ( Number(atkTime) > Number(5) ) atkTime = 5;		// attacks per second max 5
-		if ( Number(critChance) < Number(5) ) critChance = 5;	// base crit chance
-		if ( Number(critChance) > Number(100) ) critChance = 100;	// max chance including weapons and other stuff
-		if ( Number(crit) < Number(1.3) ) crit = 1.3;	// here calculate base crit damage in case
-		for ( var i = 0; i < atkNum; i++ )
-		{	// time based cycle
-			setTimeout(function(){
-				if ( effect == "ironHeart")
-				{	// increase damage at every attack, i think 10% each
-					delay = 500;	// half the delay to simulate gladiator strike dmg overtime
-					if ( Number(i) > Number(0) ) multiplier += tracer;
-				}
-				for ( var j = 0; j < atkTime; j++ )
-				{	// time based inner cycle
-					setTimeout(function(){
-						for ( var z = 0; z < enemies; z++ )
-						{	// execute this chunk more times if multiple enemies are found
-							var random = ((Math.random() * 100) + 1);	// generate random number for crit chance
-							var origDmg = finalDmg;
-							var origSkill = skill;
-							if ( Number(start) > Number(1) )
-							{	// remove start buff after 15 attacks (guess 1 attack per second)
-								if ( Number(atkNum) > Number(15) ) origDmg /= start;
-							}
-							if ( effect == "ironHeart") origDmg *= multiplier;
-							if ( effect == "gvardar" )
-							{	// gvardar crippling bow hits 10 times
-								var gvDmg = 0;	// variables used to store values boosted by talent
-								var skDmg = 0;
-								classEffectCnt++;
-								if ( Number(a9Buff) > Number(1) )
-								{	// single damage value boosted by a9 Talent
-									if ( Number(a9Buff) > Number(2.5) ) a9Buff = 2.5;	// a9 talent max 150% boost
-									gvDmg = (origDmg * a9Buff);
-									skDmg = (origSkill * a9Buff);
-									if ( Number(classEffectCnt) < Number(4) )
-									{	// do the addition with gvardar skill when this if is false
-										origDmg = gvDmg;
-										origSkill = skDmg;
-									}
-								}
-								if ( Number(classEffectCnt) > Number(3) )
-								{	// from 4th attack, damage is increased 4 times, in case boosted by talent
-									origDmg = ((origDmg * 4) + gvDmg);	// single damage value increased 4 times
-									origSkill = ((origSkill * 4) + skDmg);	// used for crit damage calculation only
-								}
-							}
-							if ( (Number(armor) > Number(1)) && (Number(armorTime) <= Number(5)) )	// calculate armor fracture buff overtime
-							{
-								if (Number(armorTime) > Number(1))
-									armorFr = 1 + (armorStack * (armorTime - 1));
-								armorTime++;
-							}
-							if ( Number(random) <= Number(critChance) )	// crit if random is within the range
-							{
-								critCalc = getDamageValue(origSkill,elder,base,wpn,wpnAura,crit,troop,
-									artif,start,stun,slow,chain,armorFr,atlasDmg,atlasTroopDmg);
-								if ( effect == "ironHeart") critCalc *= multiplier;	// give stacks to crit dmg
-								origDmg += critCalc;
-								critCnt++;	// increase crit counter
-							}
-							dmgOvertime += (origDmg * armorFr);
-							timeOutput.innerText = digit.format( Math.floor(dmgOvertime) );
-							critOutput.innerText = critCnt;
-						}
-					}, (delay / atkTime) * j);
-				}
-			}, 1000 * i);
+		// SINGLE DAMAGE (better use with skills that deal one attack)
+		case false:
+		{
+			finalDmg = getDamageValue(skill,elder,base,wpn,wpnAura,main,troop,
+				artif,start,stun,slow,chain,armor,atlasDmg,atlasTroopDmg);
+			// IF CRIT
+			if ( (Number(crit) > Number(1)) )	// crit with stat only
+			{
+				critCalc = getDamageValue(skill,elder,base,wpn,wpnAura,crit,troop,
+					artif,start,stun,slow,chain,armor,atlasDmg,atlasTroopDmg);
+				finalDmg += critCalc;	// ADD TO FINAL DMG
+			}
+			output.innerText = digit.format( Math.floor(finalDmg) );	// OUTPUT
+			// send alert to suggest time use for best calculation of some skills dmg
+			if ( Number(alertValue) != Number(0) ) sendAlert(alertValue);
+			break;
 		}
-	}
-	else
-	{	// send alert to suggest time use for best calculation of some skills dmg
-		if ( Number(alertValue) != Number(0) ) sendAlert(alertValue);
+		// TIME BASED DAMAGE (this output simulate damage from continuous attacks)
+		case true:
+		{
+			var delay = 1000;	// time delay for inner cycle
+			var timeOutput = document.getElementById("timeOutputDmg");	// TIME OUTPUT VAR
+			var critOutput = document.getElementById("critTime");	// CRIT OUTPUT VAR
+			var critCnt = 0;	// critical hits counter for output
+			var armorTime = 1;	// armor fracture attacks counter, min 1 - max 5
+			var armorFr = 1;	// armor fracture value that will increased for buff damage
+			var armorStack = (armor - 1);	// get armor fracture percentage for stacks
+			armorStack /= 4;	// take 1/4 of the value that will multiplied later
+			multiplier = 1;		// reset multiplier
+			if ( Number(atkNum) < Number(1) ) atkNum = 1;	// number of attacks min 1, max unlimited
+			if ( Number(atkTime) < Number(1) ) atkTime = 1;		// attacks per second min 1
+			if ( Number(atkTime) > Number(5) ) atkTime = 5;		// attacks per second max 5
+			if ( Number(critChance) < Number(5) ) critChance = 5;	// base crit chance
+			if ( Number(critChance) > Number(100) ) critChance = 100;	// max chance including weapons and other stuff
+			if ( Number(crit) < Number(1.3) ) crit = 1.3;	// here calculate base crit damage in case
+			for ( var i = 0; i < atkNum; i++ )
+			{	// time based cycle
+				setTimeout(function(){
+					if ( effect == "ironHeart")
+					{	// increase damage at every attack, i think 10% each
+						delay = 500;	// half the delay to simulate gladiator strike dmg overtime
+						if ( Number(i) > Number(0) ) multiplier += tracer; // increase dmg at each attack
+					}
+					for ( var j = 0; j < atkTime; j++ )
+					{	// time based inner cycle
+						setTimeout(function(){
+							for ( var z = 0; z < enemies; z++ )
+							{	// execute this chunk more times if multiple enemies are found
+								var random = ((Math.random() * 100) + 1);	// generate random number for crit chance
+								var origSkill = skill;	// backup skill value since we need original for each iteration
+								if ( effect == "ironHeart") origSkill *= multiplier;
+								if ( effect == "gvardar" )
+								{	// gvardar crippling bow hits 10 times
+									var skDmg = 0;	// used to store values boosted by talent
+									classEffectCnt++;	// determine the use of weapon effect
+									if ( Number(a9Buff) > Number(1) )
+									{	// single damage value boosted by a9 Talent
+										if ( Number(a9Buff) > Number(2.5) ) a9Buff = 2.5;	// a9 talent max 150% boost
+										skDmg = (origSkill * a9Buff);
+										if ( Number(classEffectCnt) < Number(4) ) origSkill = skDmg;
+									}
+									// from 4th attack, damage is increased 4 times, in case boosted by talent
+									if ( Number(classEffectCnt) > Number(3) ) origSkill = ((origSkill * 4) + skDmg);
+								}
+								if ( (Number(armor) > Number(1)) && (Number(armorTime) <= Number(5)) )	// calculate armor fracture buff overtime
+								{
+									if (Number(armorTime) > Number(1))
+										armorFr = 1 + (armorStack * (armorTime - 1));
+									armorTime++;
+								}
+								finalDmg = getDamageValue(origSkill,elder,base,wpn,wpnAura,main,troop,
+									artif,start,stun,slow,chain,armorFr,atlasDmg,atlasTroopDmg);
+								if ( Number(random) <= Number(critChance) )	// crit if random is within the range
+								{
+									critCalc = getDamageValue(origSkill,elder,base,wpn,wpnAura,crit,troop,
+										artif,start,stun,slow,chain,armorFr,atlasDmg,atlasTroopDmg);
+									if ( effect == "ironHeart") critCalc *= multiplier;	// give stacks to crit dmg
+									finalDmg += critCalc;
+									critCnt++;	// increase crit counter
+								}
+								if ( Number(start) > Number(1) )
+								{	// remove start buff after 15 attacks (guess 1 attack per second)
+									if ( Number(atkNum) > Number(15) ) finalDmg /= start;
+								}
+								dmgOvertime += finalDmg;	// value increased at each iteration
+								output.innerText = digit.format( Math.floor(finalDmg) );	// output (single attack)
+								timeOutput.innerText = digit.format( Math.floor(dmgOvertime) );	// output (continuous attacks)
+								critOutput.innerText = critCnt;		// show how many times critical damage was done
+							}
+						}, (delay / atkTime) * j);
+					}
+				}, 1000 * i);
+			}
+			break;
+		}
 	}
 }
 
