@@ -337,7 +337,7 @@ function calculateDamage()
 		}
 		might /= 100;	// subdivide by 100
 		skill /= might;	// subdivide skill by might value
-		if ( Number(mightGiven) > Number(0) )
+		if ( (Number(mightGiven) > Number(0)) && !(isPlrSupp) )	// increase might if player is not support
 		{
 			suppMight *= mightGiven;	// get the support's might percentage
 			suppMight /= 100;		// subdivide by 100
@@ -617,10 +617,13 @@ function calculateDamage()
 	}
 	if ( macha )		// machavann's upgrade
 	{
-		multiplier = 1;	// reinizialize multiplier
-		if ( wings ) multiplier += (macha_hammer * alcBiotrap);
-		multiplier += macha_hammer;
-		skill *= multiplier;
+		if ( !isPlrSupp )
+		{
+			multiplier = 1;	// reinizialize multiplier
+			if ( wings ) multiplier += (macha_hammer * alcBiotrap);
+			multiplier += macha_hammer;
+			skill *= multiplier;
+		}
 	}
 // if stack3 value is greater than 0, calculate nightfall buff
 	if ( Number(stack3) > Number(0) )
