@@ -495,13 +495,15 @@ function calculateDamage()
 			multiplier += (blade * stack);
 			break;
 		}
-		case "idol":	// revenant's baron samedi effect
+		case "slaughter":	// revenant's slaughter skill (stacks will simulate baron samedi boost)
 		{
-			skill *= 2;		// damage increased by 100%
+			if ( !enableTime ) alertValue = 5;
+			if ( Number(stack) > Number(10) ) stack = 10;	// baron samedi idol of death 100% bonus
+			multiplier += (tracer * stack);		// max 100% bonus
 			break;
 		}
 	}
-	skill *= multiplier;	// multiply class skill damage based on weapon effect
+	if ( Number(multiplier) > Number(1) ) skill *= multiplier;	// multiply class skill damage based on weapon effect
 // if stack2 value is greater than 0, calculate artifact special effect
 	if ( Number(stack2) > Number(0) )
 	{
@@ -685,8 +687,8 @@ function calculateDamage()
 							for ( var z = 0; z < enemies; z++ )
 							{	// execute this chunk more times if multiple enemies are found
 								var random = ((Math.random() * 100) + 1);	// generate random number for crit chance
-								var origSkill = skill;	// backup skill value since we need original for each iteration
-								if ( effect == "ironHeart") origSkill *= multiplier;
+								var bakSkill = skill;	// backup skill value since we need original for each iteration
+								if ( effect == "ironHeart") bakSkill *= multiplier;
 								if ( effect == "gvardar" )
 								{	// gvardar crippling bow hits 10 times
 									var skDmg = 0;	// used to store values boosted by talent
@@ -694,11 +696,21 @@ function calculateDamage()
 									if ( Number(a9Buff) > Number(1) )
 									{	// single damage value boosted by a9 Talent
 										if ( Number(a9Buff) > Number(2.5) ) a9Buff = 2.5;	// a9 talent max 150% boost
-										skDmg = (origSkill * a9Buff);
-										if ( Number(classEffectCnt) < Number(4) ) origSkill = skDmg;
+										skDmg = (bakSkill * a9Buff);
+										if ( Number(classEffectCnt) < Number(4) ) bakSkill = skDmg;
 									}
 									// from 4th attack, damage is increased 4 times, in case boosted by talent
-									if ( Number(classEffectCnt) > Number(3) ) origSkill = ((origSkill * 4) + skDmg);
+									if ( Number(classEffectCnt) > Number(3) ) bakSkill = ((bakSkill * 4) + skDmg);
+								}
+								if ( effect == "slaughter")
+								{	// slaughter deals 33% more damage for every enemy behind the first one, supposing this by number
+									classEffectCnt++;	// determine the amount of damage bonus done by slaughter
+									if ( Number(classEffectCnt) > Number(1) )
+									{
+										multiplier = (1 + (0.33 * (classEffectCnt - 1)));
+										if ( Number(multiplier) > Number(2) ) multiplier = 2;	// max 100% bonus
+										bakSkill *= multiplier;
+									}
 								}
 								if ( (Number(armor) > Number(1)) && (Number(armorTime) <= Number(5)) )	// calculate armor fracture buff overtime
 								{
@@ -706,11 +718,11 @@ function calculateDamage()
 										armorFr = 1 + (armorStack * (armorTime - 1));
 									armorTime++;
 								}
-								finalDmg = getDamageValue(origSkill,elder,base,wpn,wpnAura,main,troop,
+								finalDmg = getDamageValue(bakSkill,elder,base,wpn,wpnAura,main,troop,
 									artif,start,stun,slow,chain,armorFr,atlasDmg,atlasTroopDmg);
 								if ( Number(random) <= Number(critChance) )	// crit if random is within the range
 								{
-									critCalc = getDamageValue(origSkill,elder,base,wpn,wpnAura,crit,troop,
+									critCalc = getDamageValue(bakSkill,elder,base,wpn,wpnAura,crit,troop,
 										artif,start,stun,slow,chain,armorFr,atlasDmg,atlasTroopDmg);
 									if ( effect == "ironHeart") critCalc *= multiplier;	// give stacks to crit dmg
 									finalDmg += critCalc;
@@ -753,6 +765,12 @@ function sendAlert( type )
 		case 4:
 			alert("For best calculation of Whirlwind with Ragnar weapon use Time menu.\n"
 				+ "Suggested parameters for 4 hits:\nNumber of Attacks: 2\nAttacks per Second: 2");
+			break;
+		case 5:
+			alert("For best calculation of Slaughter use Time menu.\n"
+				+ "The damage is increased by 33% for each enemy behind the first one "
+				+ "up to 100% bonus. For this increase the value of 'Enemies hitted' field.\n"
+				+ "For Baron Samedi 'Idol of Death' effect use 'Stack Value' field, up to 100% bonus.");
 			break;
 	}
 }
