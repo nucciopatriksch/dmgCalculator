@@ -455,7 +455,7 @@ function calculateDamage()
 				{
 					if ( Number(a9Buff) > Number(1) ) skill /= a9Buff;	// remove a9 buff in case
 					var bakSkill = (skill / 4);	// get single attack damage
-					var skDmg = 0;	// value boosted by a9 talent
+					var skDmg = bakSkill;	// value boosted by a9 talent
 					skill = 0;	// reset skill value to fill later
 					for ( var i = 0; i < 10; i++ )	// crippling bow deals damage 10 times in one go
 					{	// starting from 4th attack, crippling bow damage is 4 times higher
@@ -465,7 +465,7 @@ function calculateDamage()
 							skDmg = (bakSkill * a9Buff);
 						}
 						if ( Number(i) > Number(2) ) skill += ((bakSkill * 4) + skDmg);
-						else skill += (bakSkill + skDmg);		// up to 3 continuous attacks, damage is standard
+						else skill += skDmg;		// up to 3 continuous attacks, damage is standard
 					}
 					alertValue = 2;
 					break;
