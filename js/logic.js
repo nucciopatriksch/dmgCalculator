@@ -678,7 +678,7 @@ function calculateDamage()
 			if ( Number(atkNum) < Number(1) ) atkNum = 1;	// number of attacks min 1, max unlimited
 			if ( Number(atkTime) < Number(1) ) atkTime = 1;		// attacks per second min 1
 			if ( Number(atkTime) > Number(5) ) atkTime = 5;		// attacks per second max 5
-			if ( Number(critChance) < Number(0) ) critChance = 0;	// base crit chance
+			if ( Number(critChance) < Number(5) ) critChance = 5;	// base crit chance
 			if ( Number(critChance) > Number(100) ) critChance = 100;	// max chance including weapons and other stuff
 			if ( Number(crit) < Number(1.3) ) crit = 1.3;	// here calculate base crit damage in case
 			for ( var i = 0; i < atkNum; i++ )
