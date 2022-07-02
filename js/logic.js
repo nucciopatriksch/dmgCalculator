@@ -455,7 +455,7 @@ function calculateDamage()
 				{
 					if ( Number(a9Buff) > Number(1) ) skill /= a9Buff;	// remove a9 buff in case
 					var bakSkill = (skill / 4);	// get single attack damage
-					var skDmg = bakSkill;	// value boosted by a9 talent
+					var skDmg = 0;	// value boosted by a9 talent
 					skill = 0;	// reset skill value to fill later
 					for ( var i = 0; i < 10; i++ )	// crippling bow deals damage 10 times in one go
 					{	// starting from 4th attack, crippling bow damage is 4 times higher
@@ -463,9 +463,14 @@ function calculateDamage()
 						{
 							if ( Number(a9Buff) > Number(2.5) ) a9Buff = 2.5;
 							skDmg = (bakSkill * a9Buff);
+							if ( Number(i) < Number(3) ) skill += skDmg;
 						}
 						if ( Number(i) > Number(2) ) skill += ((bakSkill * 4) + skDmg);
-						else skill += skDmg;		// up to 3 continuous attacks, damage is standard
+						else
+						{
+							if ( Number(a9Buff) <= Number(1) )
+								skill += bakSkill;	// up to 3 continuous attacks, damage is standard
+						}
 					}
 					alertValue = 2;
 					break;
@@ -673,7 +678,7 @@ function calculateDamage()
 			if ( Number(atkNum) < Number(1) ) atkNum = 1;	// number of attacks min 1, max unlimited
 			if ( Number(atkTime) < Number(1) ) atkTime = 1;		// attacks per second min 1
 			if ( Number(atkTime) > Number(5) ) atkTime = 5;		// attacks per second max 5
-			if ( Number(critChance) < Number(5) ) critChance = 5;	// base crit chance
+			if ( Number(critChance) < Number(0) ) critChance = 0;	// base crit chance
 			if ( Number(critChance) > Number(100) ) critChance = 100;	// max chance including weapons and other stuff
 			if ( Number(crit) < Number(1.3) ) crit = 1.3;	// here calculate base crit damage in case
 			for ( var i = 0; i < atkNum; i++ )
@@ -682,7 +687,8 @@ function calculateDamage()
 					if ( effect == "ironHeart")
 					{	// increase damage at every attack, i think 10% each
 						delay = 500;	// half the delay to simulate gladiator strike dmg overtime
-						if ( Number(i) > Number(0) ) multiplier += tracer; // increase dmg at each attack
+						classEffectCnt++;	// determine when increase dmg multiplier
+						if ( Number(classEffectCnt) > Number(1) ) multiplier += tracer; // increase dmg at each attack
 					}
 					for ( var j = 0; j < atkTime; j++ )
 					{	// time based inner cycle
