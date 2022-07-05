@@ -739,7 +739,7 @@ function calculateDamage()
 								}
 								if ( Number(start) > Number(1) )
 								{	// remove start buff after 15 attacks (guess 1 attack per second)
-									if ( Number(atkNum) > Number(15) ) finalDmg /= start;
+									if ( Number(i) > Number(15) ) finalDmg /= start;
 								}
 								dmgOvertime += finalDmg;	// value increased at each iteration
 								output.innerText = digit.format( Math.floor(finalDmg) );	// output (single attack)
