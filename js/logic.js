@@ -669,6 +669,7 @@ function calculateDamage()
 			var delay = 1000;	// time delay for inner cycle
 			var timeOutput = document.getElementById("timeOutputDmg");	// TIME OUTPUT VAR
 			var critOutput = document.getElementById("critTime");	// CRIT OUTPUT VAR
+			var startCnt = 0;
 			var critCnt = 0;	// critical hits counter for output
 			var armorTime = 1;	// armor fracture attacks counter, min 1 - max 5
 			var armorFr = 1;	// armor fracture value that will increased for buff damage
@@ -684,6 +685,7 @@ function calculateDamage()
 			for ( var i = 0; i < atkNum; i++ )
 			{	// time based cycle
 				setTimeout(function(){
+					startCnt++;
 					if ( effect == "ironHeart")
 					{	// increase damage at every attack, i think 10% each
 						delay = 500;	// half the delay to simulate gladiator strike dmg overtime
@@ -739,7 +741,7 @@ function calculateDamage()
 								}
 								if ( Number(start) > Number(1) )
 								{	// remove start buff after 15 attacks (guess 1 attack per second)
-									if ( Number(i) > Number(15) ) finalDmg /= start;
+									if ( Number(startCnt) > Number(15) ) finalDmg /= start;
 								}
 								dmgOvertime += finalDmg;	// value increased at each iteration
 								output.innerText = digit.format( Math.floor(finalDmg) );	// output (single attack)
