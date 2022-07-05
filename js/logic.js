@@ -685,6 +685,7 @@ function calculateDamage()
 			for ( var i = 0; i < atkNum; i++ )
 			{	// time based cycle
 				setTimeout(function(){
+					if ( Number(start) > Number(1) ) startCnt++;
 					if ( effect == "ironHeart")
 					{	// increase damage at every attack, i think 10% each
 						delay = 500;	// half the delay to simulate gladiator strike dmg overtime
@@ -738,11 +739,8 @@ function calculateDamage()
 									finalDmg += critCalc;
 									critCnt++;	// increase crit counter
 								}
-								if ( Number(start) > Number(1) )
-								{	// remove start buff after 15 attacks (guess 1 attack per second)
-									startCnt++;
-									if ( Number(startCnt) > Number(15) ) finalDmg /= start;
-								}
+								// remove start buff after 15 attacks (guess 1 attack per second)
+								if ( Number(startCnt) > Number(15) ) finalDmg /= start;
 								dmgOvertime += finalDmg;	// value increased at each iteration
 								output.innerText = digit.format( Math.floor(finalDmg) );	// output (single attack)
 								timeOutput.innerText = digit.format( Math.floor(dmgOvertime) );	// output (continuous attacks)
