@@ -684,7 +684,6 @@ function calculateDamage()
 			if ( Number(crit) < Number(1.3) ) crit = 1.3;	// here calculate base crit damage in case
 			for ( var i = 0; i < atkNum; i++ )
 			{	// time based cycle
-				startCnt++;
 				setTimeout(function(){
 					if ( effect == "ironHeart")
 					{	// increase damage at every attack, i think 10% each
@@ -741,6 +740,7 @@ function calculateDamage()
 								}
 								if ( Number(start) > Number(1) )
 								{	// remove start buff after 15 attacks (guess 1 attack per second)
+									startCnt++;
 									if ( Number(startCnt) > Number(15) ) finalDmg /= start;
 								}
 								dmgOvertime += finalDmg;	// value increased at each iteration
