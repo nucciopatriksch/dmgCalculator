@@ -684,8 +684,8 @@ function calculateDamage()
 			if ( Number(crit) < Number(1.3) ) crit = 1.3;	// here calculate base crit damage in case
 			for ( var i = 0; i < atkNum; i++ )
 			{	// time based cycle
+				startCnt++;
 				setTimeout(function(){
-					startCnt++;
 					if ( effect == "ironHeart")
 					{	// increase damage at every attack, i think 10% each
 						delay = 500;	// half the delay to simulate gladiator strike dmg overtime
