@@ -669,7 +669,7 @@ function calculateDamage()
 			var delay = 1000;	// time delay for inner cycle
 			var timeOutput = document.getElementById("timeOutputDmg");	// TIME OUTPUT VAR
 			var critOutput = document.getElementById("critTime");	// CRIT OUTPUT VAR
-			var startCnt = 0;
+			var startCnt = 0;	// damage to start counter, after 15 attacks buff will be removed
 			var critCnt = 0;	// critical hits counter for output
 			var armorTime = 1;	// armor fracture attacks counter, min 1 - max 5
 			var armorFr = 1;	// armor fracture value that will increased for buff damage
@@ -729,6 +729,7 @@ function calculateDamage()
 										armorFr = 1 + (armorStack * (armorTime - 1));
 									armorTime++;
 								}
+								if ( Number(startCnt) > Number(15) ) start = 1; // remove start buff after 15 attacks (guess 1 attack per second)
 								finalDmg = getDamageValue(bakSkill,elder,base,wpn,wpnAura,main,troop,
 									artif,start,stun,slow,chain,armorFr,atlasDmg,atlasTroopDmg);
 								if ( Number(random) <= Number(critChance) )	// crit if random is within the range
@@ -739,8 +740,6 @@ function calculateDamage()
 									finalDmg += critCalc;
 									critCnt++;	// increase crit counter
 								}
-								// remove start buff after 15 attacks (guess 1 attack per second)
-								if ( Number(startCnt) > Number(15) ) finalDmg /= start;
 								dmgOvertime += finalDmg;	// value increased at each iteration
 								output.innerText = digit.format( Math.floor(finalDmg) );	// output (single attack)
 								timeOutput.innerText = digit.format( Math.floor(dmgOvertime) );	// output (continuous attacks)
