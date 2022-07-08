@@ -149,7 +149,7 @@ function deleteForm()
 		+ ' #troopDmg, #armorFracture, #startDmg, #stunDmg, #slowDmg, #chainDmg, #artifactDmg,'
 		+ ' #stack, #stack2, #stack3, #compStat, #suppMight, #aura, #mightPercentage, #plrRank,'
 		+ ' #monsterRank, #atlasDmg, #atlasTroopDmg, #atkNum, #atkTime, #symbolBuff, #guildDmg,'
-		+ ' #node1, #node2, #enemies');
+		+ ' #node1, #node2, #enemies, strUnity');
 	inputs.forEach(input => {input.value = ""});
 }
 
@@ -188,6 +188,7 @@ function calculateDamage()
 	var chain = 1 + (document.getElementById("chainDmg").value / 100);
 	var charAura = document.getElementById("charAura").checked;		// character support aura boost
 	var isPlrSupp = document.getElementById("isPlrSupport").checked;	// if player is support
+	var strUnity = 1 + (document.getElementById("strUnity").value / 100);	// strength in unity buff (sum or multiplier?)
 	var plrSuppAura = 0;	// player's base support aura power
 /*				SECOND MENU				*/
 // SUPERIORITY CALCULATION
@@ -282,6 +283,8 @@ function calculateDamage()
 	if (+slow > +1.18) slow = 1.18;	// slowed max 18%
 	if (+chain < +1) chain = 1;
 	if (+chain > +1.24) chain = 1.24;		// chain killing max 24%
+	if (+strUnity < +1) strUnity = 1;
+	if (+strUnity > +1.8) strUnity = 1.8;
 	if (+artif < +1) artif = 1;
 	if (+artif > +1.35) artif = 1.35;		// artifact bonus max 35%
 	if (+atlasDmg < +1) atlasDmg = 1;	// atlas adventure damage bonus
@@ -369,6 +372,8 @@ function calculateDamage()
 	if ( Number(classBuff) > Number(1) ) skill *= classBuff;
 	if ( Number(a9Buff) > Number(1) ) skill *= a9Buff;
 	if ( Number(symbolBuff) > Number(1) ) skill *= symbolBuff;
+// apply strength in unity buff in case
+	if ( Number(strUnity) > Number(1) ) skill *= strUnity;
 // if checked apply cathedral seals
 	if ( dmgSeal ) skill *= 1.03;	// all damage seal increase damage by 3%
 	if ( cSeal ) skill *= 1.1;	// class seal +10% damage increase
