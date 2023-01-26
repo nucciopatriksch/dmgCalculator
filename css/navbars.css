@@ -47,6 +47,7 @@ body{
 
 #startPart .navbar .langSection .languages button{
 	width : 40px;
+	cursor : pointer;
 }
 
 #startPart section p{
