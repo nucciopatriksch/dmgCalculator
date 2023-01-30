@@ -1,415 +1,435 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="ISO-8859-1">
-<title>Unofficial Damage Calculator - HOME</title>
-<link rel="stylesheet" href="css/navbars.css" type="text/css">
-<link rel="stylesheet" href="css/index.css" type="text/css">
-<script type="text/javascript" src="js/logic.js"></script>
-</head>
+	<head>
+		<meta charset="UTF-8">
+		<title>Unofficial Damage Calculator - HOME</title>
+		<link rel="stylesheet" href="css/navbars.css" type="text/css">
+		<link rel="stylesheet" href="css/index.css" type="text/css">
+	</head>
 <body>
-<header id="startPart">
-	<section class="titleSection">
-		<p><strong>Unofficial Damage Calculator</strong></p>
+	<header id="startPart">
+		<section class="titleSection">
+			<p><strong>Unofficial Damage Calculator</strong></p>
+		</section>
+		<nav class="navbar">
+			<div class="linkSection">
+				<ul class="links">
+					<li><a href="info.html" id="linkEng">Instructions</a></li>
+					<li><a href="info.html" id="linkIta" hidden>Istruzioni</a></li>
+				</ul>
+			</div>
+			<div class="langSection">
+				<ul class="languages">
+					<li><button id="langEng" onclick="changeLang()" hidden>EN</button></li>
+					<li><button id="langIta" onclick="changeLang()">IT</button></li>
+				</ul>
+			</div>
+		</nav>
+	</header>
+	<section id="mainSection">
+		<div class="desc">
+			<p id="descEng">Use this form to calculate skill damage based on several factors.</p>
+			<p id="descIta" hidden>Usa questo form per calcolare i danni delle abilità basato su diversi fattori.</p>
+		</div>
+		<div class="outputSection">
+			<table>
+				<tr>
+					<td id="outputEng">Damage: </td>
+					<td id="outputIta" hidden>Danno: </td>
+					<td id="outputDmg">0</td>
+					<td id="outputDmgChar1"></td>
+				</tr>
+			</table>
+		</div>
+		<div class="timeOutputSection">
+			<table id="timeDamageOutput" hidden>
+				<tr>
+					<td id="outputEng2">Damage Overtime: </td>
+					<td id="outputIta2" hidden>Danni nel Tempo: </td>
+					<td id="timeOutputDmg">0</td>
+					<td id="outputDmgChar2"></td>
+				</tr>
+			</table>
+			<table id="critHits" hidden>
+				<tr>
+					<td id="critHitEng">Critical hits: </td>
+					<td id="critHitIta" hidden>Colpi Critici: </td>
+					<td id="critTime">0</td>
+				</tr>
+			</table>
+		</div>
+		<div class="timeOutputSection">
+			<table id="timerOutput" hidden>
+				<tr>
+					<td id="outputEng3">Timer: </td>
+					<td id="timer">0</td>
+					<td id="seconds">sec</td>
+				</tr>
+			</table>
+			<table id="timerOutput2" hidden>
+				<tr>
+					<td id="outputEng4">Total Time: </td>
+					<td id="outputIta4" hidden>Tempo Totale: </td>
+					<td id="totalTimer">0</td>
+					<td id="seconds">sec</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subSection">
+			<!--	FIRST TAB	-->
+			<div class="dataSection">
+				<table>
+					<tr><td><label>Class</label></td></tr>
+					<tr>
+						<td>Class Skill Damage</td>
+						<td><input type="number" id="skillDmg" min="0" placeholder="0" required></td>
+					</tr>
+					<tr>
+						<td>Generic Class Buff</td>
+						<td><input type="number" id="classBuff" min="0" placeholder="0"></td>
+					</tr>
+					<tr>
+						<td>Aelerium-9 Talent</td>
+						<td><input type="number" id="a9Buff" min="0" placeholder="0"></td>
+					</tr>
+					<tr>
+						<td>Symbol Bonus</td>
+						<td><input type="number" id="symbolBuff" min="0" placeholder="0"></td>
+					</tr>
+					<tr><td><label>Character</label></td></tr>
+					<tr>
+						<td>God Form</td>
+						<td><input type="checkbox" id="isPlrGod" onclick="showTravelBonus()"></td>
+					</tr>
+					<tr>
+						<td id="monsterDmgDesc" hidden>Damage to Monsters</td>
+						<td><input type="checkbox" id="monsterDmg" hidden></td>
+					</tr>
+					<tr>
+						<td>Might</td>
+						<td><input type="number" id="might" min="1000" placeholder="1000"></td>
+					</tr>
+					<tr>
+						<td>Damage Bonus</td>
+						<td><input type="number" id="baseDmg" min="0" max="56" placeholder="0"></td>
+					</tr>
+					<tr>
+						<td>Elder Multiplier</td>
+						<td><input type="number" id="elderMulti" min="0" max="28" placeholder="0"></td>
+					</tr>
+					<tr>
+						<td>Is Player Support</td>
+						<td><input type="checkbox" id="isPlrSupport" onclick="showSuppAura()"></td>
+					</tr>
+					<tr>
+						<td id="auraDesc" hidden>Support Aura Power</td>
+						<td><input type="checkbox" id="charAura" hidden></td>
+					</tr>
+					<tr><td><label>Main Stats</label></td></tr>
+					<tr>
+						<td>Armor Fracture</td>
+						<td><input type="number" id="armorFracture" min="0" max="14.4" placeholder="0"></td>
+					</tr>
+					<tr>
+						<td>Main Damage Bonus</td>
+						<td><input type="number" id="mainDmg" min="0" max="136" placeholder="0"></td>
+					</tr>
+					<tr>
+						<td>Companion Damage Bonus</td>
+						<td><input type="number" id="compDmg" min="0" max="181" placeholder="0"></td>
+					</tr>
+					<tr>
+						<td>Damage to Elite/Minion</td>
+						<td><input type="number" id="troopDmg" min="0" max="68.56" placeholder="0"></td>
+					</tr>
+					<tr>
+						<td>Critical Damage Bonus</td>
+						<td><input type="number" id="critDmg" min="0" max="181" placeholder="0"></td>
+					</tr>
+					<tr>
+						<td id="critChanceDesc" hidden>Critical Chance</td>
+						<td><input type="number" id="critChance" min="5" max="100" placeholder="0" hidden></td>
+					</tr>
+					<tr><td><label>Sub Stats</label></td></tr>
+					<tr>
+						<td>Damage when combat starts</td>
+						<td><input type="number" id="startDmg" min="0" max="59" placeholder="0"></td>
+					</tr>
+					<tr>
+						<td>Damage to stunned targets</td>
+						<td><input type="number" id="stunDmg" min="0" max="36" placeholder="0"></td>
+					</tr>
+					<tr>
+						<td>Damage to slowed targets</td>
+						<td><input type="number" id="slowDmg" min="0" max="18" placeholder="0"></td>
+					</tr>
+					<tr>
+						<td>Chain killing</td>
+						<td><input type="number" id="chainDmg" min="0" max="24" placeholder="0"></td>
+					</tr>
+					<tr>
+						<td>Strength in Unity</td>
+						<td><input type="number" id="strUnity" min="0" max="80" placeholder="0"></td>
+					</tr>
+				</table>
+			</div>
+			<!--	SECOND TAB	-->
+			<div class="weaponSection">
+				<table>
+					<tr><td><label>Superiority</label></td></tr>
+					<tr>
+						<td>Player's Rank</td>
+						<td><input type="number" id="plrRank" min="0" placeholder="0"></td>
+					</tr>
+					<tr>
+						<td>Monster's Rank</td>
+						<td><input type="number" id="monsterRank" min="0" placeholder="0"></td>
+					</tr>
+					<tr><td><label>Weapon Stats</label></td></tr>
+					<tr>
+						<td>Weapon Damage</td>
+						<td><input type="number" id="weaponDmg" min="0" placeholder="0"></td>
+					</tr>
+					<tr>
+						<td>Support Aura Power</td>	<!-- add in case if supp weapon -->
+						<td><input type="number" id="weaponAura" min="0" placeholder="0"></td>
+					</tr>
+					<tr><td><label>Artifact</label></td></tr>
+					<tr>
+						<td>Artifact Damage Bonus</td>
+						<td><input type="number" id="artifactDmg" min="0" max="35" placeholder="0"></td>
+					</tr>
+					<tr><td><label>Seals</label></td></tr>
+					<tr>
+						<td>All Damage Bonus</td>
+						<td><input type="checkbox" id="sealAllDmg"></td>
+					</tr>
+					<tr>
+						<td>Class Seal Bonus</td>
+						<td><input type="checkbox" id="sealClass"></td>
+					</tr>
+					<tr>
+						<td>Adventure Seal Bonus</td>
+						<td><input type="checkbox" id="sealAdv"></td>
+					</tr>
+					<tr><td id="travelDesc" hidden><label>Hall Travels</label></td></tr>
+					<tr>
+						<td id="defSuppDesc" hidden>Defense/Support Bonus</td>
+						<td><input type="checkbox" id="defSuppBonus" hidden></td>
+					</tr>
+					<tr>
+						<td id="soloDesc" hidden>Damage Bonus (solo)</td>
+						<td><select id="multiSelect4" hidden>
+							<option id="optValue4" value="null">null</option>
+							<option id="optValue4" value="soloGroup">Group Bonus</option>
+							<option id="optValue4" value="soloParty">Party Bonus</option>
+						</select></td>
+					</tr>
+	
+					<tr><td><label>Hyperion</label></td></tr>
+					<tr>
+						<td>Use Verdict</td>
+						<td><input type="checkbox" id="useVerdict" onclick="showVerdictStacks()"></td>
+					</tr>
+					<tr>
+						<td id="verdictDesc" hidden>Verdict Stack</td>
+						<td><input type="number" id="verdictValue" min="0" max="20" placeholder="0" hidden></td>
+					</tr>
+					<tr><td><label>Atlas</label></td></tr>
+					<tr>
+						<td>Adventure Damage Bonus</td>
+						<td><input type="number" id="atlasDmg" min="0" max="30" placeholder="0"></td>
+					</tr>
+					<tr>
+						<td>Troop Damage Bonus</td>
+						<td><input type="number" id="atlasTroopDmg" min="0" max="39" placeholder="0"></td>
+					</tr>
+					<tr>
+						<td>Atlas Node Buff 1</td>
+						<td><input type="number" id="node1" min="0" placeholder="0"></td>
+					</tr>
+					<tr>
+						<td>Atlas Node Buff 2</td>
+						<td><input type="number" id="node2" min="0" placeholder="0"></td>
+					</tr>
+					<tr><td><label>Misc</label></td></tr>
+					<tr>
+						<td>Pantheon Damage Bonus</td>
+						<td><input type="number" id="guildDmg" min="0" max="12" placeholder="0"></td>
+					</tr>
+					<tr>
+						<td>Premium Damage Bonus</td>
+						<td><input type="checkbox" id="premiumDmg"></td>
+					</tr>
+				</table>
+			</div>
+			<!--	EFFECTS		-->
+			<div class="effectSection">
+				<table class="effectTable">
+					<tr>
+						<td><label>Show Effects Menu</label></td>
+						<td><input type="checkbox" id="multiplerCheck" onclick="showEffects()"></td>
+					</tr>
+				</table>
+				<table id="tableOfEffects" hidden>
+					<tr><td><label>Weapon Effect</label></td></tr>
+					<tr>
+						<td>Stack Value</td>
+						<td><input type="number" id="stack" min="0" placeholder="0"></td>
+					</tr>
+					<tr>
+						<td>Effect Multiplier</td>
+						<td><select id="multiSelect">
+							<option id="optValue" value="genEffect">Generic Multiplier</option>
+							<option id="optValue" value="tracer">Tracer</option>
+							<option id="optValue" value="viperMark">Viper Mark</option>
+							<option id="optValue" value="dodgeThat">Dodge That</option>
+							<option id="optValue" value="ironHeart">Iron Heart</option>
+							<option id="optValue" value="gvardar">Gvardar</option>
+							<option id="optValue" value="bloodlust1">Bloodlust Firestorm</option>
+							<option id="optValue" value="bloodlust2">Bloodlust Whirlwind</option>
+							<option id="optValue" value="slaughter">Slaughter</option>
+						</select></td>
+					</tr>
+					<tr><td><label>Artifact Effect</label></td></tr>
+					<tr>
+						<td>Artifact Stack</td>
+						<td><input type="number" id="stack2" min="0" max="10" placeholder="0"></td>
+					</tr>
+					<tr>
+						<td>Artifact Select</td>
+						<td><select id="multiSelect2">
+							<option id="optValue2" value="null">null</option>
+							<option id="optValue2" value="detector">Vulnerability Detector</option>
+							<option id="optValue2" value="blade">Bloodied Blade</option>
+						</select></td>
+					</tr>
+					<tr><td><label>Euphomine</label></td></tr>
+					<tr>
+						<td>Use Stimulant</td>
+						<td><input type="checkbox" id="useStims" onclick="useStimulants()"></td>
+					</tr>
+					<tr>
+						<td id="stimsDesc" hidden>Buff Percentage</td>
+						<td><input type="number" id="stimsValue" min="30" max="100" placeholder="30" hidden></td>
+					</tr>
+					<tr><td><label>Support</label></td></tr>
+					<tr>
+						<td>Support's Might</td>
+						<td><input type="number" id="suppMight" min="1000" placeholder="1000"></td>
+					</tr>
+					<tr>
+						<td>Support's Aura Power</td>
+						<td><input type="number" id="aura" min="0" placeholder="0"></td>
+					</tr>
+					<tr>
+						<td>Transferred Might</td>
+						<td><input type="number" id="mightPercentage" min="0" max="80" placeholder="0"></td>
+					</tr>
+					<tr><td><label>Buff Effect</label></td></tr>
+					<tr>
+						<td>Soundweaver Buff</td>
+						<td><select id="multiSelect3">
+							<option id="optValue3" value="null">null</option>
+							<option id="optValue3" value="rythm1">Rythm Strength / Courage</option>
+							<option id="optValue3" value="rythmOC">Rythm with Overcharge</option>
+							<option id="optValue3" value="swUlti">Fiery Solo</option>
+						</select></td>
+					</tr>
+					<tr>
+						<td>Wings of Skies</td>
+						<td><input type="checkbox" id="wings"></td>
+					</tr>
+					<tr>
+						<td>Blessing of the Sun</td>
+						<td><input type="checkbox" id="bless"></td>
+					</tr>
+					<tr>
+						<td>Incarnation of Light</td>
+						<td><input type="checkbox" id="light"></td>
+					</tr>
+					<tr>
+						<td>Energy Shower</td>
+						<td><input type="checkbox" id="shower"></td>
+					</tr>
+					<tr>
+						<td>Biotrap</td>
+						<td><input type="checkbox" id="biotrap"></td>
+					</tr>
+					<tr>
+						<td>Nerion's Hammer</td>
+						<td><input type="checkbox" id="nerion"></td>
+					</tr>
+					<tr>
+						<td>Machavann's Upgrade</td>
+						<td><input type="checkbox" id="machavann"></td>
+					</tr>
+					<tr><td><label>Exo Nightfall</label></td></tr>
+					<tr>
+						<td>Static Charge</td>
+						<td><input type="number" id="stack3" min="0" max="3" placeholder="0"></td>
+					</tr>
+					<tr>
+						<td>Stat Percentage</td>
+						<td><input type="number" id="compStat" min="0" max="33" placeholder="0"></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div class="timeSection">
+			<label>Time based Damage</label>
+			<div class="timeInputs">
+				<table>
+					<tr>
+						<td>Enable Time</td>
+						<td><input type="checkbox" id="enableTime" onclick="enableTimeDamage()"></td>
+					</tr>
+				</table>
+				<table>
+					<tr>
+						<td id="atkNumDesc" hidden>Number of Attacks</td>
+						<td><input type="number" id="atkNum" min="1" placeholder="1" hidden></td>
+					</tr>
+				</table>
+				<table>
+					<tr>
+						<td id="atkTimeDesc" hidden>Attacks per Second</td>
+						<td><input type="number" id="atkTime" min="1" max="5" placeholder="1" hidden></td>
+					</tr>
+				</table>
+				<table>
+					<tr>
+						<td id="enemiesDesc" hidden>Enemies hitted</td>
+						<td><input type="number" id="enemies" min="1" placeholder="1" hidden></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div class="finalSection">
+			<div class="btnSection">
+				<button id="calcButtonEng" onclick="calculateDamage()">Calculate Damage</button>
+				<button id="clearButtonEng" onclick="deleteForm()">Clear Fields</button>
+				<button id="calcButtonIta" onclick="calculateDamage()" hidden>Calcola Danni</button>
+				<button id="clearButtonIta" onclick="deleteForm()" hidden>Pulisci Campi</button>
+				<button id="resetTime" onclick="resetTimer()" hidden>Reset Timer</button>
+			</div>
+			<div class="space">
+				<p id="lastInfoEng">For any problem, see the "<b>Instructions</b>" section.<br>
+					This is a <b>WIP</b> Project and can have margin to get better.</p>
+				<p id="lastInfoIta" hidden>In caso di problemi, consultare la sezione "<b>Istruzioni</b>".<br>
+					Questo è un Progetto <b>WIP</b> e può avere margine di miglioramento.</p>
+			</div>
+		</div>
 	</section>
-	<nav class="navbar">
-		<div class="linkSection">
-			<ul class="links">
-				<li><a href="info.html" id="linkEng">Instructions</a></li>
-				<li><a href="info.html" id="linkIta" hidden>Istruzioni</a></li>
+	<footer id="lastPart">
+		<section>
+			<ul>
+				<li><label id="authorEng">Author: </label></li>
+				<li><label id="authorIta" hidden>Autore: </label></li>
+				<li class="name">Anonymous</li>
 			</ul>
-		</div>
-		<div class="langSection">
-			<ul class="languages">
-				<li><button id="langEng" onclick="changeLang()" hidden>EN</button></li>
-				<li><button id="langIta" onclick="changeLang()">IT</button></li>
-			</ul>
-		</div>
-	</nav>
-</header>
-<section id="mainSection">
-	<div class="desc">
-		<p id="descEng">Use this form to calculate skill damage based on several factors.</p>
-		<p id="descIta" hidden>Usa questo form per calcolare i danni delle abilita' basato su diversi fattori.</p>
-	</div>
-	<div class="outputSection">
-		<table>
-			<tr>
-				<td id="outputEng">Damage: </td>
-				<td id="outputIta" hidden>Danno: </td>
-				<td id="outputDmg">0</td>
-			</tr>
-		</table>
-	</div>
-	<div class="timeOutputSection">
-		<table id="timeDamageOutput" hidden>
-			<tr>
-				<td id="outputEng2">Damage Overtime: </td>
-				<td id="outputIta2" hidden>Danni nel Tempo: </td>
-				<td id="timeOutputDmg">0</td>
-			</tr>
-		</table>
-		<table id="critHits" hidden>
-			<tr>
-				<td id="critHitEng">Critical hits: </td>
-				<td id="critHitIta" hidden>Colpi Critici: </td>
-				<td id="critTime">0</td>
-			</tr>
-		</table>
-	</div>
-	<div class="subSection">
-		<!--	FIRST TAB	-->
-		<div class="dataSection">
-			<table>
-				<tr><td><label>Class</label></td></tr>
-				<tr>
-					<td>Class Skill Damage</td>
-					<td><input type="number" id="skillDmg" min="0" placeholder="0" required></td>
-				</tr>
-				<tr>
-					<td>Generic Class Buff</td>
-					<td><input type="number" id="classBuff" min="0" placeholder="0"></td>
-				</tr>
-				<tr>
-					<td>Aelerium-9 Talent</td>
-					<td><input type="number" id="a9Buff" min="0" placeholder="0"></td>
-				</tr>
-				<tr>
-					<td>Symbol Bonus</td>
-					<td><input type="number" id="symbolBuff" min="0" placeholder="0"></td>
-				</tr>
-				<tr><td><label>Character</label></td></tr>
-				<tr>
-					<td>God Form</td>
-					<td><input type="checkbox" id="isPlrGod" onclick="showTravelBonus()"></td>
-				</tr>
-				<tr>
-					<td id="monsterDmgDesc" hidden>Damage to Monsters</td>
-					<td><input type="checkbox" id="monsterDmg" hidden></td>
-				</tr>
-				<tr>
-					<td>Might</td>
-					<td><input type="number" id="might" min="1000" placeholder="1000"></td>
-				</tr>
-				<tr>
-					<td>Damage Bonus</td>
-					<td><input type="number" id="baseDmg" min="0" max="56" placeholder="0"></td>
-				</tr>
-				<tr>
-					<td>Elder Multiplier</td>
-					<td><input type="number" id="elderMulti" min="0" max="28" placeholder="0"></td>
-				</tr>
-				<tr>
-					<td>Is Player Support</td>
-					<td><input type="checkbox" id="isPlrSupport" onclick="showSuppAura()"></td>
-				</tr>
-				<tr>
-					<td id="auraDesc" hidden>Support Aura Power</td>
-					<td><input type="checkbox" id="charAura" hidden></td>
-				</tr>
-				<tr><td><label>Main Stats</label></td></tr>
-				<tr>
-					<td>Armor Fracture</td>
-					<td><input type="number" id="armorFracture" min="0" max="14.4" placeholder="0"></td>
-				</tr>
-				<tr>
-					<td>Main Damage Bonus</td>
-					<td><input type="number" id="mainDmg" min="0" max="136" placeholder="0"></td>
-				</tr>
-				<tr>
-					<td>Companion Damage Bonus</td>
-					<td><input type="number" id="compDmg" min="0" max="181" placeholder="0"></td>
-				</tr>
-				<tr>
-					<td>Damage to Elite/Minion</td>
-					<td><input type="number" id="troopDmg" min="0" max="68.56" placeholder="0"></td>
-				</tr>
-				<tr>
-					<td>Critical Damage Bonus</td>
-					<td><input type="number" id="critDmg" min="0" max="181" placeholder="0"></td>
-				</tr>
-				<tr>
-					<td id="critChanceDesc" hidden>Critical Chance</td>
-					<td><input type="number" id="critChance" min="5" max="100" placeholder="0" hidden></td>
-				</tr>
-				<tr><td><label>Sub Stats</label></td></tr>
-				<tr>
-					<td>Damage when combat starts</td>
-					<td><input type="number" id="startDmg" min="0" max="59" placeholder="0"></td>
-				</tr>
-				<tr>
-					<td>Damage to stunned targets</td>
-					<td><input type="number" id="stunDmg" min="0" max="36" placeholder="0"></td>
-				</tr>
-				<tr>
-					<td>Damage to slowed targets</td>
-					<td><input type="number" id="slowDmg" min="0" max="18" placeholder="0"></td>
-				</tr>
-				<tr>
-					<td>Chain killing</td>
-					<td><input type="number" id="chainDmg" min="0" max="24" placeholder="0"></td>
-				</tr>
-				<tr>
-					<td>Strength in Unity</td>
-					<td><input type="number" id="strUnity" min="0" max="80" placeholder="0"></td>
-				</tr>
-			</table>
-		</div>
-		<!--	SECOND TAB	-->
-		<div class="weaponSection">
-			<table>
-				<tr><td><label>Superiority</label></td></tr>
-				<tr>
-					<td>Player's Rank</td>
-					<td><input type="number" id="plrRank" min="0" placeholder="0"></td>
-				</tr>
-				<tr>
-					<td>Monster's Rank</td>
-					<td><input type="number" id="monsterRank" min="0" placeholder="0"></td>
-				</tr>
-				<tr><td><label>Weapon Stats</label></td></tr>
-				<tr>
-					<td>Weapon Damage</td>
-					<td><input type="number" id="weaponDmg" min="0" placeholder="0"></td>
-				</tr>
-				<tr>
-					<td>Support Aura Power</td>	<!-- add in case if supp weapon -->
-					<td><input type="number" id="weaponAura" min="0" placeholder="0"></td>
-				</tr>
-				<tr><td><label>Artifact</label></td></tr>
-				<tr>
-					<td>Artifact Damage Bonus</td>
-					<td><input type="number" id="artifactDmg" min="0" max="35" placeholder="0"></td>
-				</tr>
-				<tr><td><label>Seals</label></td></tr>
-				<tr>
-					<td>All Damage Bonus</td>
-					<td><input type="checkbox" id="sealAllDmg"></td>
-				</tr>
-				<tr>
-					<td>Class Seal Bonus</td>
-					<td><input type="checkbox" id="sealClass"></td>
-				</tr>
-				<tr>
-					<td>Adventure Seal Bonus</td>
-					<td><input type="checkbox" id="sealAdv"></td>
-				</tr>
-				<tr><td id="travelDesc" hidden><label>Hall Travels</label></td></tr>
-				<tr>
-					<td id="defSuppDesc" hidden>Defense/Support Bonus</td>
-					<td><input type="checkbox" id="defSuppBonus" hidden></td>
-				</tr>
-				<tr>
-					<td id="soloDesc" hidden>Damage Bonus (solo)</td>
-					<td><select id="multiSelect4" hidden>
-						<option id="optValue4" value="null">null</option>
-						<option id="optValue4" value="soloGroup">Group Bonus</option>
-						<option id="optValue4" value="soloParty">Party Bonus</option>
-					</select></td>
-				</tr>
-
-				<tr><td><label>Hyperion</label></td></tr>
-				<tr>
-					<td>Use Verdict</td>
-					<td><input type="checkbox" id="useVerdict" onclick="showVerdictStacks()"></td>
-				</tr>
-				<tr>
-					<td id="verdictDesc" hidden>Verdict Stack</td>
-					<td><input type="number" id="verdictValue" min="0" max="20" placeholder="0" hidden></td>
-				</tr>
-				<tr><td><label>Atlas</label></td></tr>
-				<tr>
-					<td>Adventure Damage Bonus</td>
-					<td><input type="number" id="atlasDmg" min="0" max="30" placeholder="0"></td>
-				</tr>
-				<tr>
-					<td>Troop Damage Bonus</td>
-					<td><input type="number" id="atlasTroopDmg" min="0" max="39" placeholder="0"></td>
-				</tr>
-				<tr>
-					<td>Atlas Node Buff 1</td>
-					<td><input type="number" id="node1" min="0" placeholder="0"></td>
-				</tr>
-				<tr>
-					<td>Atlas Node Buff 2</td>
-					<td><input type="number" id="node2" min="0" placeholder="0"></td>
-				</tr>
-				<tr><td><label>Misc</label></td></tr>
-				<tr>
-					<td>Pantheon Damage Bonus</td>
-					<td><input type="number" id="guildDmg" min="0" max="12" placeholder="0"></td>
-				</tr>
-				<tr>
-					<td>Premium Damage Bonus</td>
-					<td><input type="checkbox" id="premiumDmg"></td>
-				</tr>
-			</table>
-		</div>
-		<!--	EFFECTS		-->
-		<div class="effectSection">
-			<table class="effectTable">
-				<tr>
-					<td><label>Show Effects Menu</label></td>
-					<td><input type="checkbox" id="multiplerCheck" onclick="showEffects()"></td>
-				</tr>
-			</table>
-			<table id="tableOfEffects" hidden>
-				<tr><td><label>Weapon Effect</label></td></tr>
-				<tr>
-					<td>Stack Value</td>
-					<td><input type="number" id="stack" min="0" placeholder="0"></td>
-				</tr>
-				<tr>
-					<td>Effect Multiplier</td>
-					<td><select id="multiSelect">
-						<option id="optValue" value="genEffect">Generic Multiplier</option>
-						<option id="optValue" value="tracer">Tracer</option>
-						<option id="optValue" value="viperMark">Viper Mark</option>
-						<option id="optValue" value="dodgeThat">Dodge That</option>
-						<option id="optValue" value="ironHeart">Iron Heart</option>
-						<option id="optValue" value="gvardar">Gvardar</option>
-						<option id="optValue" value="bloodlust1">Bloodlust Firestorm</option>
-						<option id="optValue" value="bloodlust2">Bloodlust Whirlwind</option>
-						<option id="optValue" value="slaughter">Slaughter</option>
-					</select></td>
-				</tr>
-				<tr><td><label>Artifact Effect</label></td></tr>
-				<tr>
-					<td>Artifact Stack</td>
-					<td><input type="number" id="stack2" min="0" max="10" placeholder="0"></td>
-				</tr>
-				<tr>
-					<td>Artifact Select</td>
-					<td><select id="multiSelect2">
-						<option id="optValue2" value="null">null</option>
-						<option id="optValue2" value="detector">Vulnerability Detector</option>
-						<option id="optValue2" value="blade">Bloodied Blade</option>
-					</select></td>
-				</tr>
-				<tr><td><label>Euphomine</label></td></tr>
-				<tr>
-					<td>Use Stimulant</td>
-					<td><input type="checkbox" id="useStims" onclick="useStimulants()"></td>
-				</tr>
-				<tr>
-					<td id="stimsDesc" hidden>Buff Percentage</td>
-					<td><input type="number" id="stimsValue" min="30" max="100" placeholder="30" hidden></td>
-				</tr>
-				<tr><td><label>Support</label></td></tr>
-				<tr>
-					<td>Support's Might</td>
-					<td><input type="number" id="suppMight" min="1000" placeholder="1000"></td>
-				</tr>
-				<tr>
-					<td>Support's Aura Power</td>
-					<td><input type="number" id="aura" min="0" placeholder="0"></td>
-				</tr>
-				<tr>
-					<td>Transferred Might</td>
-					<td><input type="number" id="mightPercentage" min="0" max="80" placeholder="0"></td>
-				</tr>
-				<tr><td><label>Buff Effect</label></td></tr>
-				<tr>
-					<td>Soundweaver Buff</td>
-					<td><select id="multiSelect3">
-						<option id="optValue3" value="null">null</option>
-						<option id="optValue3" value="rythm1">Rythm Strength / Courage</option>
-						<option id="optValue3" value="rythmOC">Rythm with Overcharge</option>
-						<option id="optValue3" value="swUlti">Fiery Solo</option>
-					</select></td>
-				</tr>
-				<tr>
-					<td>Wings of Skies</td>
-					<td><input type="checkbox" id="wings"></td>
-				</tr>
-				<tr>
-					<td>Blessing of the Sun</td>
-					<td><input type="checkbox" id="bless"></td>
-				</tr>
-				<tr>
-					<td>Incarnation of Light</td>
-					<td><input type="checkbox" id="light"></td>
-				</tr>
-				<tr>
-					<td>Energy Shower</td>
-					<td><input type="checkbox" id="shower"></td>
-				</tr>
-				<tr>
-					<td>Biotrap</td>
-					<td><input type="checkbox" id="biotrap"></td>
-				</tr>
-				<tr>
-					<td>Nerion's Hammer</td>
-					<td><input type="checkbox" id="nerion"></td>
-				</tr>
-				<tr>
-					<td>Machavann's Upgrade</td>
-					<td><input type="checkbox" id="machavann"></td>
-				</tr>
-				<tr><td><label>Exo Nightfall</label></td></tr>
-				<tr>
-					<td>Static Charge</td>
-					<td><input type="number" id="stack3" min="0" max="3" placeholder="0"></td>
-				</tr>
-				<tr>
-					<td>Stat Percentage</td>
-					<td><input type="number" id="compStat" min="0" max="33" placeholder="0"></td>
-				</tr>
-			</table>
-		</div>
-	</div>
-	<div class="timeSection">
-		<label>Time based Damage</label>
-		<div class="timeInputs">
-			<table>
-				<tr>
-					<td>Enable Time</td>
-					<td><input type="checkbox" id="enableTime" onclick="enableTimeDamage()"></td>
-				</tr>
-			</table>
-			<table>
-				<tr>
-					<td id="atkNumDesc" hidden>Number of Attacks</td>
-					<td><input type="number" id="atkNum" min="1" placeholder="1" hidden></td>
-				</tr>
-			</table>
-			<table>
-				<tr>
-					<td id="atkTimeDesc" hidden>Attacks per Second</td>
-					<td><input type="number" id="atkTime" min="1" max="5" placeholder="1" hidden></td>
-				</tr>
-			</table>
-			<table>
-				<tr>
-					<td id="enemiesDesc" hidden>Enemies hitted</td>
-					<td><input type="number" id="enemies" min="1" placeholder="1" hidden></td>
-				</tr>
-			</table>
-		</div>
-	</div>
-	<div class="finalSection">
-		<div class="btnSection">
-			<button id="calcButtonEng" onclick="calculateDamage()">Calculate Damage</button>
-			<button id="clearButtonEng" onclick="deleteForm()">Clear Fields</button>
-			<button id="calcButtonIta" onclick="calculateDamage()" hidden>Calcola Danni</button>
-			<button id="clearButtonIta" onclick="deleteForm()" hidden>Pulisci Campi</button>
-		</div>
-		<div class="space">
-			<p id="lastInfoEng">For any problem, see the "<b>Instructions</b>" section.<br>
-				This is a <b>WIP</b> Project and can have margin to get better.</p>
-			<p id="lastInfoIta" hidden>In caso di problemi, consultare la sezione "<b>Istruzioni</b>".<br>
-				Questo � un Progetto <b>WIP</b> e pu� avere margine di miglioramento.</p>
-		</div>
-	</div>
-</section>
-<footer id="lastPart">
-	<section>
-		<ul>
-			<li><label id="authorEng">Author: </label></li>
-			<li><label id="authorIta" hidden>Autore: </label></li>
-			<li class="name">Anonymous</li>
-		</ul>
-	</section>
-</footer>
+		</section>
+	</footer>
+	<script type="text/javascript" src="js/logic.js"></script>
 </body>
 </html>

@@ -1,142 +1,139 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
-<title>Unofficial Damage Calculator - INFO</title>
-<link rel="stylesheet" href="css/navbars.css" type="text/css">
-<link rel="stylesheet" href="css/info.css" type="text/css">
-<script type="text/javascript" src="js/info.js"></script>
+	<meta charset="UTF-8">
+	<title>Unofficial Damage Calculator - INFO</title>
+	<link rel="stylesheet" href="css/navbars.css" type="text/css">
+	<link rel="stylesheet" href="css/info.css" type="text/css">
 </head>
 <body>
-<header id="startPart">
-	<section class="titleSection">
-		<p><strong>Unofficial Damage Calculator</strong></p>
+	<header id="startPart">
+		<section class="titleSection">
+			<p><strong>Unofficial Damage Calculator</strong></p>
+		</section>
+		<nav class="navbar">
+			<div class="linkSection">
+				<ul class="links">
+					<li><a href="index.html">HomePage</a></li>
+				</ul>
+			</div>
+			<div class="langSection">
+				<ul class="languages">
+					<li><button id="langEng" onclick="changeLang()" hidden>EN</button></li>
+					<li><button id="langIta" onclick="changeLang()">IT</button></li>
+				</ul>
+			</div>
+		</nav>
+	</header>
+	<section id="mainSection">
+		<section class="mainIntro">
+			<p id="premiseIntroEng">WIP - Instructions will be updated soon<br>
+									If you know the basis of this game...</p>
+			<p id="premiseIntroIta" hidden>WIP - Le istruzioni saranno aggiornate presto<br>
+									Se conosci le basi del gioco...</p>
+		</section>
+		<section class="mainPremise">
+			<p id="premiseEng">...the task will be easier.<br>
+				The calculator is intuitive to use, the main value that is mandatory is the "Class Skill Damage" field.<br>
+				Then simply compile the other fields, only the ones you need. This calculator is capable to give two kinds of output,
+				one specifically for those skill that deal damage once every tot seconds, the last are time based and for this
+				you will enable the menu in the section Time based Damage to calculate continuous damage.
+			</p>
+			<p id="premiseIta" hidden>Il calcolatore è intuitivo da usare, il valore principale obbligatorio è il campo "Class Skill Damage".<br>
+				Quindi compila semplicemente gli altri campi, solo quelli che ti servono. Questa calcolatrice è in grado di fornire due tipi di output,
+				uno specifico per quelle abilità che infliggono danno una volta ogni tot secondi, gli ultimi sono basati sul tempo e per questo
+				abiliterai il menu nella sezione Time based Damage per il calcolo del danno continuo.
+			</p>
+		</section>
+		<section class="rulesIntro">
+			<p id="introEng">Rules for using the calculator</p>
+			<p id="introIta" hidden>Regole per l'utilizzo del calcolatore</p>
+		</section>
+		<section class="infoRules">
+			<p id="infoRulesEng">Compile the "Class Skill Damage" field, it refers to the damage caused by one of the skills of a class;
+				check the actual damage value from the game itself via the Abilities tab before entering.<br>
+				Then insert the reference values of your character's stats; you can also use values that are not
+				in your possession to make a comparison between one or more configurations.<br>
+				The calculation of the damage can be done without the need to necessarily enter all the values;
+				just think that some of the multipliers such as "Damage when combat starts" are momentary bonuses.<br>
+				To calculate critical damage of a single skill, the "Critical damage bonus" field must be compiled, having a value greater than 0.<br>
+				If "Time based Damage" menu is enabled, Critical hits will be calculated through a random chance based on "Critical Chance" field that will appear.<br><br>
+				As you can see the second menu at center contains other fields referring to other bonuses such as Weapon's stats, Atlas buffs, Verdict and so on.<br><br>
+				<br>
+				Note:<br>
+				- All the stats are hard coded; using bigger values that are unintented will have no effect to the final calculation.<br>
+				- "Elder Multiplier" increases the damage done by a certain skill of a class, obtained by progressing within the Halls of Elder Gods (max 28%).<br>
+				- "Generic Class Buff" field refers to a class skill that increases damage, like paladin's Holy Ground skill.<br>
+				- "Aelerium-9 Talent" field refers to a class talent that can increase damage.<br>
+				- "Symbol Bonus" field refers to a class symbol that can increase damage.<br>
+				- "God Form" checkbox simulate the character's divine form, resulting in an increased damage output. Other fields connected to the divine state will appear.<br>
+				- Atlas have 4 fields, first two refers to the damage done in adventures and to specific troop, last two represents an generic buff effect coming from Atlas development.</p>
+	
+			<p id ="infoRulesIta" hidden>Compila il campo "Class Skill Damage", si riferisce al danno causato da una delle abilità di una classe;
+				controlla l'effettivo valore del danno dal gioco stesso tramite la scheda Abilità prima di entrare.<br>
+				Poi inserisci i valori di riferimento delle statistiche del tuo personaggio; puoi anche usare valori che non lo sono
+				in tuo possesso per effettuare un confronto tra una o più configurazioni.<br>
+				Il calcolo del danno può essere effettuato senza la necessità di inserire necessariamente tutti i valori;
+				basti pensare che alcuni dei moltiplicatori come "Damage when combat starts" sono bonus momentanei.<br>
+				Per calcolare il danno critico di una singola abilità, deve essere compilato il campo "Bonus danno critico", avente valore maggiore di 0.<br>
+				Se il menu "Danno basato sul tempo" è abilitato, i colpi critici verranno calcolati attraverso una possibilità casuale basata sul campo "Probabilità critica" che apparirà.<br><br>
+				Come puoi vedere, il secondo menu al centro contiene altri campi che fanno riferimento ad altri bonus come le statistiche dell'arma, i buff dell'Atlante, il Verdict e così via.<br><br>
+				Note:<br>
+				- Tutte le statistiche sono hardcoded; l'utilizzo involontario di valori maggiori non avrà alcun effetto sul calcolo finale.<br>
+				- "Elder Multiplier" aumenta il danno fatto da una certa abilità di una classe, ottenuta progredendo all'interno delle Sale degli Elder Gods (massimo 28%).<br>
+				- Il campo "Generic Class Buff" si riferisce a un'abilità di classe che aumenta i danni, come l'abilità Holy Ground del paladino.<br>
+				- Il campo "Talento Aelerium-9" si riferisce a un talento di classe che può aumentare il danno.<br>
+				- Il campo "Bonus simbolo" si riferisce a un simbolo di classe che può aumentare il danno.<br>
+				- La casella di controllo "Forma divina" simula la forma divina del personaggio, con conseguente aumento dei danni inflitti. Appariranno altri campi collegati allo stato divino.<br>
+				- Atlas ha 4 campi, i primi due si riferiscono al danno fatto nelle avventure ea una specifica truppa, gli ultimi due rappresentano un generico effetto buff derivante dallo sviluppo di Atlas.</p>
+		</section>
+		<section class="effectIntro">
+			<p id="descEng">Rules for using effects</p>
+			<p id="descIta" hidden>Regole per l'uso degli effetti</p>
+		</section>
+		<section class="effectRules">
+			<p id="infoEffectEng">Unlock the menu, then select an effect type and enter the stack value.<br>
+				The need to use this section arises from the fact of being able to calculate the damage that can be done
+				with certain Legendary weapons or under certain circumstances.<br><br>
+				- "Generic Effect" multiplies the final damage value by 10% for each stack applied (unlimited).<br>
+				- "Tracer" multiplies the final damage value by 10% for each stack applied (max 16).<br>
+				- "Viper Mark" multiplies the final damage value for each stack applied by 10% up to 20. After the 20th stack, each new stack adds + 2% to the base multiplier which is 10%, hence the value of the multiplier it will depend on how many stacks you have set (max 100).<br>
+				- "Dodge That" triples the base damage value of the skill if you previously hit a target with Sureshot, then multiplies the final damage value by 10% for each stack applied (max 16).<br>
+				- Below you will find more useful things related to support buffs.<br>
+				- To calculate "Nightfall" buff, you need to set a value for "Companion Damage Bonus" and only then insert the amount of "Static Charges" and the percentage of the stat.<br><br>
+				Note:<br>
+				- "Generic Effect" could be used to calculate the 'Dehydration' skill with Ner'Gal weapon (use max 10 for this).<br>
+				- Use "Tracer" and "Viper Mark" to calculate the 'Sureshot' skill for the Outlaw class.<br>
+				- Use "Dodge That" with 0 stack to calculate the 'Dodge That' skill for the Outlaw class. Apply the
+				stacks (max 16) to calculate the damage that the 'Eternal Darkness, Endless Night' weapon can generate.<br>
+				- "Dodge That" with 0 stack could be used for 'Living Missle' skill calculation via Sigil weapon.</p>
+	
+			<p id="infoEffectIta" hidden>Sbloccare il menu', quindi selezionare un tipo di effetto e inserire il valore dello stack.<br>
+				L'esigenza di usare questa sezione nasce dal fatto di poter calcolare i danni che si possono effettuare
+				con determinate armi Leggendarie.<br>
+				- "Generic Effect" moltiplica del 10% il valore finale del danno per ogni stack applicato (senza limiti).<br>
+				- "Tracer" moltiplica del 10% il valore finale del danno per ogni stack applicato (max 16).<br>
+				- "Viper Mark" moltiplica del 10% il valore finale del danno per ogni stack applicato fino a 20. Dopo i 20 stack, ogni nuovo stack aggiunge il +2% al moltiplicatore di base che e' del 10%, quindi il valore del moltiplicatore dipendera' da quanti stack avete impostato (max 100).<br>
+				- "Dodge That" triplica di base il valore del danno della skill se in precedenza hai colpito un bersaglio con Sureshot, quindi moltiplica del 10% il valore finale del danno per ogni stack applicato (max 16).<br>
+				- Di seguito troverai altre cose utili relative ai buff di supporto.<br>
+				- Per calcolare il buff "Nightfall", è necessario impostare un valore per "Companion Damage Bonus" e solo successivamente inserire l'ammontare di "Static Charges" e la percentuale della statistica.<br><br>
+				Note:<br>
+				- "Generic Effect" potrebbe essere usato per il calcolo della skill 'Dehydration' tramite arma Ner'Gal (max 10 for this).<br>
+				- Usare "Tracer" e "Viper Mark" per il calcolo della skill 'Sureshot' per la classe Outlaw.<br>
+				- Usare "Dodge That" con 0 stack per il calcolo della skill 'Dodge That' per la classe Outlaw. Applicare gli
+				stacks (max 16) per calcolare i danni che puo' generare l'arma 'Eternal Darkness, Endless Night'.<br>
+				- "Dodge That" con 0 stack potrebbe essere usato per il calcolo della skill 'Living Missle' tramite arma Sigil.</p>
+		</section>
 	</section>
-	<nav class="navbar">
-		<div class="linkSection">
-			<ul class="links">
-				<li><a href="index.html">HomePage</a></li>
+	<footer id="lastPart">
+		<section>
+			<ul>
+				<li><label id="authorEng">Author: </label></li>
+				<li><label id="authorIta" hidden>Autore: </label></li>
+				<li class="name">Anonymous</li>
 			</ul>
-		</div>
-		<div class="langSection">
-			<ul class="languages">
-				<li><button id="langEng" onclick="changeLang()" hidden>EN</button></li>
-				<li><button id="langIta" onclick="changeLang()">IT</button></li>
-			</ul>
-		</div>
-	</nav>
-</header>
-<section id="mainSection">
-	<section class="mainIntro">
-		<p id="premiseIntroEng">WIP - Instructions will be updated soon<br>
-								If you know the basis of this game...</p>
-		<p id="premiseIntroIta" hidden>WIP - Le istruzioni saranno aggiornate presto<br>
-								Se conosci le basi del gioco...</p>
-	</section>
-	<section class="mainPremise">
-		<p id="premiseEng">...the task will be easier.<br>
-			The calculator is intuitive to use, the main value that is mandatory is the Class Skill Damage field.<br>
-			Then simply compile the other fields, only the ones you need. This calculator is capable to give two kinds of output,
-			one specifically for those skill that deal damage once every tot seconds, the last are time based and for this
-			you will enable the menu in the section Time based Damage to calculate continuous damage.
-		</p>
-		<p id="premiseIta" hidden>...dovresti avere una conoscenza media del gioco.<br>
-			Conoscendo le basi delle tue statistiche, i Bonus della Cattedrale, i Buffs e ogni altro oggetto che aumenta<br>
-			il danno finale, render� il compito pi� semplice permettendoti di calcolare i tuoi danni potenziali della singola<br>
-			skill basandosi su diversi fattori.
-		</p>
-	</section>
-	<section class="rulesIntro">
-		<p id="introEng">Rules for using the calculator</p>
-		<p id="introIta" hidden>Regole per l'utilizzo del calcolatore</p>
-	</section>
-	<section class="infoRules">
-		<p id="infoRulesEng">Compile the Class Skill Damage field, it refers to the damage caused by one of the skills of a class;
-			check the actual damage value from the game itself via the Abilities tab before entering.<br>
-			Then insert the reference values of your character's stats; you can also use values that are not
-			in your possession to make a comparison between one or more configurations.<br>
-			The calculation of the damage can be done without the need to necessarily enter all the values;
-			just think that some of the multipliers such as "Damage when combat starts" are momentary bonuses.<br>
-			To calculate critical damage of a single skill, the "Critical damage bonus" field must be compiled, having a value greater than 0.<br>
-			If "Time based Damage" menu is enabled, Critical hits will be calculated through a random chance based on "Critical Chance" field that will appear.<br><br>
-			As you can see the second menu at center contains other fields referring to other bonuses such as Weapon's stats, Atlas buffs, Verdict and so on.<br><br>
-			<br>
-			Note:<br>
-			- All the stats are hard coded; using bigger values that are unintented will have no effect to the final calculation.<br>
-			- "Elder Multiplier" increases the damage done by a certain skill of a class, obtained by progressing
-			within the Halls of Elder Gods (max 28%).<br>
-			- "Generic Class Buff" field refers to a class skill that increases damage, like paladin's Holy Ground skill.<br>
-			- "Aelerium-9 Talent" field refers to a class talent that can increase damage.<br>
-			- "Symbol Bonus" field refers to a class symbol that can increase damage.<br>
-			- "God Form" checkbox simulate the character's divine form, resulting in an increased damage output. Other fields connected to the divine state will appear.<br>
-			- Atlas have 4 fields, first two refers to the damage done in adventures and to specific troop, last two </p>
-
-		<p id ="infoRulesIta" hidden>Inserire il valore del danno causato da una delle skill di una classe, ad esempio Revenant skill Slaughter;
-			controllare l'effettivo valore del danno dal gioco stesso tramite la scheda Abilities prima dell'inserimento.<br>
-			Inserire quindi i valori di riferimento alle statistiche del vostro personaggio; potete usare anche valori non
-			in vostro possesso per effettuare un confronto tra una o pi� configurazioni.<br>
-			Il calcolo del danno pu� essere effettuato senza la necessit� di inserire necessariamente tutti i valori;
-			basti pensare che alcuni dei moltiplicatori come ad esempio "Damage when combat starts" sono bonus momentanei.<br>
-			Per calcolare i danni critici il valore di "Critical damage bonus" deve essere maggiore di 0.<br>
-			Abilitando il menu "Time based Damage", i Colpi critici saranno calcolati in base alla stat "Critical Chance".<br><br>
-			Note:<br>
-			- "Base Damage" si riferisce al moltiplicatore di base del vostro personaggio (max 56%).<br>
-			- "Elder Multiplier" aumenta i danni effettuati da una certa skill di una classe, si ottiene facendo progressi
-			all'interno della Halls of Elder Gods (max 28%).<br>
-			- "Damage when combat starts" aumenta i vostri danni all'inizio di una battaglia e per i primi 15 secondi (max 59%).<br>
-			- "Artifact Damage bonus" aumenta tutti i danni effettuati, si ottiene tramite un Artefatto Leggendario (max 35%).<br>
-			- "Class Seal Bonus" aumenta tutti i danni effettuati da una classe, si ottiene tramite la Cattedrale (max 10%).<br>
-			- "Adventure Seal Bonus" aumenta tutti i danni effettuati in un determinato tipo di avventura, si ottiene tramite
-			la Cattedrale (max 5%).</p>
-	</section>
-	<section class="effectIntro">
-		<p id="descEng">Rules for using effects</p>
-		<p id="descIta" hidden>Regole per l'uso degli effetti</p>
-	</section>
-	<section class="effectRules">
-		<p id="infoEffectEng">Unlock the menu, then select an effect type and enter the stack value.<br>
-			The need to use this section arises from the fact of being able to calculate the damage that can be done
-			with certain Legendary weapons or under certain circumstances.<br><br>
-			- "Generic Effect" multiplies the final damage value by 10% for each stack applied (unlimited).<br>
-			- "Tracer" multiplies the final damage value by 10% for each stack applied (max 16).<br>
-			- "Viper Mark" multiplies the final damage value for each stack applied by 10% up to 20. After the 20th stack,
-			each new stack adds + 2% to the base multiplier which is 10%, hence the value of the multiplier
-			it will depend on how many stacks you have set (max 100).<br>
-			- "Dodge That" triples the base damage value of the skill if you previously hit a target with Sureshot,
-			then multiplies the final damage value by 10% for each stack applied (max 16).<br><br>
-			Note:<br>
-			- "Generic Effect" could be used to calculate the 'Dehydration' skill with Ner'Gal weapon (use max 10 for this).<br>
-			- Use "Tracer" and "Viper Mark" to calculate the 'Sureshot' skill for the Outlaw class.<br>
-			- Use "Dodge That" with 0 stack to calculate the 'Dodge That' skill for the Outlaw class. Apply the
-			stacks (max 16) to calculate the damage that the 'Eternal Darkness, Endless Night' weapon can generate.<br>
-			- "Dodge That" with 0 stack could be used for 'Living Missle' skill calculation via Sigil weapon.</p>
-
-		<p id="infoEffectIta" hidden>Sbloccare il men�, quindi selezionare un tipo di effetto e inserire il valore dello stack.<br>
-			L'esigenza di usare questa sezione nasce dal fatto di poter calcolare i danni che si possono effettuare
-			con determinate armi Leggendarie.<br>
-			- "Generic Effect" moltiplica del 10% il valore finale del danno per ogni stack applicato (senza limiti).<br>
-			- "Tracer" moltiplica del 10% il valore finale del danno per ogni stack applicato (max 16).<br>
-			- "Viper Mark" moltiplica del 10% il valore finale del danno per ogni stack applicato fino a 20. Dopo i 20 stack,
-			ogni nuovo stack aggiunge il +2% al moltiplicatore di base che � del 10%, quindi il valore del moltiplicatore
-			dipender� da quanti stack avete impostato (max 100).<br>
-			- "Dodge That" triplica di base il valore del danno della skill se in precedenza hai colpito un bersaglio con Sureshot,
-			quindi moltiplica del 10% il valore finale del danno per ogni stack applicato (max 16).<br><br>
-			Note:<br>
-			- "Generic Effect" potrebbe essere usato per il calcolo della skill 'Dehydration' tramite arma Ner'Gal (max 10 for this).<br>
-			- Usare "Tracer" e "Viper Mark" per il calcolo della skill 'Sureshot' per la classe Outlaw.<br>
-			- Usare "Dodge That" con 0 stack per il calcolo della skill 'Dodge That' per la classe Outlaw. Applicare gli
-			stacks (max 16) per calcolare i danni che pu� generare l'arma 'Eternal Darkness, Endless Night'.<br>
-			- "Dodge That" con 0 stack potrebbe essere usato per il calcolo della skill 'Living Missle' tramite arma Sigil.</p>
-	</section>
-</section>
-<footer id="lastPart">
-	<section>
-		<ul>
-			<li><label id="authorEng">Author: </label></li>
-			<li><label id="authorIta" hidden>Autore: </label></li>
-			<li class="name">Anonymous</li>
-		</ul>
-	</section>
-</footer>
+		</section>
+	</footer>
+	<script type="text/javascript" src="js/info.js"></script>
 </body>
 </html>

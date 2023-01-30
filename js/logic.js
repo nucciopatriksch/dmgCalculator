@@ -2,20 +2,22 @@
  * 
  */
 // WEAPON
-const tracer = 0.1		// 0.1 equals to 10%
-const viperMark = 0.02		// 0.02 equals to 2%
+const tracer = 0.1		// 0.1 equals to 10% (Sureshot)
+const viperMark = 0.02		// 0.02 equals to 2% (Sureshot)
 // ARTIFACT
-const vulnerability = 0.08	// 0.08 equals to 8%
-const blade = 0.04		// 0.04 equals to 4%
+const vulnerability = 0.08	// 0.08 equals to 8% (Vulnerability Detector)
+const blade = 0.04		// 0.04 equals to 4% (Bloodied Blade)
 // DIVINE WEAPON
-const macha_hammer = 0.15	// 0.15 equals to 15%
+const macha_hammer = 0.15	// 0.15 equals to 15% (Machavann's Guard)
 // BUFFS
-const bless = 0.35			// 0.35 equals to 35%
-const lightInc = 0.5		// 0.5 equals to 50%
-const shower = 0.3			// 0.3 equals to 30%
-const alcBiotrap = 0.4		// 0.4 equals to 40%
+const bless = 0.35			// 0.35 equals to 35% (Blessing of the Sun)
+const lightInc = 0.5		// 0.5 equals to 50% (Incarnation of Light)
+const shower = 0.3			// 0.3 equals to 30% (Energy Shower)
+const alcBiotrap = 0.4		// 0.4 equals to 40% (Biotrap)
 // SERVICE
-let timeDamageOnGoing = false
+let timeDamageOnGoing = false	// prevents multiple clicks of calculate damage while time menu is on
+let timeoutArrayOne = []	// timeout array
+let timeoutArrayTwo = []	// timeout array
 
 function changeLang()
 {
@@ -59,20 +61,32 @@ function useStimulants()
 function enableTimeDamage()
 {
 	const elements = document.querySelectorAll("#atkNumDesc, #atkNum, #atkTimeDesc, #atkTime,"
-	+ "#timeDamageOutput, #critChanceDesc, #critChance, #enemiesDesc, #enemies, #critHits")
+	+ "#timeDamageOutput, #critChanceDesc, #critChance, #enemiesDesc, #enemies, #critHits,"
+	+ "#timerOutput, #timerOutput2, #resetTime")
 	elements.forEach(e => { e.hidden = (e.hidden)? false : true })
+	timeDamageOnGoing = false
+}
+
+function resetTimer()
+{
+	const elements = document.querySelectorAll("#outputDmg, #timeOutputDmg, #critTime, #timer, #totalTimer")
+	const chars = document.querySelectorAll("#outputDmgChar1, #outputDmgChar2")
+	elements.forEach(e => { e.innerText = 0 })
+	chars.forEach(c => { c.innerText = "" })
+	timeoutArrayOne.forEach(function(timer) { clearTimeout(timer) })
+	timeoutArrayTwo.forEach(function(timer) { clearTimeout(timer) })
 	timeDamageOnGoing = false
 }
 
 function deleteForm()
 {
-	const elements = document.querySelectorAll('#might, #skillDmg, #baseDmg, #classBuff, #a9Buff,'
-		+ ' #weaponDmg, #weaponAura, #elderMulti, #mainDmg, #critDmg, #critChance, #compDmg,'
-		+ ' #troopDmg, #armorFracture, #startDmg, #stunDmg, #slowDmg, #chainDmg, #artifactDmg,'
-		+ ' #stack, #stack2, #stack3, #compStat, #suppMight, #aura, #mightPercentage, #plrRank,'
-		+ ' #monsterRank, #atlasDmg, #atlasTroopDmg, #atkNum, #atkTime, #symbolBuff, #guildDmg,'
-		+ ' #node1, #node2, #enemies, #strUnity')
-		elements.forEach(e => { e.value = "" })
+	const elements = document.querySelectorAll("#might, #skillDmg, #baseDmg, #classBuff, #a9Buff,"
+		+ "#weaponDmg, #weaponAura, #elderMulti, #mainDmg, #critDmg, #critChance, #compDmg,"
+		+ "#troopDmg, #armorFracture, #startDmg, #stunDmg, #slowDmg, #chainDmg, #artifactDmg,"
+		+ "#stack, #stack2, #stack3, #compStat, #suppMight, #aura, #mightPercentage, #plrRank,"
+		+ "#monsterRank, #atlasDmg, #atlasTroopDmg, #atkNum, #atkTime, #symbolBuff, #guildDmg,"
+		+ "#node1, #node2, #enemies, #strUnity")
+	elements.forEach(e => { e.value = "" })
 }
 
 function getDamageValue(n1,n2,n3,n4,n5,n6,n7,n8,n9,n10,n11,n12,n13,n14,n15)
@@ -81,11 +95,27 @@ function getDamageValue(n1,n2,n3,n4,n5,n6,n7,n8,n9,n10,n11,n12,n13,n14,n15)
 		* n8) * n9) * n10) * n11) * n12) * n13) * n14) * n15)
 }
 
+function damageChar(dmg) {
+	if (dmg >= 1000000000000000000000000n) return "Y"
+	if (dmg >= 1000000000000000000000n) return "Z"
+	if (dmg >= 1000000000000000000n) return "E"
+	if (dmg >= 1000000000000000) return "P"
+	if (dmg >= 1000000000000) return "T"
+	if (dmg >= 1000000000) return "G"
+	if (dmg >= 1000000) return "M"
+	if (dmg >= 1000) return "K"
+	if (dmg < 1000) return ""
+}
+
 function calculateDamage()
 {
 	if (timeDamageOnGoing) return
+	timeoutArrayOne = []	// clear the timeout array
+	timeoutArrayTwo = []	// clear the timeout array
 	let output = document.getElementById("outputDmg")	// OUTPUT
-/*				FIRST MENU				*/
+	let dmgChar1 = document.getElementById("outputDmgChar1")	// OUTPUT
+	let dmgChar2 = document.getElementById("outputDmgChar2")	// OUTPUT
+/*						FIRST MENU						*/
 // CLASS
 	let skill = document.getElementById("skillDmg").value
 	let classBuff = 1 + (document.getElementById("classBuff").value / 100)
@@ -112,7 +142,7 @@ function calculateDamage()
 	let isPlrSupp = document.getElementById("isPlrSupport").checked	// if player is support
 	let strUnity = 1 + (document.getElementById("strUnity").value / 100)	// strength in unity buff (sum or multiplier?)
 	let plrSuppAura = 0	// player's base support aura power
-/*				SECOND MENU				*/
+/*						SECOND MENU						*/
 // SUPERIORITY CALCULATION
 	let plrRank = document.getElementById("plrRank").value		// player rank
 	let monsterRank = document.getElementById("monsterRank").value	// monster rank
@@ -139,7 +169,7 @@ function calculateDamage()
 // MISC
 	let panthDmg = 1 + (document.getElementById("guildDmg").value / 100)
 	let premiumDmg = document.getElementById("premiumDmg").checked
-/* 				EFFECTS MENU				*/
+/* 						EFFECTS MENU						*/
 // WEAPON EFFECT
 	let stack = document.getElementById("stack").value	// weapon
 	let select = document.getElementById("multiSelect")	// weapon
@@ -224,6 +254,10 @@ function calculateDamage()
 	if (+enemies < +1) enemies = 1
 	if (+stack < +0) stack = 0
 	skill = Math.floor( skill )	// workaround
+	if (skill === Number(0)) {
+		sendAlert(6)	// if skill is less than 1, return and stop calculation
+		return
+	}
 	let effect = select.options[select.selectedIndex].value	// get option value
 	let effect2 = select2.options[select2.selectedIndex].value	// get option value
 	let effect3 = select3.options[select3.selectedIndex].value	// get option value
@@ -319,16 +353,16 @@ function calculateDamage()
 	{
 		default: case "genEffect":
 		{
-			multiplier += (tracer * stack)		// stack without limits
+			multiplier += (tracer * stack)		// stack without limits (General)
 			break
 		}
-		case "tracer":		// outlaw's tracer
+		case "tracer":		// outlaw's tracer (Sureshot)
 		{
 			if ( Number(stack) > Number(16) ) stack = 16	// standard tracer max 16 stacks
 			multiplier += (tracer * stack)
 			break
 		}
-		case "viperMark":	// outlaw's viper mark effect
+		case "viperMark":	// outlaw's viper mark effect (Sureshot)
 		{
 			if ( Number(stack) > Number(100) ) stack = 100	// viper mark max 100 stacks
 			if ( Number(stack) > Number(20) )	// starting from 20th mark, apply special effect
@@ -343,14 +377,14 @@ function calculateDamage()
 			}
 			break
 		}
-		case "dodgeThat":	// outlaw's dodge that
+		case "dodgeThat":	// outlaw's Dodge That
 		{
 			if ( Number(stack) > Number(16) ) stack = 16
 			multiplier += (tracer * stack)
 			skill *= 3
 			break
 		}
-		case "ironHeart":	// berserker's iron heart effect
+		case "ironHeart":	// berserker's iron heart effect (Gladiator Strike)
 		{
 			switch ( enableTime )
 			{
@@ -374,7 +408,7 @@ function calculateDamage()
 			multiplier += alcBiotrap	// gladiator strike 40% damage bonus
 			break
 		}
-		case "gvardar":		// berserker's gvardar effect
+		case "gvardar":		// berserker's gvardar effect (Crippling Bow)
 		{
 			switch ( enableTime )
 			{
@@ -411,7 +445,7 @@ function calculateDamage()
 			}
 			break
 		}
-		case "bloodlust1":	// berserker's ragnar bloodlust effect (firestorm)
+		case "bloodlust1":	// berserker's ragnar bloodlust effect (Firestorm)
 		{
 			if ( Number(stack) > Number(100) ) stack = 100	// bloodlust max 100 stacks
 			if ( enableTime ) skill /= 9	// get single firestorm attack damage (9 hit max)
@@ -419,7 +453,7 @@ function calculateDamage()
 			multiplier += (blade * stack)
 			break
 		}
-		case "bloodlust2":	// berserker's ragnar bloodlust effect (whirlwind)
+		case "bloodlust2":	// berserker's ragnar bloodlust effect (Whirlwind)
 		{
 			if ( Number(stack) > Number(100) ) stack = 100	// bloodlust max 100 stacks
 			if ( enableTime ) skill /= 4	// get single whirlwind attack damage (4 hit max)
@@ -427,10 +461,10 @@ function calculateDamage()
 			multiplier += (blade * stack)
 			break
 		}
-		case "slaughter":	// revenant's slaughter skill (stacks will simulate baron samedi boost)
+		case "slaughter":	// revenant's slaughter skill (stacks will simulate Baron Samedi's boost)
 		{
 			if ( !enableTime ) alertValue = 5
-			if ( Number(stack) > Number(10) ) stack = 10	// baron samedi idol of death 100% bonus
+			if ( Number(stack) > Number(10) ) stack = 10	// baron samedi's idol of death 100% bonus
 			multiplier += (tracer * stack)		// max 100% bonus
 			break
 		}
@@ -442,7 +476,7 @@ function calculateDamage()
 		multiplier = 1	// reinizialize multiplier
 		switch ( effect2 )
 		{
-			default: {break}	// case null - do nothing
+			default: { break }	// case null - do nothing
 			case "detector":
 			{
 				if (Number(stack2) > Number(5)) stack2 = 5	// detector max 5 stacks
@@ -487,7 +521,7 @@ function calculateDamage()
 		multiplier = 1	// reinizialize multiplier
 		switch ( effect3 )
 		{
-			default: {break}	// case null - do nothing
+			default: { break }	// case null - do nothing
 			case "rythm1":
 			{
 				if ( wings ) multiplier += (shower * alcBiotrap)
@@ -586,6 +620,7 @@ function calculateDamage()
 				finalDmg += critCalc	// ADD TO FINAL DMG
 			}
 			output.innerText = digit.format( Math.floor(finalDmg) )	// OUTPUT
+			dmgChar1.innerText = damageChar(finalDmg)	// OUTPUT
 			// send alert to suggest time use for best calculation of some skills dmg
 			if ( Number(alertValue) != Number(0) ) sendAlert(alertValue)
 			break
@@ -595,8 +630,10 @@ function calculateDamage()
 		{
 			timeDamageOnGoing = true
 			let delay = 1000	// time delay for inner cycle
-			let timeOutput = document.getElementById("timeOutputDmg")	// TIME OUTPUT let
-			let critOutput = document.getElementById("critTime")	// CRIT OUTPUT let
+			let timeOutput = document.getElementById("timeOutputDmg")	// TIME OUTPUT
+			let critOutput = document.getElementById("critTime")	// CRIT OUTPUT
+			let timerOutput = document.getElementById("timer")	// TIMER OUTPUT
+			let totalTimeOutput = document.getElementById("totalTimer")	// TOTAL TIMER OUTPUT
 			let startCnt = 0	// damage to start counter, after 15 attacks buff will be removed
 			let critCnt = 0	// critical hits counter for output
 			let armorTime = 1	// armor fracture attacks counter, min 1 - max 5
@@ -610,28 +647,29 @@ function calculateDamage()
 			if ( Number(critChance) < Number(5) ) critChance = 5	// base crit chance
 			if ( Number(critChance) > Number(100) ) critChance = 100	// max chance including weapons and other stuff
 			if ( Number(crit) < Number(1.3) ) crit = 1.3	// here calculate base crit damage in case
+			totalTimeOutput.innerText = (atkNum - 1)	// total time is equal to max attacks amount
 			for ( let i = 0; i < atkNum; i++ )
 			{	// time based cycle
-				setTimeout(() => {
-					if ( Number(start) > Number(1) ) startCnt++
-					if ( effect == "ironHeart")
+				timeoutArrayOne.push( setTimeout(() => {
+					if ( Number(start) > Number(1) ) startCnt += 1
+					if ( effect == "ironHeart" )
 					{	// increase damage at every attack, i think 10% each
 						delay = 500	// half the delay to simulate gladiator strike dmg overtime
-						classEffectCnt++	// determine when increase dmg multiplier
+						classEffectCnt += 1	// determine when increase dmg multiplier
 						if ( Number(classEffectCnt) > Number(1) ) multiplier += tracer // increase dmg at each attack
 					}
 					for ( let j = 0; j < atkTime; j++ )
 					{	// time based inner cycle
-						setTimeout(() => {
+						timeoutArrayTwo.push( setTimeout(() => {
 							for ( let z = 0; z < enemies; z++ )
 							{	// execute this chunk more times if multiple enemies are found
 								let random = ((Math.random() * 100) + 1)	// generate random number for crit chance
 								let bakSkill = skill	// backup skill value since we need original for each iteration
-								if ( effect == "ironHeart") bakSkill *= multiplier
+								if ( effect == "ironHeart" ) bakSkill *= multiplier
 								if ( effect == "gvardar" )
 								{	// gvardar crippling bow hits 10 times
 									let skDmg = 0	// used to store values boosted by talent
-									classEffectCnt++	// determine the use of weapon effect
+									classEffectCnt += 1	// determine the use of weapon effect
 									if ( Number(a9Buff) > Number(1) )
 									{	// single damage value boosted by a9 Talent
 										if ( Number(a9Buff) > Number(2.5) ) a9Buff = 2.5	// a9 talent max 150% boost
@@ -641,9 +679,9 @@ function calculateDamage()
 									// from 4th attack, damage is increased 4 times, in case boosted by talent
 									if ( Number(classEffectCnt) > Number(3) ) bakSkill = ((bakSkill * 4) + skDmg)
 								}
-								if ( effect == "slaughter")
+								if ( effect == "slaughter" )
 								{	// slaughter deals 33% more damage for every enemy behind the first one, supposing this by number
-									classEffectCnt++	// determine the amount of damage bonus done by slaughter
+									classEffectCnt += 1	// determine the amount of damage bonus done by slaughter
 									if ( Number(classEffectCnt) > Number(1) )
 									{
 										multiplier = (1 + (0.33 * (classEffectCnt - 1)))
@@ -655,7 +693,7 @@ function calculateDamage()
 								{
 									if (Number(armorTime) > Number(1))
 										armorFr = 1 + (armorStack * (armorTime - 1))
-									armorTime++
+									armorTime += 1
 								}
 								if ( Number(startCnt) > Number(15) ) start = 1 // remove start buff after 15 attacks (guess 1 attack per second)
 								finalDmg = getDamageValue(bakSkill,elder,base,wpn,wpnAura,main,troop,
@@ -664,19 +702,22 @@ function calculateDamage()
 								{
 									critCalc = getDamageValue(bakSkill,elder,base,wpn,wpnAura,crit,troop,
 										artif,start,stun,slow,chain,armorFr,atlasDmg,atlasTroopDmg)
-									if ( effect == "ironHeart") critCalc *= multiplier	// give stacks to crit dmg
+									if ( effect == "ironHeart" ) critCalc *= multiplier	// give stacks to crit dmg
 									finalDmg += critCalc
-									critCnt++	// increase crit counter
+									critCnt += 1	// increase crit counter
 								}
 								dmgOvertime += finalDmg	// value increased at each iteration
 								output.innerText = digit.format( Math.floor(finalDmg) )	// output (single attack)
 								timeOutput.innerText = digit.format( Math.floor(dmgOvertime) )	// output (continuous attacks)
+								dmgChar1.innerText = damageChar(finalDmg)	// output (damage character)
+								dmgChar2.innerText = damageChar(dmgOvertime)	// output (damage character)
 								critOutput.innerText = critCnt		// show how many times critical damage was done
 							}
-						}, (delay / atkTime) * j)
+						}, (delay / atkTime) * j))
 					}
+					timerOutput.innerText = i	// shows how much time passed
 					if (Number(i + 1) === Number(atkNum)) timeDamageOnGoing = false
-				}, 1000 * i)
+				}, 1000 * i))
 			}
 			break
 		}
@@ -708,6 +749,9 @@ function sendAlert( type )
 				+ "The damage is increased by 33% for each enemy behind the first one "
 				+ "up to 100% bonus. For this increase the value of 'Enemies hitted' field.\n"
 				+ "For Baron Samedi 'Idol of Death' effect use 'Stack Value' field, up to 100% bonus.")
+			break
+		case 6:
+			alert("\"Class Skill Damage\" is empty.")
 			break
 	}
 }
