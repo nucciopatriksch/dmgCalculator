@@ -1,4 +1,4 @@
-@charset "ISO-8859-1";
+@charset "UTF-8";
 #mainSection{
 	width : 850px;
 	height : 100%;
@@ -16,7 +16,8 @@
 	justify-content : space-around;
 }
 
-#mainSection .outputSection, .timeOutputSection{
+#mainSection .outputSection, #mainSection .timeOutputSection{
+	width: 100%;
 	border-top : 1px solid black;
 	border-left : 1px solid black;
 	border-right : 1px solid black;
@@ -24,13 +25,12 @@
 	color : darkslategrey;
 }
 
-#mainSection .outputSection td, .timeOutputSection td{
+#mainSection .outputSection td, #mainSection .timeOutputSection td{
 	font-size : 24px;
 }
 
 #mainSection .dataSection, .weaponSection, .effectSection{
 	border-top : 1px solid black;
-	border-bottom : 1px solid black;
 	background : rgba(0,88,96,1);
 	color : whitesmoke;
 }
@@ -48,19 +48,17 @@
 }
 
 #mainSection .dataSection{
-	width : 36%;
-	border-left : 1px solid black;
+	width : 34%;
 	border-right : 1px solid black;
 }
 
 #mainSection .weaponSection{
-	width : 32%;
+	width : 33%;
 	border-right : 1px solid black;
 }
 
 #mainSection .effectSection{
-	width : 32%;
-	border-right : 1px solid black;
+	width : 33%;
 }
 
 #mainSection .finalSection .btnSection{
@@ -80,11 +78,11 @@
 }
 
 #mainSection input{
-	width : 102px;
+	width : 100px;
 }
 
 #mainSection select{
-	width : 110px;
+	width : 108px;
 }
 
 #mainSection .subSection label{
@@ -93,24 +91,42 @@
 	justify-content : flex-end;
 }
 
-#mainSection .timeSection{
+#mainSection .enemySection{
+	border-bottom: 1px solid black;
+}
+
+#mainSection .enemySection, #mainSection .timeSection{
+	width: 100%;
 	border-left : 1px solid black;
 	border-right : 1px solid black;
 	background : rgba(4,91,83,1);
 	color : whitesmoke;
 }
 
-#mainSection .timeSection label{
+#mainSection .enemySection label, #mainSection .timeSection label{
 	color : gold;
 	display : flex;
 	justify-content : center;
 }
 
-#mainSection .timeSection .timeInputs{
+#mainSection .enemySection .healthInputs, #mainSection .timeSection .timeInputs{
 	display : flex;
 	justify-content : space-evenly;
 }
 
+#mainSection .enemySection #healthButton, #mainSection .enemySection input{
+	width: 160px;
+}
+
 #mainSection .timeSection input{
 	width : 56px;
+}
+
+#mainSection .calc-container .subSection {
+	width: 100%;
+	border: 1px solid black;
+}
+
+#mainSection .finalSection {
+	width: 100%;
 }

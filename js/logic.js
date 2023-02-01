@@ -15,7 +15,14 @@ const lightInc = 0.5		// 0.5 equals to 50% (Incarnation of Light)
 const shower = 0.3			// 0.3 equals to 30% (Energy Shower)
 const alcBiotrap = 0.4		// 0.4 equals to 40% (Biotrap)
 // SERVICE
+let digit = Intl.NumberFormat()	// used to separate thousands values with dots
 let timeDamageOnGoing = false	// prevents multiple clicks of calculate damage while time menu is on
+let enemyHealthStatus = document.getElementById("actualStatus")	// status of enemy
+let outputHealth = document.getElementById("outputHealth")	// enemy health output value
+let healthChar = document.getElementById("outputHealthChar1")	// enemy char output
+let outputHitsToKill = document.getElementById("outputHitsToKill")	// hits to kill counter output
+let enemyHealthCurrent = -1		// current enemy health value
+let hitsToKill = 0	// counter for hits
 let timeoutArrayOne = []	// timeout array
 let timeoutArrayTwo = []	// timeout array
 
@@ -23,7 +30,8 @@ function changeLang()
 {
 	const elements = document.querySelectorAll("#linkEng, #linkIta, #langEng, #langIta, #descEng, #descIta,"
 		+ "#outputEng, #outputIta, #lastInfoEng, #lastInfoIta, #calcButtonEng, #clearButtonEng, #calcButtonIta,"
-		+ "#clearButtonIta, #authorEng, #authorIta, #outputEng2, #outputIta2, #critHitEng, #critHitIta")
+		+ "#clearButtonIta, #authorEng, #authorIta, #outputEng2, #outputIta2, #critHitEng, #critHitIta,"
+		+ "#outputEng4, #outputIta4, #outputEng5, #outputIta5, #outputEng6, #outputIta6")
 	elements.forEach(e => { e.hidden = (e.hidden)? false : true })
 }
 
@@ -58,21 +66,63 @@ function useStimulants()
 	elements.forEach(e => { e.hidden = (e.hidden)? false : true })
 }
 
+function healthStatus(value, status) {
+	if (value < 0) {
+		status.style.color = "#ff9900"
+		return "Unset"
+	}
+	else {
+		status.style.color = (value > 0)? "#03fc3d" : "#ff0000"
+		return (value > 0)? "Alive" : "Killed"
+	}
+}
+
+function removeHealth() {
+	enemyHealthCurrent = -1
+	outputHealth.innerText = 0
+	healthChar.innerText = ""
+	enemyHealthStatus.innerText = healthStatus(enemyHealthCurrent, enemyHealthStatus)
+}
+
+function healthValue(value, output, char, status) {
+	output.innerText = digit.format(value)
+	char.innerText = damageChar(value)
+	status.innerText = healthStatus(value, status)
+}
+
+function setHits(value, output) {
+	hitsToKill = value
+	output.innerText = hitsToKill
+}
+
+function enableEnemyHealth() {
+	const elements = document.querySelectorAll("#enemyHealth, #enemyHealthNum, #enemyStatus, #actualStatus,"
+	+ "#setHealth, #healthOutputSection, #hitsToKillSection, #enableHealthDesc, #disableHealthDesc")
+	elements.forEach(e => { e.hidden = (e.hidden)? false : true })
+	enemyHealthStatus.innerText = healthStatus(enemyHealthCurrent, enemyHealthStatus)
+}
+
+function setHealth() {
+	let inputHealth = document.getElementById("enemyHealthNum").value
+	if (inputHealth < 0 || inputHealth === "") inputHealth = 0
+	enemyHealthCurrent = inputHealth
+	healthValue(enemyHealthCurrent, outputHealth, healthChar, enemyHealthStatus)
+	setHits(0, outputHitsToKill)
+}
+
 function enableTimeDamage()
 {
 	const elements = document.querySelectorAll("#atkNumDesc, #atkNum, #atkTimeDesc, #atkTime,"
 	+ "#timeDamageOutput, #critChanceDesc, #critChance, #enemiesDesc, #enemies, #critHits,"
-	+ "#timerOutput, #timerOutput2, #resetTime")
+	+ "#timerOutput, #timerOutput2, #resetTime, #enableTimeDesc, #disableTimeDesc")
 	elements.forEach(e => { e.hidden = (e.hidden)? false : true })
 	timeDamageOnGoing = false
 }
 
 function resetTimer()
 {
-	const elements = document.querySelectorAll("#outputDmg, #timeOutputDmg, #critTime, #timer, #totalTimer")
-	const chars = document.querySelectorAll("#outputDmgChar1, #outputDmgChar2")
+	const elements = document.querySelectorAll("#timer, #totalTimer")
 	elements.forEach(e => { e.innerText = 0 })
-	chars.forEach(c => { c.innerText = "" })
 	timeoutArrayOne.forEach(function(timer) { clearTimeout(timer) })
 	timeoutArrayTwo.forEach(function(timer) { clearTimeout(timer) })
 	timeDamageOnGoing = false
@@ -85,7 +135,7 @@ function deleteForm()
 		+ "#troopDmg, #armorFracture, #startDmg, #stunDmg, #slowDmg, #chainDmg, #artifactDmg,"
 		+ "#stack, #stack2, #stack3, #compStat, #suppMight, #aura, #mightPercentage, #plrRank,"
 		+ "#monsterRank, #atlasDmg, #atlasTroopDmg, #atkNum, #atkTime, #symbolBuff, #guildDmg,"
-		+ "#node1, #node2, #enemies, #strUnity")
+		+ "#node1, #node2, #enemies, #strUnity, #enemyHealthNum")
 	elements.forEach(e => { e.value = "" })
 }
 
@@ -96,6 +146,8 @@ function getDamageValue(n1,n2,n3,n4,n5,n6,n7,n8,n9,n10,n11,n12,n13,n14,n15)
 }
 
 function damageChar(dmg) {
+	if (dmg >= 1000000000000000000000000000000n) return "Ge"
+	if (dmg >= 1000000000000000000000000000n) return "B"
 	if (dmg >= 1000000000000000000000000n) return "Y"
 	if (dmg >= 1000000000000000000000n) return "Z"
 	if (dmg >= 1000000000000000000n) return "E"
@@ -105,6 +157,24 @@ function damageChar(dmg) {
 	if (dmg >= 1000000) return "M"
 	if (dmg >= 1000) return "K"
 	if (dmg < 1000) return ""
+}
+
+function damageEnemy(damage) {
+	if (enemyHealthCurrent > 0)
+	{
+		if (enemyHealthCurrent > 0)
+		{
+			enemyHealthCurrent -= damage
+			setHits((hitsToKill + 1), outputHitsToKill)
+		}
+		if (enemyHealthCurrent < 0) enemyHealthCurrent = 0
+	}
+	else enemyHealthCurrent = 0
+	healthValue(enemyHealthCurrent, outputHealth, healthChar, enemyHealthStatus)
+}
+
+function random() {
+	return Number((Math.random() * 100) + 1)	// generate random number for crit chance
 }
 
 function calculateDamage()
@@ -195,17 +265,17 @@ function calculateDamage()
 // EXO NIGHTFALL
 	let stack3 = document.getElementById("stack3").value			// nightfall
 	let compStat = (document.getElementById("compStat").value / 100)	// nightfall
-// DAMAGE OUTPUT letIABLE
+// DAMAGE OUTPUT VARIABLES
 	let finalDmg = 0
 	let critCalc = 0
 	let dmgOvertime = 0
-// TIME letIABLES
+// HEALTH VARIABLES
+	let enableHealth = document.getElementById("enableHealth").checked	// enemy health enabler
+// TIME VARIABLES
 	let enableTime = document.getElementById("enableTime").checked	// time enabler
 	let atkNum = document.getElementById("atkNum").value		// number of attacks
 	let atkTime = document.getElementById("atkTime").value		// attacks per second
 	let enemies = document.getElementById("enemies").value		// number of enemies hitted with one attack
-// SERVICE
-	let digit = Intl.NumberFormat()	// used to separate thousands values with dots
 // CHECKS
 	if (+classBuff < +1) classBuff = 1
 	if (+a9Buff < +1) a9Buff = 1
@@ -621,6 +691,7 @@ function calculateDamage()
 			}
 			output.innerText = digit.format( Math.floor(finalDmg) )	// OUTPUT
 			dmgChar1.innerText = damageChar(finalDmg)	// OUTPUT
+			if (enableHealth) damageEnemy(finalDmg)		// if enabled, decreases enemy health
 			// send alert to suggest time use for best calculation of some skills dmg
 			if ( Number(alertValue) != Number(0) ) sendAlert(alertValue)
 			break
@@ -628,6 +699,7 @@ function calculateDamage()
 		// TIME BASED DAMAGE (this output simulate damage from continuous attacks)
 		case true:
 		{
+			if (enableHealth && enemyHealthCurrent <= 0) return
 			timeDamageOnGoing = true
 			let delay = 1000	// time delay for inner cycle
 			let timeOutput = document.getElementById("timeOutputDmg")	// TIME OUTPUT
@@ -663,7 +735,6 @@ function calculateDamage()
 						timeoutArrayTwo.push( setTimeout(() => {
 							for ( let z = 0; z < enemies; z++ )
 							{	// execute this chunk more times if multiple enemies are found
-								let random = ((Math.random() * 100) + 1)	// generate random number for crit chance
 								let bakSkill = skill	// backup skill value since we need original for each iteration
 								if ( effect == "ironHeart" ) bakSkill *= multiplier
 								if ( effect == "gvardar" )
@@ -698,7 +769,8 @@ function calculateDamage()
 								if ( Number(startCnt) > Number(15) ) start = 1 // remove start buff after 15 attacks (guess 1 attack per second)
 								finalDmg = getDamageValue(bakSkill,elder,base,wpn,wpnAura,main,troop,
 									artif,start,stun,slow,chain,armorFr,atlasDmg,atlasTroopDmg)
-								if ( Number(random) <= Number(critChance) )	// crit if random is within the range
+								if ( Number(critChance) >= Number(100) ||
+									random() <= Number(critChance) )	// crit if random is within the range
 								{
 									critCalc = getDamageValue(bakSkill,elder,base,wpn,wpnAura,crit,troop,
 										artif,start,stun,slow,chain,armorFr,atlasDmg,atlasTroopDmg)
@@ -712,6 +784,11 @@ function calculateDamage()
 								dmgChar1.innerText = damageChar(finalDmg)	// output (damage character)
 								dmgChar2.innerText = damageChar(dmgOvertime)	// output (damage character)
 								critOutput.innerText = critCnt		// show how many times critical damage was done
+								if (enableHealth)	// if enabled, decreases enemy health
+								{
+									damageEnemy(finalDmg)	// subtract enemy's health
+									if (enemyHealthCurrent <= 0) resetTimer()	// if enemy is killed, interrupt the calculation
+								}
 							}
 						}, (delay / atkTime) * j))
 					}
