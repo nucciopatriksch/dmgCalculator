@@ -438,6 +438,7 @@ function calculateDamage()
 			multiplier += (tracer * stack)
 			break
 		}
+		case "viperHunters": { if ( Number(stack) > Number(20) ) skill *= 0.65 }	// outlaw's destroyed viper mark effect (65% of Sureshot) (no break to fall into viperMark effect)
 		case "viperMark":	// outlaw's viper mark effect (Sureshot)
 		{
 			if ( Number(stack) > Number(100) ) stack = 100	// viper mark max 100 stacks
