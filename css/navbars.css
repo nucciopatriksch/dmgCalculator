@@ -1,16 +1,16 @@
-@charset "ISO-8859-1";
+@charset "UTF-8";
 body{
 	height : 100%;
 	width : 100%;
 	margin : 0 auto;
-	background : whitesmoke;
+	background-color : rgb(230,230,230);
 	font-family : sans-serif;
 	font-size : 14px;
 }
 
 #startPart{
 	width : 100%;
-	background : rgba(0,80,128,1);
+	background : rgb(0,88,120);
 }
 
 #startPart .titleSection{
@@ -28,7 +28,7 @@ body{
 
 #startPart .navbar .linkSection .links li a:hover{
 	background : whitesmoke;
-	color : rgba(0,80,160,1);
+	color : rgb(0,80,160);
 	transition : .8s;
 }
 
@@ -60,7 +60,7 @@ body{
 #lastPart{
 	display : flex;
 	width : 100%;
-	background : rgba(24,24,24,1);
+	background-color : rgb(24,24,24);
 }
 
 #lastPart section ul li{

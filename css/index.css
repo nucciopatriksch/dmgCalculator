@@ -32,7 +32,6 @@
 }
 
 #mainSection .dataSection, .weaponSection, .effectSection{
-	border-top : 1px solid black;
 	color : whitesmoke;
 }
 
@@ -78,11 +77,11 @@
 }
 
 #mainSection input{
-	width : 100px;
+	width : 102px;
 }
 
 #mainSection select{
-	width : 108px;
+	width : 110px;
 }
 
 #mainSection .subSection label{

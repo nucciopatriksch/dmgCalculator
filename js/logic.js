@@ -79,7 +79,9 @@ function healthStatus(value, status) {
 
 function removeHealth() {
 	enemyHealthCurrent = -1
+	hitsToKill = 0
 	outputHealth.innerText = 0
+	outputHitsToKill.innerText = hitsToKill
 	healthChar.innerText = ""
 	enemyHealthStatus.innerText = healthStatus(enemyHealthCurrent, enemyHealthStatus)
 }
@@ -324,6 +326,10 @@ function calculateDamage()
 	if (+enemies < +1) enemies = 1
 	if (+stack < +0) stack = 0
 	skill = Math.floor( skill )	// workaround
+	if (enableHealth && enemyHealthCurrent <= 0) {
+		sendAlert(7)	// no calculation if enemy health is 0
+		return
+	}
 	if (skill === Number(0)) {
 		sendAlert(6)	// if skill is less than 1, return and stop calculation
 		return
@@ -699,7 +705,6 @@ function calculateDamage()
 		// TIME BASED DAMAGE (this output simulate damage from continuous attacks)
 		case true:
 		{
-			if (enableHealth && enemyHealthCurrent <= 0) return
 			timeDamageOnGoing = true
 			let delay = 1000	// time delay for inner cycle
 			let timeOutput = document.getElementById("timeOutputDmg")	// TIME OUTPUT
@@ -830,5 +835,8 @@ function sendAlert( type )
 		case 6:
 			alert("\"Class Skill Damage\" is empty.")
 			break
+		case 7:
+			alert("Set an amount of \"Enemy Health\" before calculation")
+		break
 	}
 }
