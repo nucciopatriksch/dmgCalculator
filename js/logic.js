@@ -66,14 +66,14 @@ function useStimulants()
 	elements.forEach(e => { e.hidden = (e.hidden)? false : true })
 }
 
-function healthStatus(value, status) {
+function healthStatus(value) {
 	if (value < 0) {
-		status.style.color = "#ff9900"
-		return "Unset"
+		enemyHealthStatus.style.color = "#ff9900"
+		enemyHealthStatus.innerText = "Unset"
 	}
 	else {
-		status.style.color = (value > 0)? "#03fc3d" : "#ff0000"
-		return (value > 0)? "Alive" : "Killed"
+		enemyHealthStatus.style.color = (value > 0)? "#03fc3d" : "#ff0000"
+		enemyHealthStatus.innerText = (value > 0)? "Alive" : "Killed"
 	}
 }
 
@@ -83,13 +83,13 @@ function removeHealth() {
 	outputHealth.innerText = 0
 	outputHitsToKill.innerText = hitsToKill
 	healthChar.innerText = ""
-	enemyHealthStatus.innerText = healthStatus(enemyHealthCurrent, enemyHealthStatus)
+	healthStatus(enemyHealthCurrent)
 }
 
-function healthValue(value, output, char, status) {
+function healthValue(value, output, char) {
 	output.innerText = digit.format(value)
 	char.innerText = damageChar(value)
-	status.innerText = healthStatus(value, status)
+	healthStatus(value)
 }
 
 function setHits(value, output) {
@@ -101,14 +101,14 @@ function enableEnemyHealth() {
 	const elements = document.querySelectorAll("#enemyHealth, #enemyHealthNum, #enemyStatus, #actualStatus,"
 	+ "#setHealth, #healthOutputSection, #hitsToKillSection, #enableHealthDesc, #disableHealthDesc")
 	elements.forEach(e => { e.hidden = (e.hidden)? false : true })
-	enemyHealthStatus.innerText = healthStatus(enemyHealthCurrent, enemyHealthStatus)
+	healthStatus(enemyHealthCurrent)
 }
 
 function setHealth() {
 	let inputHealth = document.getElementById("enemyHealthNum").value
 	if (inputHealth < 0 || inputHealth === "") inputHealth = 0
 	enemyHealthCurrent = inputHealth
-	healthValue(enemyHealthCurrent, outputHealth, healthChar, enemyHealthStatus)
+	healthValue(enemyHealthCurrent, outputHealth, healthChar)
 	setHits(0, outputHitsToKill)
 }
 
@@ -164,15 +164,12 @@ function damageChar(dmg) {
 function damageEnemy(damage) {
 	if (enemyHealthCurrent > 0)
 	{
-		if (enemyHealthCurrent > 0)
-		{
-			enemyHealthCurrent -= damage
-			setHits((hitsToKill + 1), outputHitsToKill)
-		}
+		enemyHealthCurrent -= damage
+		setHits((hitsToKill + 1), outputHitsToKill)
 		if (enemyHealthCurrent < 0) enemyHealthCurrent = 0
 	}
 	else enemyHealthCurrent = 0
-	healthValue(enemyHealthCurrent, outputHealth, healthChar, enemyHealthStatus)
+	healthValue(enemyHealthCurrent, outputHealth, healthChar)
 }
 
 function random() {
@@ -252,6 +249,7 @@ function calculateDamage()
 	let useStims = document.getElementById("useStims").checked			// euphomine
 	let stimsValue = (document.getElementById("stimsValue").value / 100)	// euphomine
 // SUPPORT
+	let isSuppGod = document.getElementById("isSuppGod").checked	// support's god form
 	let suppMight = document.getElementById("suppMight").value		// support's might
 	let suppAura = (document.getElementById("aura").value / 100)	// support's aura
 	let mightGiven = (document.getElementById("mightPercentage").value / 100)	// support
@@ -374,6 +372,7 @@ function calculateDamage()
 		skill /= might	// subdivide skill by might value
 		if ( (Number(mightGiven) > Number(0)) && !(isPlrSupp) )	// increase might if player is not support
 		{
+			if ( isSuppGod ) suppMight *= 1.7	// if support is in divine form, increase its might by 70%
 			suppMight *= mightGiven	// get the support's might percentage
 			suppMight /= 100		// subdivide by 100
 			if ( wings ) might += (suppMight * alcBiotrap)
@@ -581,13 +580,15 @@ function calculateDamage()
 		if ( Number(stimsValue) > Number(1) ) stimsValue = 1	// max buff value is 100% (green euphomine)
 		base += stimsValue	// stimulants adds value to character's base damage bonus
 	}
-// if player is not support and we have support aura from another player, calculate aura buff
+// if player is not support and if support's might is greater than 1000, then we have a support player, so calculate aura buff
 	if ( !isPlrSupp )
 	{
-		if ( Number(suppAura) > Number(0) )
+		if ( Number(suppMight) > Number(1000) )
 		{
 			if ( !(useStims) || (Number(stimsValue) === Number(0.3)) )
 			{
+				if ( isSuppGod ) suppAura += 0.36	// extra 36% of support aura power if support is god
+				suppAura += 0.44	// extra 20% base + 24% of support aura power coming from temple of deeds
 				base += suppAura	// boost only if we are using red euphomine or if we are not
 			}
 		}
@@ -698,7 +699,7 @@ function calculateDamage()
 			}
 			output.innerText = digit.format( Math.floor(finalDmg) )	// OUTPUT
 			dmgChar1.innerText = damageChar(finalDmg)	// OUTPUT
-			if (enableHealth) damageEnemy(finalDmg)		// if enabled, decreases enemy health
+			if ( enableHealth ) damageEnemy(finalDmg)		// if enabled, decreases enemy health
 			// send alert to suggest time use for best calculation of some skills dmg
 			if ( Number(alertValue) != Number(0) ) sendAlert(alertValue)
 			break
@@ -790,7 +791,7 @@ function calculateDamage()
 								dmgChar1.innerText = damageChar(finalDmg)	// output (damage character)
 								dmgChar2.innerText = damageChar(dmgOvertime)	// output (damage character)
 								critOutput.innerText = critCnt		// show how many times critical damage was done
-								if (enableHealth)	// if enabled, decreases enemy health
+								if ( enableHealth )		// if enabled, decreases enemy health
 								{
 									damageEnemy(finalDmg)	// subtract enemy's health
 									if (enemyHealthCurrent <= 0) resetTimer()	// if enemy is killed, interrupt the calculation
