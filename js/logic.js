@@ -25,6 +25,7 @@ let enemyHealthCurrent = -1		// current enemy health value
 let hitsToKill = 0	// counter for hits
 let timeoutArrayOne = []	// timeout array
 let timeoutArrayTwo = []	// timeout array
+let lastAlertValue = 0	// variable needed to store the latest alert value used so we can play the alert message only once
 
 function changeLang()
 {
@@ -121,10 +122,13 @@ function enableTimeDamage()
 	timeDamageOnGoing = false
 }
 
-function resetTimer()
+function resetTimer(value)
 {
-	const elements = document.querySelectorAll("#timer, #totalTimer")
-	elements.forEach(e => { e.innerText = 0 })
+	if ( value > 0 )
+	{
+		const elements = document.querySelectorAll("#timer, #totalTimer")
+		elements.forEach(e => { e.innerText = 0 })
+	}
 	timeoutArrayOne.forEach(function(timer) { clearTimeout(timer) })
 	timeoutArrayTwo.forEach(function(timer) { clearTimeout(timer) })
 	timeDamageOnGoing = false
@@ -176,6 +180,11 @@ function random() {
 	return Number((Math.random() * 100) + 1)	// generate random number for crit chance
 }
 
+function setStacks(value, input) {
+	input.value = value
+	return value
+}
+
 function calculateDamage()
 {
 	if (timeDamageOnGoing) return
@@ -213,8 +222,10 @@ function calculateDamage()
 	let plrSuppAura = 0	// player's base support aura power
 /*						SECOND MENU						*/
 // SUPERIORITY CALCULATION
-	let plrRank = document.getElementById("plrRank").value		// player rank
-	let monsterRank = document.getElementById("monsterRank").value	// monster rank
+	let plrRank = document.getElementById("plrRank")		// player rank
+	let monsterRank = document.getElementById("monsterRank")	// monster rank
+	let plrRankValue = plrRank.value		// player rank value
+	let monsterRankValue = monsterRank.value	// monster rank value
 // WEAPON STATS
 	let wpn = (document.getElementById("weaponDmg").value / 100)		// weapon damage
 	let wpnAura = (document.getElementById("weaponAura").value / 100)	// weapon support aura
@@ -240,10 +251,12 @@ function calculateDamage()
 	let premiumDmg = document.getElementById("premiumDmg").checked
 /* 						EFFECTS MENU						*/
 // WEAPON EFFECT
-	let stack = document.getElementById("stack").value	// weapon
+	let wpnStack = document.getElementById("stack")	// weapon
+	let stack = wpnStack.value	// weapon
 	let select = document.getElementById("multiSelect")	// weapon
 // ARTIFACT EFFECT
-	let stack2 = document.getElementById("stack2").value	// artifact
+	let artifStack = document.getElementById("stack2")	// artifact
+	let stack2 = artifStack.value	// artifact
 	let select2 = document.getElementById("multiSelect2")	// artifact
 // EUPHOMINE
 	let useStims = document.getElementById("useStims").checked			// euphomine
@@ -263,7 +276,8 @@ function calculateDamage()
 	let hammer = document.getElementById("nerion").checked		// nerion's hammer
 	let macha = document.getElementById("machavann").checked	// machavann upgrade
 // EXO NIGHTFALL
-	let stack3 = document.getElementById("stack3").value			// nightfall
+	let nfStack = document.getElementById("stack3")		// nightfall
+	let stack3 = nfStack.value		// nightfall
 	let compStat = (document.getElementById("compStat").value / 100)	// nightfall
 // DAMAGE OUTPUT VARIABLES
 	let finalDmg = 0
@@ -342,17 +356,23 @@ function calculateDamage()
 	stack2 = Math.floor( stack2 )	// workaround
 	stack3 = Math.floor( stack3 )	// workaround
 // calculate player superiority bonus (+1% dmg done for every excess rank player has than monster, or -10% dmg done for every excess rank monster has)
-	if ( (Number(plrRank) > Number(0)) && (Number(monsterRank) > Number(0)) )	// calculate only if both ranks are higher than 0
+	if ( (Number(plrRankValue) > Number(0)) && (Number(monsterRankValue) > Number(0)) )	// calculate only if both ranks are higher than 0
 	{
 		let superiorityMultiplier = 1
-		if ( Number(plrRank) > Number(monsterRank) )
+		if ( Number(plrRankValue) > Number(monsterRankValue) )
 		{	// bonus
-			superiorityMultiplier += ((plrRank - monsterRank) / 100)
+			let superioritySize = ( plrRankValue - monsterRankValue )
+			if ( Number(superioritySize) > Number(60) )		// in-game, superiority increases damage up to +60% for every rank in excess than the enemy has
+			{
+				superioritySize = 60
+				monsterRank.value = ( plrRankValue - superioritySize )	// set the new monster rank accordingly
+			}
+			superiorityMultiplier += (superioritySize / 100)
 			skill *= superiorityMultiplier
 		}
 		else
 		{	// malus
-			superiorityMultiplier += (((monsterRank - plrRank) / 100) * 10)
+			superiorityMultiplier += (((monsterRankValue - plrRankValue) / 100) * 10)
 			skill /= superiorityMultiplier
 		}
 	}
@@ -433,17 +453,22 @@ function calculateDamage()
 		}
 		case "tracer":		// outlaw's tracer (Sureshot)
 		{
-			if ( Number(stack) > Number(16) ) stack = 16	// standard tracer max 16 stacks
+			if ( Number(stack) > Number(16) ) stack = setStacks(16, wpnStack)	// standard tracer max 16 stacks
 			multiplier += (tracer * stack)
 			break
 		}
 		case "viperHunters": { if ( Number(stack) > Number(20) ) skill *= 0.65 }	// outlaw's destroyed viper mark effect (65% of Sureshot) (no break to fall into viperMark effect)
-		case "viperMark":	// outlaw's viper mark effect (Sureshot)
+		case "viperMark": case "viperMarkUnlocked":		// outlaw's viper mark effect (Sureshot)
 		{
-			if ( Number(stack) > Number(100) ) stack = 100	// viper mark max 100 stacks
+			if ( effect != "viperMarkUnlocked" )	// limit the stack value to 100 max if selected effect is not "viperMarkUnlocked"
+				if ( Number(stack) > Number(100) ) stack = setStacks(100, wpnStack)	// viper mark max 100 stacks
 			if ( Number(stack) > Number(20) )	// starting from 20th mark, apply special effect
 			{
-				if ( stack % 2 != 0 ) stack += 1	// apply in pairs
+				if ( stack % 2 != 0 )	// apply in pairs
+				{
+					stack += 1
+					setStacks(stack, wpnStack)
+				}
 				let newMark = (stack - 20)
 				multiplier += ((tracer + (viperMark * newMark)) * stack)
 			}
@@ -455,13 +480,14 @@ function calculateDamage()
 		}
 		case "dodgeThat":	// outlaw's Dodge That
 		{
-			if ( Number(stack) > Number(16) ) stack = 16
+			if ( Number(stack) > Number(16) ) stack = setStacks(16, wpnStack)
 			multiplier += (tracer * stack)
 			skill *= 3
 			break
 		}
 		case "ironHeart":	// berserker's iron heart effect (Gladiator Strike)
 		{
+			setStacks(0, wpnStack)	// no stacks with this effect
 			switch ( enableTime )
 			{
 				case false:
@@ -486,6 +512,7 @@ function calculateDamage()
 		}
 		case "gvardar":		// berserker's gvardar effect (Crippling Bow)
 		{
+			setStacks(0, wpnStack)	// no stacks with this effect
 			switch ( enableTime )
 			{
 				case false:
@@ -523,7 +550,7 @@ function calculateDamage()
 		}
 		case "bloodlust1":	// berserker's ragnar bloodlust effect (Firestorm)
 		{
-			if ( Number(stack) > Number(100) ) stack = 100	// bloodlust max 100 stacks
+			if ( Number(stack) > Number(100) ) stack = setStacks(100, wpnStack)	// bloodlust max 100 stacks
 			if ( enableTime ) skill /= 9	// get single firestorm attack damage (9 hit max)
 			else alertValue = 3
 			multiplier += (blade * stack)
@@ -531,7 +558,7 @@ function calculateDamage()
 		}
 		case "bloodlust2":	// berserker's ragnar bloodlust effect (Whirlwind)
 		{
-			if ( Number(stack) > Number(100) ) stack = 100	// bloodlust max 100 stacks
+			if ( Number(stack) > Number(100) ) stack = setStacks(100, wpnStack)	// bloodlust max 100 stacks
 			if ( enableTime ) skill /= 4	// get single whirlwind attack damage (4 hit max)
 			else alertValue = 4
 			multiplier += (blade * stack)
@@ -540,7 +567,7 @@ function calculateDamage()
 		case "slaughter":	// revenant's slaughter skill (stacks will simulate Baron Samedi's boost)
 		{
 			if ( !enableTime ) alertValue = 5
-			if ( Number(stack) > Number(10) ) stack = 10	// baron samedi's idol of death 100% bonus
+			if ( Number(stack) > Number(10) ) stack = setStacks(10, wpnStack)	// baron samedi's idol of death 100% bonus
 			multiplier += (tracer * stack)		// max 100% bonus
 			break
 		}
@@ -555,13 +582,13 @@ function calculateDamage()
 			default: { break }	// case null - do nothing
 			case "detector":
 			{
-				if (Number(stack2) > Number(5)) stack2 = 5	// detector max 5 stacks
+				if (Number(stack2) > Number(5)) stack2 = setStacks(5, artifStack)	// detector max 5 stacks
 				multiplier += (vulnerability * stack2)
 				break
 			}
 			case "blade":
 			{
-				if (Number(stack2) > Number(10)) stack2 = 10	// blade max 10 stacks
+				if (Number(stack2) > Number(10)) stack2 = setStacks(10, artifStack)	// blade max 10 stacks
 				multiplier += (blade * stack2)
 				break
 			}
@@ -674,7 +701,7 @@ function calculateDamage()
 	{
 		multiplier = 1	// reinizialize multiplier
 		if (Number(comp) > Number(1.81)) comp = 1.81	// comp damage max 181%
-		if (Number(stack3) > Number(3)) stack3 = 3	// max 3 stacks
+		if (Number(stack3) > Number(3)) stack3 = setStacks(3, nfStack)	// max 3 stacks
 		if (Number(compStat) < Number(0)) compStat = 0
 		if (Number(compStat) > Number(0.33)) compStat = 0.33
 		let nightfall = (comp * compStat)
@@ -794,7 +821,7 @@ function calculateDamage()
 								if ( enableHealth )		// if enabled, decreases enemy health
 								{
 									damageEnemy(finalDmg)	// subtract enemy's health
-									if (enemyHealthCurrent <= 0) resetTimer()	// if enemy is killed, interrupt the calculation
+									if (enemyHealthCurrent <= 0) resetTimer(0)	// if enemy is killed, interrupt the calculation
 								}
 							}
 						}, (delay / atkTime) * j))
@@ -810,6 +837,7 @@ function calculateDamage()
 
 function sendAlert( type )
 {
+	if ( Number(lastAlertValue) === Number(type) ) return	// check done to play the same alert only once
 	switch ( type )
 	{
 		case 1:
@@ -841,4 +869,5 @@ function sendAlert( type )
 			alert("Set an amount of \"Enemy Health\" before calculation")
 		break
 	}
+	lastAlertValue = type	// set the latest alert value sended to this function
 }
